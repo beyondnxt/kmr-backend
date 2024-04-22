@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -7,6 +7,8 @@ import { RoleModule } from './role/role.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entity/user.entity';
 import { Role } from './role/entity/role.entity';
+import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
+import { RequestService } from './common/request.service';
 
 @Module({
   imports: [
@@ -30,6 +32,19 @@ import { Role } from './role/entity/role.entity';
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    RequestService
+  ],
 })
-export class AppModule {}
+export class AppModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(AuthenticationMiddleware).exclude(
+  //     { path: 'auth/signup', method: RequestMethod.POST },
+  //     { path: 'auth/signin', method: RequestMethod.POST },
+  //     { path: 'auth/forgotPassword', method: RequestMethod.PUT },
+  //     { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
+  //     { path: 'auth/email/changePassword', method: RequestMethod.POST },
+
+  //   ).forRoutes('*');
+  // }
+}

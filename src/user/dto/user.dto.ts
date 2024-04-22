@@ -8,6 +8,10 @@ export class CreateUserDto {
     password: string;
     roleId: number;
     status: boolean;
+    createdBy: string
+    createdOn: Date
+    updatedBy: string
+    updatedOn: Date;
   }
 
   export class userCreated {

@@ -23,7 +23,7 @@ export class AuthService {
         const user = await this.userRepository.create({
             firstName,
             lastName,
-            phoneNumber,
+            phoneNumber: phoneNumber.toString(),
             email,
             password: hashedPassword,
             roleId,

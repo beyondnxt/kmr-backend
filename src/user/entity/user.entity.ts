@@ -37,14 +37,14 @@ export class User {
     @Column()
     status: boolean;
 
-    @Column()
-    createdBy: string;
+    @Column({ default: null })
+    createdBy: number;
 
     @CreateDateColumn()
     createdOn: Date;
 
-    @Column()
-    updatedBy: string;
+    @Column({ default: null })
+    updatedBy: number;
 
     @UpdateDateColumn()
     updatedOn: Date;

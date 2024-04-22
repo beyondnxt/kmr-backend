@@ -22,14 +22,14 @@ export class Role {
   @OneToMany(() => User, user => user.role)
   user: User[];
 
-  @Column()
-  createdBy: string;
+  @Column({ default: null })
+  createdBy: number;
 
   @CreateDateColumn()
   createdOn: Date;
 
-  @Column()
-  updatedBy: string;
+  @Column({ default: null })
+  updatedBy: number;
 
   @UpdateDateColumn()
   updatedOn: Date;
