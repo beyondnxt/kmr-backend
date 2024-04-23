@@ -11,6 +11,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { User } from './user/entity/user.entity';
 import { Role } from './role/entity/role.entity';
+import { CompanyModule } from './company/company.module';
+import { Company } from './company/entity/company.entity';
 
 @Module({
   imports: [
@@ -21,11 +23,11 @@ import { Role } from './role/entity/role.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Role],
+      entities: [User, Role, Company],
       synchronize: true,
       options: {
-        encrypt: true, // Use SSL
-        trustServerCertificate: true, // Trust self-signed certificate
+        encrypt: true,
+        trustServerCertificate: true,
       },
     }),
     ConfigModule.forRoot(),
@@ -37,6 +39,7 @@ import { Role } from './role/entity/role.entity';
     AuthModule,
     UserModule,
     RoleModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [

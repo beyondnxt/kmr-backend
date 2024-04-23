@@ -14,7 +14,7 @@ export class AuthService {
     ) { }
 
     async signUp(signUpDto: User): Promise<any> {
-        const { firstName, lastName, phoneNumber, email, password, roleId, status } = signUpDto;
+        const { firstName, lastName, phoneNumber, email, password, roleId, companyId, status } = signUpDto;
         const existingUser = await this.userRepository.findOne({ where: { email } });
         if (existingUser) {
             throw new UnauthorizedException('Email already exists');
@@ -27,12 +27,13 @@ export class AuthService {
             email,
             password: hashedPassword,
             roleId,
+            companyId,
             status
         });
         await this.userRepository.save(user);
         const token = this.jwtService.sign({ id: user.id });
 
-        return {token};
+        return { token };
     }
 
     async signIn(signInDto: User): Promise<any> {

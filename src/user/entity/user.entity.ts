@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
+import { Company } from 'src/company/entity/company.entity';
 import { Role } from 'src/role/entity/role.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
@@ -33,6 +34,13 @@ export class User {
     @ManyToOne(() => Role, role => role.user)
     @JoinColumn({ name: 'roleId' })
     role: Role;
+
+    @Column({ name: 'companyId'})
+    companyId: number
+
+    @ManyToOne(() => Company, company => company.user)
+    @JoinColumn({ name: 'companyId' })
+    company: Company;
 
     @Column()
     status: boolean;
