@@ -1,50 +1,47 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { RequestService } from './common/request.service';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
 import { User } from './user/entity/user.entity';
 import { Role } from './role/entity/role.entity';
-import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
-import { RequestService } from './common/request.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mssql',
-      host: '192.168.0.2',
-      port: 1433,
-      username: 'kmruser',
-      password: 'kmr@123',
-      database: 'kmr',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [User, Role],
       synchronize: true,
       options: {
-        encrypt: false, // Use SSL
+        encrypt: true, // Use SSL
+        trustServerCertificate: true, // Trust self-signed certificate
       },
-
     }),
-    AuthModule, 
-    UserModule, 
-    RoleModule
+    ConfigModule.forRoot(),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
+    AuthModule,
+    UserModule,
+    RoleModule,
   ],
-
   controllers: [AppController],
-  providers: [AppService,
-    RequestService
+  providers: [
+    AppService,
+    RequestService,
   ],
 })
-export class AppModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(AuthenticationMiddleware).exclude(
-  //     { path: 'auth/signup', method: RequestMethod.POST },
-  //     { path: 'auth/signin', method: RequestMethod.POST },
-  //     { path: 'auth/forgotPassword', method: RequestMethod.PUT },
-  //     { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
-  //     { path: 'auth/email/changePassword', method: RequestMethod.POST },
-
-  //   ).forRoutes('*');
-  // }
-}
+export class AppModule { }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto, userCreated } from 'src/user/dto/user.dto';
+// import { CreateUserDto, userCreated } from 'src/user/dto/user.dto';
 import * as nodemailer from 'nodemailer';
 import * as bcrypt from 'bcrypt';
 
@@ -13,7 +13,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>, private readonly jwtService: JwtService
     ) { }
 
-    async signUp(signUpDto: CreateUserDto): Promise<any> {
+    async signUp(signUpDto: User): Promise<any> {
         const { firstName, lastName, phoneNumber, email, password, roleId, status } = signUpDto;
         const existingUser = await this.userRepository.findOne({ where: { email } });
         if (existingUser) {
@@ -35,7 +35,7 @@ export class AuthService {
         return {token};
     }
 
-    async signIn(signInDto: userCreated): Promise<any> {
+    async signIn(signInDto: User): Promise<any> {
         const { email, password } = signInDto;
         const user = await this.userRepository.findOne({ where: { email } })
         if (!user) {

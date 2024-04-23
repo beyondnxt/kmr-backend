@@ -12,6 +12,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
         //Authenticate the request
         const userId: any = req.headers['userid'];
         const secretKey = process.env.JWT_SECRET;
+        console.log(secretKey)
         const userExists = await this.userService.doesUserExist(userId);
         const authToken = this.decodeToken(req.headers['authorization'], secretKey);
         if ((!userExists || !authToken || (parseInt(userId) !== authToken.id))) {
