@@ -43,6 +43,8 @@ export class UserService {
                 email: user.email,
                 roleId: user.roleId,
                 roleName: user.role.name,
+                companyId: user.companyId,
+                companyName: user.company.companyName,
                 createdOn: user.createdOn,
                 status: user.status
             })),
@@ -80,12 +82,13 @@ export class UserService {
             throw new NotFoundException(`User with id ${id} not found`);
         }
 
-        existingUser.firstName = user.firstName;
-        existingUser.lastName = user.lastName;
-        existingUser.phoneNumber = user.phoneNumber;
-        existingUser.email = user.email;
-        existingUser.roleId = user.roleId;
-        existingUser.status = user.status;
+        existingUser.firstName = user.firstName,
+        existingUser.lastName = user.lastName,
+        existingUser.phoneNumber = user.phoneNumber,
+        existingUser.email = user.email,
+        existingUser.roleId = user.roleId,
+        existingUser.companyId = user. companyId,
+        existingUser.status = user.status
 
         return await this.userRepository.save(existingUser);
     }
