@@ -12,7 +12,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
         //Authenticate the request
         const userId: any = req.headers['userid'];
         const secretKey = process.env.JWT_SECRET;
-        console.log(secretKey)
+        // console.log(secretKey)
         const userExists = await this.userService.doesUserExist(userId);
         const authToken = this.decodeToken(req.headers['authorization'], secretKey);
         if ((!userExists || !authToken || (parseInt(userId) !== authToken.id))) {
@@ -21,6 +21,12 @@ export class AuthenticationMiddleware implements NestMiddleware {
         this.requestService.setUserId(userId);
         next();
     }
+
+    // use(req: Request, res: Response, next: NextFunction) {
+    //     // Custom logic here
+    //     console.log('Request...');
+    //     next();
+    //   }
     decodeToken(token: string, secretKey: string): any {
         try {
             const decoded = jwt.verify(token, secretKey);
