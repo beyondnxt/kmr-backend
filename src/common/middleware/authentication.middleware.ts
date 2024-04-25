@@ -10,11 +10,16 @@ export class AuthenticationMiddleware implements NestMiddleware {
     private readonly logger = new Logger(AuthenticationMiddleware.name)
     async use(req: Request, res: Response, next: NextFunction,) {
         //Authenticate the request
-        const userId: any = req.headers['userid'];
+        const userId: any = req?.headers.userid;
+        // console.log('userId', userId)
         const secretKey = process.env.JWT_SECRET;
-        // console.log(secretKey)
+        // const secretKey = 'Jisha';
+        // console.log('secretKey',secretKey)
         const userExists = await this.userService.doesUserExist(userId);
-        const authToken = this.decodeToken(req.headers['authorization'], secretKey);
+        // console.log('userExists', userExists)
+        const authToken = this.decodeToken(req?.headers.authorization, secretKey);
+        // console.log('authToken', authToken)
+        // console.log('authToken1', req?.headers.authorization)
         if ((!userExists || !authToken || (parseInt(userId) !== authToken.id))) {
             return res.status(401).json({ error: 'Unauthorized: Missing userId or authToken' });
         }
@@ -22,11 +27,6 @@ export class AuthenticationMiddleware implements NestMiddleware {
         next();
     }
 
-    // use(req: Request, res: Response, next: NextFunction) {
-    //     // Custom logic here
-    //     console.log('Request...');
-    //     next();
-    //   }
     decodeToken(token: string, secretKey: string): any {
         try {
             const decoded = jwt.verify(token, secretKey);

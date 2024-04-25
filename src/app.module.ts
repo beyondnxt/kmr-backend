@@ -7,8 +7,6 @@ import { RoleModule } from './role/role.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RequestService } from './common/request.service';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 import { User } from './user/entity/user.entity';
 import { Role } from './role/entity/role.entity';
 import { CompanyModule } from './company/company.module';
@@ -17,17 +15,23 @@ import { MainCustomerModule } from './main-customer/main-customer.module';
 import { CustomerModule } from './customer/customer.module';
 import { MainCustomer } from './main-customer/entity/main-customer.entity';
 import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
-    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: '192.168.0.2',
+    //   port: 3306,
+    //   username: 'test1',
+    //   password: 'test@123',
+    //   database: 'kmr',
+    //   entities: [User, Role, Company, MainCustomer],
+    //   synchronize: false,
+    // }),
     // TypeOrmModule.forRoot({
     //   type: process.env.DB_TYPE,
     //   host: process.env.DB_HOST,
@@ -45,18 +49,18 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mssql',
+        type: 'mysql',
         host: configService.get('DB_HOST'),
         port: +configService.get('DB_PORT'),
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [User, Role, Company, MainCustomer],
-        synchronize: true,
+        synchronize: false,
         options: {
-          encrypt: true, 
-          trustServerCertificate: true, 
-        },  
+          encrypt: true,
+          trustServerCertificate: true,
+        },
       }),
       inject: [ConfigService],
     }),
@@ -72,7 +76,7 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
     AppService,
     RequestService,
   ],
-  
+
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
