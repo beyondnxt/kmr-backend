@@ -1,50 +1,50 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Put, Query, Req } from '@nestjs/common';
-import { CustomerService } from './customer.service';
-import { Customer } from './entity/customer.entity';
+import { CategoryService } from './category.service';
+import { Category } from './entity/category.entity';
 
-@Controller('customer')
-export class CustomerController {
+@Controller('category')
+export class CategoryController {
     constructor(
-        private readonly customerService: CustomerService
+        private readonly categoryService: CategoryService
     ) { }
 
     @Post()
-    async create(@Body() customerData: Customer, @Req() req: Request) {
+    async create(@Body() categoryData: Category, @Req() req: Request) {
         try {
             const userId = req.headers['userid']
-            return await this.customerService.create(customerData, userId)
+            return await this.categoryService.create(categoryData, userId)
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ Customer: Customer[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ Category: Category[], totalCount: number }> {
         try {
-            return await this.customerService.findAll(page, limit);
+            return await this.categoryService.findAll(page, limit);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: number): Promise<Customer> {
+    async findOne(@Param('id') id: number): Promise<Category> {
         try {
-            const Customer = await this.customerService.findOne(id);
-            if (!Customer) {
-                throw new NotFoundException('Customer not found');
+            const Category = await this.categoryService.findOne(id);
+            if (!Category) {
+                throw new NotFoundException('Category not found');
             }
-            return Customer;
+            return Category;
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Put(':id')
-    async update(@Param('id') id: number, @Body() customerData: Customer, @Req() req: Request): Promise<Customer> {
+    async update(@Param('id') id: number, @Body() categoryData: Category, @Req() req: Request): Promise<Category> {
         try {
             const userId = req.headers['userid']
-            return await this.customerService.update(id, customerData, userId);
+            return await this.categoryService.update(id, categoryData, userId);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -53,7 +53,7 @@ export class CustomerController {
     @Delete(':id')
     async remove(@Param('id') id: number): Promise<any> {
         try {
-            return await this.customerService.remove(id);
+            return await this.categoryService.remove(id);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

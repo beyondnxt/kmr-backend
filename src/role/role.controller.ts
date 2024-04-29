@@ -10,7 +10,7 @@ export class RoleController {
   @Get()
   async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ roles: Role[]; total: number }> {
     try {
-      return await this.roleService.getAllRoles(page,limit);
+      return await this.roleService.getAllRoles(page, limit);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }

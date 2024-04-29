@@ -13,7 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 //     // ConfigModule.forRoot(),
 //     PassportModule.register({ defaultStrategy: 'jwt' }),
 //     JwtModule.register({
-//       secret: 'Jisha',
+//       secret: process.env.JWT_SECRET,
 //       signOptions: { expiresIn: '1h' },
 //     }),
 //     TypeOrmModule.forFeature([User, Role]),

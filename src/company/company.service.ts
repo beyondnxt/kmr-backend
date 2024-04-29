@@ -15,7 +15,7 @@ export class CompanyService {
         company.createdBy = userId
         return await this.companyRepository.save(company);
     }
-    
+
     async findAll(page: number = 1, limit: number = 10): Promise<{ company: Company[], totalCount: number }> {
         const [company, totalCount] = await this.companyRepository.findAndCount({
             skip: (page - 1) * limit,

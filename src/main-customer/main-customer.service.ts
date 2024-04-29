@@ -15,7 +15,7 @@ export class MainCustomerService {
         mainCustomer.createdBy = userId
         return await this.mainCustomerRepository.save(mainCustomer);
     }
-    
+
     async findAll(page: number = 1, limit: number = 10): Promise<{ mainCustomer: MainCustomer[], totalCount: number }> {
         const [mainCustomer, totalCount] = await this.mainCustomerRepository.findAndCount({
             skip: (page - 1) * limit,
