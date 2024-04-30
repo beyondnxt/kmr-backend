@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -14,10 +14,13 @@ import { Company } from './company/entity/company.entity';
 import { MainCustomerModule } from './main-customer/main-customer.module';
 import { CustomerModule } from './customer/customer.module';
 import { MainCustomer } from './main-customer/entity/main-customer.entity';
-import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
 import { Customer } from './customer/entity/customer.entity';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entity/category.entity';
+import { RopeModule } from './rope/rope.module';
+import { WarehouseModule } from './warehouse/warehouse.module';
+import { Rope } from './rope/entity/rope.entity';
+import { Warehouse } from './warehouse/entity/warehouse.entity';
 
 @Module({
   imports: [
@@ -25,16 +28,6 @@ import { Category } from './category/entity/category.entity';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: '192.168.0.2',
-    //   port: 3306,
-    //   username: 'test1',
-    //   password: 'test@123',
-    //   database: 'kmr',
-    //   entities: [User, Role, Company, MainCustomer],
-    //   synchronize: false,
-    // }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -42,13 +35,10 @@ import { Category } from './category/entity/category.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Role, Company, MainCustomer, Customer, Category],
-      // synchronize: false,
-      options: {
-        encrypt: true,
-        trustServerCertificate: true,
-      },
-    }as any),
+      entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse],
+      synchronize: false,
+    }),
+
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
     //   useFactory: (configService: ConfigService) => ({
@@ -74,6 +64,8 @@ import { Category } from './category/entity/category.entity';
     MainCustomerModule,
     CustomerModule,
     CategoryModule,
+    RopeModule,
+    WarehouseModule,
   ],
   controllers: [AppController],
   providers: [
@@ -83,15 +75,15 @@ import { Category } from './category/entity/category.entity';
 
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware).exclude(
-      { path: 'auth/signup', method: RequestMethod.POST },
-      { path: 'auth/signin', method: RequestMethod.POST },
-      { path: 'auth/forgotPassword', method: RequestMethod.PUT },
-      { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
-      { path: 'auth/email/changePassword', method: RequestMethod.POST },
-      { path: 'products/getProductData', method: RequestMethod.GET }
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(AuthenticationMiddleware).exclude(
+  //     { path: 'auth/signup', method: RequestMethod.POST },
+  //     { path: 'auth/signin', method: RequestMethod.POST },
+  //     { path: 'auth/forgotPassword', method: RequestMethod.PUT },
+  //     { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
+  //     { path: 'auth/email/changePassword', method: RequestMethod.POST },
+  //     { path: 'products/getProductData', method: RequestMethod.GET }
 
-    ).forRoutes('*');
-  }
+  //   ).forRoutes('*');
+  // }
 }
