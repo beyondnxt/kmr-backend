@@ -1,4 +1,3 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
 import { Company } from 'src/company/entity/company.entity';
 import { Role } from 'src/role/entity/role.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
@@ -8,21 +7,16 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    @IsNotEmpty()
+    @Column({ default: null })
     firstName: string;
 
-    @Column()
-    @IsNotEmpty()
+    @Column({ default: null })
     lastName: string;
 
-    @Column()
-    @IsNotEmpty()
+    @Column({ default: null })
     phoneNumber: string;
 
     @Column()
-    @IsNotEmpty()
-    @IsEmail()
     email: string;
 
     @Column()
@@ -35,7 +29,7 @@ export class User {
     @JoinColumn({ name: 'roleId' })
     role: Role;
 
-    @Column({ name: 'companyId'})
+    @Column({ name: 'companyId' })
     companyId: number
 
     @ManyToOne(() => Company, company => company.user)

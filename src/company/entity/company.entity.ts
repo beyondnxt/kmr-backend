@@ -25,16 +25,25 @@ export class Company {
 
     @Column({ default: null })
     pan: string
+    
+    @Column({ default: null })
+    accountYear: string
 
-    @Column({ type: 'simple-json', default: null })
-    address: { [key: string]: any }
+    @Column({ default: null })
+    referenceNumber: string
+
+    @Column({ default: null })
+    gstIn: string
+
+    @Column({ default: null })
+    address: string
 
     @Column({ default: null })
     @IsEmail()
     email: string;
 
     @Column({ default: null })
-    password: string;
+    mobileNo: string;
 
     @Column({ default: null })
     createdBy: number;
