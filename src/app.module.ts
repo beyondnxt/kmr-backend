@@ -36,7 +36,7 @@ import { Warehouse } from './warehouse/entity/warehouse.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse],
-      synchronize: true,
+      synchronize: false,
     }),
 
     // TypeOrmModule.forRootAsync({

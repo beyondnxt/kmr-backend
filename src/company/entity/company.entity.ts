@@ -43,7 +43,7 @@ export class Company {
     email: string;
 
     @Column({ default: null })
-    mobileNo: string;
+    mobileNumber: string;
 
     @Column({ default: null })
     createdBy: number;
