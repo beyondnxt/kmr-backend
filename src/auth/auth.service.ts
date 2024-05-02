@@ -38,19 +38,23 @@ export class AuthService {
 
     async signIn(signInDto: User): Promise<any> {
         const { email, password } = signInDto;
-        const user = await this.userRepository.findOne({ where: { email } })
-        if (!user) {
-            throw new UnauthorizedException('Invalid email');
+        if (!email && !password) {
+            return { message: 'Invalid email or password' };
         }
+        const user = await this.userRepository.findOne({ where: { email }, relations: ['role'] })
+        if (!user) {
+            return { message: 'Invalid email' };
+        }
+
         if (user.status !== true) {
-            throw new UnauthorizedException('User is not active');
+            return { message: 'User is not active' };
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            throw new UnauthorizedException('Invalid password');
+            return { message: 'Invalid password' };
         }
         const token = this.jwtService.sign({ id: user.id });
-        const userData = { userId: user.id, roleId: user.roleId, token: token }
+        const userData = { userId: user.id, userName: user.firstName, roleId: user.roleId, roleName: user.role.name, token: token }
         return userData;
     }
 

@@ -13,67 +13,67 @@ export class Customer {
     @JoinColumn({ name: 'mainCustomerId' })
     mainCustomer: MainCustomer;
 
-    @Column()
+    @Column({ default: null })
     status: boolean
 
-    @Column()
+    @Column({ default: null })
     name: string
 
-    @Column()
+    @Column({ default: null })
     code: string
 
-    @Column()
+    @Column({ default: null })
     type: string
 
-    @Column()
+    @Column({ default: null })
     contactPerson: string
 
-    @Column()
+    @Column({ default: null })
     contactNo: string
 
-    @Column()
+    @Column({ default: null })
     email: string
 
-    @Column()
+    @Column({ default: null })
     grade: string
 
-    @Column()
+    @Column({ default: null })
     salesLeadName: string
 
-    @Column()
+    @Column({ default: null })
     salesCode: string
 
-    @Column()
+    @Column({ default: null })
     destinationPort: string
 
-    @Column()
+    @Column({ default: null })
     finalDestination: string
 
-    @Column()
+    @Column({ default: null })
     pieceWeightTolerance: string
 
-    @Column()
+    @Column({ default: null })
     invoiceTolerance: string
 
-    @Column()
+    @Column({ default: null })
     state: string
 
-    @Column()
+    @Column({ default: null })
     gstIn: string
 
-    @Column()
+    @Column({ default: null })
     aadhaarNumber: number
 
-    @Column()
+    @Column({ default: null })
     pan: number
 
-    @Column()
+    @Column({ default: null })
     country: string
 
-    @Column()
+    @Column({ default: null })
     HandledBy: string
 
-    @Column()
+    @Column({ default: null })
     address: string
 
     @Column({ default: null })
