@@ -21,6 +21,10 @@ import { RopeModule } from './rope/rope.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
 import { Rope } from './rope/entity/rope.entity';
 import { Warehouse } from './warehouse/entity/warehouse.entity';
+import { SupplierModule } from './supplier/supplier.module';
+import { DepartmentModule } from './department/department.module';
+import { ColorModule } from './color/color.module';
+import { BrandModule } from './brand/brand.module';
 
 @Module({
   imports: [
@@ -66,6 +70,10 @@ import { Warehouse } from './warehouse/entity/warehouse.entity';
     CategoryModule,
     RopeModule,
     WarehouseModule,
+    SupplierModule,
+    DepartmentModule,
+    ColorModule,
+    BrandModule,
   ],
   controllers: [AppController],
   providers: [
