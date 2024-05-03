@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import { Company } from 'src/company/entity/company.entity';
 import { Role } from 'src/role/entity/role.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
@@ -17,6 +18,7 @@ export class User {
     phoneNumber: string;
 
     @Column()
+    @IsEmail()
     email: string;
 
     @Column()

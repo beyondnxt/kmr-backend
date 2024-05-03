@@ -1,15 +1,16 @@
 export class CreateUserDto {
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    email: string;
-    password: string;
-    roleId: number;
-    status: boolean;
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    email: string
+    password: string
+    roleId: number
+    companyId: number
+    status: boolean
     createdBy: string
     createdOn: Date
     updatedBy: string
-    updatedOn: Date;
+    updatedOn: Date
   }
 
 //   export class userCreated {

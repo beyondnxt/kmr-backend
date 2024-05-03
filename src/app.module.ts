@@ -25,6 +25,9 @@ import { SupplierModule } from './supplier/supplier.module';
 import { DepartmentModule } from './department/department.module';
 import { ColorModule } from './color/color.module';
 import { BrandModule } from './brand/brand.module';
+import { Supplier } from './supplier/entity/supplier.entity';
+import { Department } from './department/entity/department.entity';
+import { Color } from './color/entity/color.entiry';
 
 @Module({
   imports: [
@@ -39,28 +42,10 @@ import { BrandModule } from './brand/brand.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse],
-      synchronize: false,
+      entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse, Supplier,
+        Department, Color],
+      synchronize: true,
     }),
-
-    // TypeOrmModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   useFactory: (configService: ConfigService) => ({
-    //     type: 'mysql',
-    //     host: configService.get('DB_HOST'),
-    //     port: +configService.get('DB_PORT'),
-    //     username: configService.get('DB_USERNAME'),
-    //     password: configService.get('DB_PASSWORD'),
-    //     database: configService.get('DB_NAME'),
-    //     entities: [User, Role, Company, MainCustomer],
-    //     synchronize: false,
-    //     options: {
-    //       encrypt: true,
-    //       trustServerCertificate: true,
-    //     },
-    //   }),
-    //   inject: [ConfigService],
-    // }),
     AuthModule,
     UserModule,
     RoleModule,

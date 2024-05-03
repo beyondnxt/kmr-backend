@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { RopeService } from './rope.service';
 import { Rope } from './entity/rope.entity';
+import { CreateRopeDto } from './dto/rope.dto';
 
 @Controller('rope')
 export class RopeController {
@@ -25,7 +26,7 @@ export class RopeController {
     }
 
     @Post()
-    async createRope(@Body() ropeData: Rope, @Req() req: Request): Promise<Rope> {
+    async createRope(@Body() ropeData: CreateRopeDto, @Req() req: Request): Promise<Rope> {
         try {
             const userId = req.headers['userid']
             return await this.ropeService.createRope(ropeData, userId);
@@ -35,7 +36,7 @@ export class RopeController {
     }
 
     @Put(':id')
-    async updateRope(@Param('id') id: number, @Body() ropeData: Rope, @Req() req: Request): Promise<Rope> {
+    async updateRope(@Param('id') id: number, @Body() ropeData: CreateRopeDto, @Req() req: Request): Promise<Rope> {
         try {
             const userId = req.headers['userid']
             const updatedRope = await this.ropeService.updateRope(id, ropeData, userId);

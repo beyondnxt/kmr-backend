@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MainCustomer } from './entity/main-customer.entity';
 import { Repository } from 'typeorm';
+import { CreateMainCustomerDto } from './dto/main-customer.dto';
 
 @Injectable()
 export class MainCustomerService {
@@ -10,7 +11,7 @@ export class MainCustomerService {
         private readonly mainCustomerRepository: Repository<MainCustomer>
     ) { }
 
-    async create(mainCustomerData: MainCustomer, userId: number): Promise<MainCustomer> {
+    async create(mainCustomerData: CreateMainCustomerDto, userId: number): Promise<MainCustomer> {
         const mainCustomer = this.mainCustomerRepository.create(mainCustomerData);
         mainCustomer.createdBy = userId
         return await this.mainCustomerRepository.save(mainCustomer);
@@ -32,7 +33,7 @@ export class MainCustomerService {
         return mainCustomer;
     }
 
-    async update(id: number, mainCustomerData: MainCustomer, userId): Promise<MainCustomer> {
+    async update(id: number, mainCustomerData: CreateMainCustomerDto, userId): Promise<MainCustomer> {
         try {
             const mainCustomer = await this.mainCustomerRepository.findOne({ where: { id } });
             if (!mainCustomer) {

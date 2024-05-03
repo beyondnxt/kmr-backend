@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Warehouse } from './entity/warehouse.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateWarehouseDto } from './dto/warehouse.dto';
 
 @Injectable()
 export class WarehouseService {
@@ -10,7 +11,7 @@ export class WarehouseService {
         private readonly warehouseRepository: Repository<Warehouse>
     ) { }
 
-    async create(warehouseData: Warehouse, userId: number): Promise<Warehouse> {
+    async create(warehouseData: CreateWarehouseDto, userId: number): Promise<Warehouse> {
         const warehouse = this.warehouseRepository.create(warehouseData);
         warehouse.createdBy = userId
         return await this.warehouseRepository.save(warehouse);
@@ -32,7 +33,7 @@ export class WarehouseService {
         return warehouse;
     }
 
-    async update(id: number, warehouseData: Warehouse, userId): Promise<Warehouse> {
+    async update(id: number, warehouseData: CreateWarehouseDto, userId): Promise<Warehouse> {
         try {
             const warehouse = await this.warehouseRepository.findOne({ where: { id } });
             if (!warehouse) {

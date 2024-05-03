@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 // import { CreateUserDto, userCreated } from 'src/user/dto/user.dto';
 import * as nodemailer from 'nodemailer';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from 'src/user/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>, private readonly jwtService: JwtService
     ) { }
 
-    async signUp(signUpDto: User): Promise<any> {
+    async signUp(signUpDto: CreateUserDto): Promise<any> {
         const { firstName, lastName, phoneNumber, email, password, roleId, companyId, status } = signUpDto;
         const existingUser = await this.userRepository.findOne({ where: { email } });
         if (existingUser) {
@@ -36,14 +37,11 @@ export class AuthService {
         return { token };
     }
 
-    async signIn(signInDto: User): Promise<any> {
+    async signIn(signInDto: CreateUserDto): Promise<any> {
         const { email, password } = signInDto;
-        if (!email && !password) {
-            return { message: 'Invalid email or password' };
-        }
         const user = await this.userRepository.findOne({ where: { email }, relations: ['role'] })
         if (!user) {
-            return { message: 'Invalid email' };
+            return { message: 'Invalid email or password' };
         }
 
         if (user.status !== true) {
@@ -51,7 +49,7 @@ export class AuthService {
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            return { message: 'Invalid password' };
+            return { message: 'Invalid email or password' };
         }
         const token = this.jwtService.sign({ id: user.id });
         const userData = { userId: user.id, userName: user.firstName, roleId: user.roleId, roleName: user.role.name, token: token }

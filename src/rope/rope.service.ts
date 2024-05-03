@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Rope } from './entity/rope.entity';
 import { Repository } from 'typeorm';
+import { CreateRopeDto } from './dto/rope.dto';
 
 @Injectable()
 export class RopeService {
@@ -10,7 +11,7 @@ export class RopeService {
         private readonly ropeRepository: Repository<Rope>,
       ) { }
     
-      async createRope(ropeData: Rope, userId: number): Promise<Rope> {
+      async createRope(ropeData: CreateRopeDto, userId: number): Promise<Rope> {
         try {
           const rope = this.ropeRepository.create(ropeData);
           rope.createdBy = userId
@@ -40,7 +41,7 @@ export class RopeService {
         }
       }
     
-      async updateRope(id: number, ropeData: Rope, userId): Promise<Rope> {
+      async updateRope(id: number, ropeData: CreateRopeDto, userId): Promise<Rope> {
         try {
           const rope = await this.ropeRepository.findOne({ where: { id } });
           if (!Rope) {

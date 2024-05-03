@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { Customer } from './entity/customer.entity';
+import { CreateCustomerDto } from './dto/customer.dto';
 
 @Controller('customer')
 export class CustomerController {
@@ -9,7 +10,7 @@ export class CustomerController {
     ) { }
 
     @Post()
-    async create(@Body() customerData: Customer, @Req() req: Request) {
+    async create(@Body() customerData: CreateCustomerDto, @Req() req: Request) {
         try {
             const userId = req.headers['userid']
             return await this.customerService.create(customerData, userId)
@@ -41,7 +42,7 @@ export class CustomerController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: number, @Body() customerData: Customer, @Req() req: Request): Promise<Customer> {
+    async update(@Param('id') id: number, @Body() customerData: CreateCustomerDto, @Req() req: Request): Promise<Customer> {
         try {
             const userId = req.headers['userid']
             return await this.customerService.update(id, customerData, userId);

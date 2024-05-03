@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { WarehouseService } from './warehouse.service';
 import { Warehouse } from './entity/warehouse.entity';
+import { CreateWarehouseDto } from './dto/warehouse.dto';
 
 @Controller('warehouse')
 export class WarehouseController {
@@ -9,7 +10,7 @@ export class WarehouseController {
     ) { }
 
     @Post()
-    async create(@Body() warehouseData: Warehouse, @Req() req: Request) {
+    async create(@Body() warehouseData: CreateWarehouseDto, @Req() req: Request) {
         try {
             const userId = req.headers['userid']
             return await this.warehouseService.create(warehouseData, userId)
@@ -41,7 +42,7 @@ export class WarehouseController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: number, @Body() warehouseData: Warehouse, @Req() req: Request): Promise<Warehouse> {
+    async update(@Param('id') id: number, @Body() warehouseData: CreateWarehouseDto, @Req() req: Request): Promise<Warehouse> {
         try {
             const userId = req.headers['userid']
             return await this.warehouseService.update(id, warehouseData, userId);

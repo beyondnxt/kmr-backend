@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, HttpException, HttpStatus, Query } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { Role } from './entity/role.entity';
+import { CreateRoleDto } from './dto/role.dto';
 
 
 @Controller('role')
@@ -30,7 +31,7 @@ export class RoleController {
   }
 
   @Post()
-  async createRole(@Body() roleData: Role): Promise<Role> {
+  async createRole(@Body() roleData: CreateRoleDto): Promise<Role> {
     try {
       return await this.roleService.createRole(roleData);
     } catch (error) {
@@ -39,7 +40,7 @@ export class RoleController {
   }
 
   @Put(':id')
-  async updateRole(@Param('id') id: number, @Body() roleData: Role): Promise<Role> {
+  async updateRole(@Param('id') id: number, @Body() roleData: CreateRoleDto): Promise<Role> {
     try {
       const updatedRole = await this.roleService.updateRole(id, roleData);
       if (!updatedRole) {
