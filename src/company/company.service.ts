@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entity/company.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/company.dto';
 
 @Injectable()
@@ -17,12 +17,28 @@ export class CompanyService {
         return await this.companyRepository.save(company);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ company: Company[], totalCount: number }> {
-        const [company, totalCount] = await this.companyRepository.findAndCount({
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { company, totalCount };
+    async findAll(page: number | "all" = 1, limit: number = 10, companyName: string): Promise<{ data: Company[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
+        if (companyName) {
+            where.companyName = Like(`%${companyName}%`);
+        }
+        let queryBuilder = this.companyRepository.createQueryBuilder('company')
+            .andWhere(where);
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [companies, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: companies,
+            fetchedCount: companies.length,
+            totalCount: totalCount
+        };
     }
 
     async findOne(id: number): Promise<Company> {

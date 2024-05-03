@@ -20,9 +20,9 @@ export class CompanyController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ company: Company[], totalCount: number }> {
+    async findAll(@Query('page') page: number | "all" = 1, @Query('limit') limit: number = 10, @Query('value') companyName: string): Promise<{ data: Company[], fetchedCount: number, totalCount: number }> {
         try {
-            return await this.companyService.findAll(page, limit);
+            return await this.companyService.findAll(page, limit, companyName);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

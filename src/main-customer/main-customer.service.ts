@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MainCustomer } from './entity/main-customer.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateMainCustomerDto } from './dto/main-customer.dto';
 
 @Injectable()
@@ -17,12 +17,28 @@ export class MainCustomerService {
         return await this.mainCustomerRepository.save(mainCustomer);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ mainCustomer: MainCustomer[], totalCount: number }> {
-        const [mainCustomer, totalCount] = await this.mainCustomerRepository.findAndCount({
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { mainCustomer, totalCount };
+    async findAll(page: number | "all" = 1, limit: number = 10, name: string): Promise<{ data: MainCustomer[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
+        if (name) {
+            where.name = Like(`%${name}%`);
+        }
+        let queryBuilder = this.mainCustomerRepository.createQueryBuilder('main_customer')
+            .andWhere(where);
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [mainCustomer, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: mainCustomer,
+            fetchedCount: mainCustomer.length,
+            totalCount: totalCount
+        };
     }
 
     async findOne(id: number): Promise<MainCustomer> {
