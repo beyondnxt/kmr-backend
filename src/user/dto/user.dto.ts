@@ -1,17 +1,20 @@
 export class CreateUserDto {
-    firstName: string
-    lastName: string
-    phoneNumber: string
-    email: string
-    password: string
-    roleId: number
-    companyId: number
-    status: boolean
-    createdBy: string
-    createdOn: Date
-    updatedBy: string
-    updatedOn: Date
-  }
+  userName: string
+  fullName: string
+  location: string
+  departmentId: number
+  password: string
+  mobileNumer: string
+  salesFullAccess: boolean
+  barcodeTypeAccess: boolean
+  allCustomerAccess: boolean
+  roleId: number
+  status: boolean
+  createdBy: number
+  createdOn: Date
+  updatedBy: number
+  updatedOn: Date
+}
 
 //   export class userCreated {
 //     @IsEmail()

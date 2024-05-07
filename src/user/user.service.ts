@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "./entity/user.entity";
+import { CreateUserDto } from "./dto/user.dto";
 
 @Injectable()
 export class UserService {
@@ -14,21 +15,21 @@ export class UserService {
         return user;
     }
 
-    async getUsersWithRoles(page: number = 1, limit: number = 10, firstName?: string, lastName?: string): Promise<{ data: any[], total: number }> {
+    async getUsersWithRoles(page: number = 1, limit: number = 10, userName?: string, fullName?: string): Promise<{ data: any[], total: number }> {
         const skip = (page - 1) * limit;
 
         let query = this.userRepository.createQueryBuilder('user')
             .leftJoinAndSelect('user.role', 'role')
-            .leftJoinAndSelect('user.company', 'company')
+            .leftJoinAndSelect('user.department', 'department')
             .skip(skip)
             .take(limit);
 
-        if (firstName) {
-            query = query.andWhere('user.firstName = :firstName', { firstName });
+        if (userName) {
+            query = query.andWhere('user.userName = :userName', { userName });
         }
 
-        if (lastName) {
-            query = query.andWhere('user.lastName = :lastName', { lastName });
+        if (fullName) {
+            query = query.andWhere('user.fullName = :fullName', { fullName });
         }
 
         const usersWithRoles = await query.getMany();
@@ -38,16 +39,19 @@ export class UserService {
         return {
             data: usersWithRoles.map(user => ({
                 id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                phoneNumber: user.phoneNumber,
-                email: user.email,
-                roleId: user.roleId ? user.roleId : null,
+                userName: user.userName,
+                fullName: user.fullName,
+                location: user.location,
+                departmentId: user.departmentId,
+                departmentName: user.department.departmentName,
+                password: user.password,
+                mobileNumer: user.mobileNumer,
+                salesFullAccess: user.salesFullAccess,
+                barcodeTypeAccess: user.barcodeTypeAccess,
+                allCustomerAccess: user.allCustomerAccess,
+                roleId: user.roleId,
                 roleName: user.role.name,
-                companyId: user.companyId ? user.companyId : null,
-                companyName: user.company.companyName,
-                createdOn: user.createdOn,
-                status: user.status
+                createdOn: user.createdOn
             })),
             total: totalCount
         };
@@ -77,20 +81,13 @@ export class UserService {
         }
     }
 
-    async updateUser(id: number, user: User): Promise<User> {
+    async updateUser(id: number, userData: CreateUserDto): Promise<User> {
         const existingUser = await this.userRepository.findOne({ where: { id } });
         if (!existingUser) {
             throw new NotFoundException(`User with id ${id} not found`);
         }
 
-        existingUser.firstName = user.firstName,
-            existingUser.lastName = user.lastName,
-            existingUser.phoneNumber = user.phoneNumber,
-            existingUser.email = user.email,
-            existingUser.roleId = user.roleId,
-            existingUser.companyId = user.companyId,
-            existingUser.status = user.status
-
+        Object.assign(existingUser, userData);
         return await this.userRepository.save(existingUser);
     }
 

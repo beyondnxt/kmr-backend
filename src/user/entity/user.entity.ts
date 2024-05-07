@@ -1,5 +1,4 @@
-import { IsEmail } from 'class-validator';
-import { Company } from 'src/company/entity/company.entity';
+import { Department } from 'src/department/entity/department.entity';
 import { Role } from 'src/role/entity/role.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
@@ -8,38 +7,46 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ default: null })
-    firstName: string;
+    @Column()
+    userName: string;
 
     @Column({ default: null })
-    lastName: string;
-
-    @Column({ default: null })
-    phoneNumber: string;
+    fullName: string;
 
     @Column()
-    @IsEmail()
-    email: string;
+    location: string;
 
     @Column()
+    departmentId: number
+
+    @ManyToOne(() => Department, department => department.user)
+    @JoinColumn({ name: 'departmentId' })
+    department: Department;
+
+    @Column({ default: null })
     password: string;
+
+    @Column({ default: null })
+    mobileNumer: string;
+
+    @Column()
+    salesFullAccess: boolean;
+
+    @Column()
+    barcodeTypeAccess: boolean;
+
+    @Column()
+    allCustomerAccess: boolean;
 
     @Column({ name: 'roleId' })
     roleId: number
 
     @ManyToOne(() => Role, role => role.user)
     @JoinColumn({ name: 'roleId' })
-    role: Role;
-
-    @Column({ name: 'companyId' })
-    companyId: number
-
-    @ManyToOne(() => Company, company => company.user)
-    @JoinColumn({ name: 'companyId' })
-    company: Company;
-
+    role: Role
+    
     @Column()
-    status: boolean;
+    status: boolean
 
     @Column({ default: null })
     createdBy: number;

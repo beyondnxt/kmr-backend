@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from 'src/user/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 // import { CreateUserDto, userCreated } from 'src/user/dto/user.dto';
-import * as nodemailer from 'nodemailer';
+// import * as nodemailer from 'nodemailer';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/user/dto/user.dto';
 
@@ -15,20 +15,23 @@ export class AuthService {
     ) { }
 
     async signUp(signUpDto: CreateUserDto): Promise<any> {
-        const { firstName, lastName, phoneNumber, email, password, roleId, companyId, status } = signUpDto;
-        const existingUser = await this.userRepository.findOne({ where: { email } });
+        const { userName, fullName, location, departmentId, password, mobileNumer, salesFullAccess, barcodeTypeAccess, allCustomerAccess, roleId, status } = signUpDto;
+        const existingUser = await this.userRepository.findOne({ where: { userName } });
         if (existingUser) {
-            throw new UnauthorizedException('Email already exists');
+            throw new UnauthorizedException('userName already exists');
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await this.userRepository.create({
-            firstName,
-            lastName,
-            phoneNumber: phoneNumber.toString(),
-            email,
+            userName,
+            fullName,
+            location,
+            departmentId,
             password: hashedPassword,
+            mobileNumer: mobileNumer.toString(),
+            salesFullAccess,
+            barcodeTypeAccess,
+            allCustomerAccess,
             roleId,
-            companyId,
             status
         });
         await this.userRepository.save(user);
@@ -38,10 +41,14 @@ export class AuthService {
     }
 
     async signIn(signInDto: CreateUserDto): Promise<any> {
-        const { email, password } = signInDto;
-        const user = await this.userRepository.findOne({ where: { email }, relations: ['role'] })
+        const { userName, password } = signInDto;
+        if (!userName || !password) {
+            return { message: 'User name and password required' }
+        }
+        const user = await this.userRepository.findOne({ where: { userName }, relations: ['role'] })
+
         if (!user) {
-            return { message: 'Invalid email or password' };
+            return { message: 'Invalid user name or password' };
         }
 
         if (user.status !== true) {
@@ -49,10 +56,10 @@ export class AuthService {
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            return { message: 'Invalid email or password' };
+            return { message: 'Invalid user name or password' };
         }
         const token = this.jwtService.sign({ id: user.id });
-        const userData = { userId: user.id, userName: user.firstName, roleId: user.roleId, roleName: user.role.name, token: token }
+        const userData = { userId: user.id, userName: user.userName, roleId: user.roleId, roleName: user.role.name, token: token }
         return userData;
     }
 
@@ -83,59 +90,59 @@ export class AuthService {
         }
     }
 
-    async forgotPassword(email: string, newPassword: string): Promise<User> {
-        const existingUser = await this.userRepository.findOne({ where: { email } });
+    async forgotPassword(userName: string, newPassword: string): Promise<User> {
+        const existingUser = await this.userRepository.findOne({ where: { userName } });
         if (!existingUser) {
-            throw new NotFoundException('Invalid email');
+            throw new NotFoundException('Invalid user name');
         }
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         existingUser.password = hashedPassword;
         return await this.userRepository.save(existingUser);
     }
 
-    async resetPasswordUsingId(id: number, password: string): Promise<any> {
-        try {
-            const user = await this.changePassword(id, password);
-            return user;
-        } catch (error) {
-            throw new InternalServerErrorException('Failed to reset password');
-        }
-    }
+    // async resetPasswordUsingId(id: number, password: string): Promise<any> {
+    //     try {
+    //         const user = await this.changePassword(id, password);
+    //         return user;
+    //     } catch (error) {
+    //         throw new InternalServerErrorException('Failed to reset password');
+    //     }
+    // }
 
-    async sendEmailForgotPassword(email: string): Promise<boolean> {
-        try {
-            const user = await this.userRepository.findOne({ where: { email } });
-            if (!user) {
-                throw new NotFoundException('User not found');
-            }
+    // async sendEmailForgotPassword(email: string): Promise<boolean> {
+    //     try {
+    //         const user = await this.userRepository.findOne({ where: { email } });
+    //         if (!user) {
+    //             throw new NotFoundException('User not found');
+    //         }
 
-            const transporter = nodemailer.createTransport({
-                host: process.env.HOST,
-                port: parseInt(process.env.PORT),
-                secure: process.env.SECURE === 'true', // Convert string to boolean
-                auth: {
-                    user: process.env.USER,
-                    pass: process.env.PASSWORD
-                },
-                tls: {
-                    rejectUnauthorized: false
-                }
-            });
+    //         const transporter = nodemailer.createTransport({
+    //             host: process.env.HOST,
+    //             port: parseInt(process.env.PORT),
+    //             secure: process.env.SECURE === 'true', // Convert string to boolean
+    //             auth: {
+    //                 user: process.env.USER,
+    //                 pass: process.env.PASSWORD
+    //             },
+    //             tls: {
+    //                 rejectUnauthorized: false
+    //             }
+    //         });
 
-            const mailOptions = {
-                from: 'jishajini21@gmail.com',
-                to: email,
-                subject: 'Forgotten Password',
-                text: 'Forgot Password',
-                html: `Hi!<br><br>If you requested to reset your password, click <a href="http://localhost:4200/change-password/${user.id}">here</a>`
-            };
+    //         const mailOptions = {
+    //             from: 'jishajini21@gmail.com',
+    //             to: email,
+    //             subject: 'Forgotten Password',
+    //             text: 'Forgot Password',
+    //             html: `Hi!<br><br>If you requested to reset your password, click <a href="http://localhost:4200/change-password/${user.id}">here</a>`
+    //         };
 
-            const info = await transporter.sendMail(mailOptions);
-            console.log('Email sent:', info.response);
-            return true;
-        } catch (error) {
-            console.error('Error sending email:', error);
-            throw new InternalServerErrorException('Failed to send email');
-        }
-    }
+    //         const info = await transporter.sendMail(mailOptions);
+    //         console.log('Email sent:', info.response);
+    //         return true;
+    //     } catch (error) {
+    //         console.error('Error sending email:', error);
+    //         throw new InternalServerErrorException('Failed to send email');
+    //     }
+    // }
 }

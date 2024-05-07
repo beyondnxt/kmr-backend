@@ -1,5 +1,4 @@
 import { IsEmail } from "class-validator";
-import { User } from "src/user/entity/user.entity";
 import { Warehouse } from "src/warehouse/entity/warehouse.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -56,9 +55,6 @@ export class Company {
 
     @UpdateDateColumn()
     updatedOn: Date;
-
-    @OneToMany(() => User, user => user.company)
-    user: User[];
 
     @OneToMany(() => Warehouse, warehouse => warehouse.company)
     warehouse: Warehouse[];
