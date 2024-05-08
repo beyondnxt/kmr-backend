@@ -5,9 +5,7 @@ export class CreateUserDto {
   departmentId: number
   password: string
   mobileNumer: string
-  salesFullAccess: boolean
-  barcodeTypeAccess: boolean
-  allCustomerAccess: boolean
+  email: string
   roleId: number
   status: boolean
   createdBy: number

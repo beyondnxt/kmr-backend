@@ -28,6 +28,10 @@ import { BrandModule } from './brand/brand.module';
 import { Supplier } from './supplier/entity/supplier.entity';
 import { Department } from './department/entity/department.entity';
 import { Color } from './color/entity/color.entiry';
+import { SalesLeadModule } from './sales-lead/sales-lead.module';
+import { SalesLead } from './sales-lead/entity/sales-lead.entity';
+import { ParentCategoryModule } from './parent-category/parent-category.module';
+import { ParentCategory } from './parent-category/entity/parent-category.entity';
 
 @Module({
   imports: [
@@ -43,7 +47,7 @@ import { Color } from './color/entity/color.entiry';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse, Supplier,
-        Department, Color],
+        Department, Color, SalesLead,ParentCategory],
       synchronize: true,
     }),
     AuthModule,
@@ -59,6 +63,8 @@ import { Color } from './color/entity/color.entiry';
     DepartmentModule,
     ColorModule,
     BrandModule,
+    SalesLeadModule,
+    ParentCategoryModule,
   ],
   controllers: [AppController],
   providers: [

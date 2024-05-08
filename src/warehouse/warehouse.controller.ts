@@ -20,7 +20,7 @@ export class WarehouseController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ warehouse: Warehouse[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Warehouse[], totalCount: number }> {
         try {
             return await this.warehouseService.findAll(page, limit);
         } catch (error) {

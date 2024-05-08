@@ -17,12 +17,12 @@ export class ColorService {
         return await this.colorRepository.save(color);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ color: Color[], totalCount: number }> {
-        const [color, totalCount] = await this.colorRepository.findAndCount({
+    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Color[], totalCount: number }> {
+        const [data, totalCount] = await this.colorRepository.findAndCount({
             skip: (page - 1) * limit,
             take: limit,
         });
-        return { color, totalCount };
+        return { data, totalCount };
     }
 
     async findOne(id: number): Promise<Color> {

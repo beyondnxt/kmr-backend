@@ -17,12 +17,12 @@ export class CategoryService {
         return await this.CategoryRepository.save(Category);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ Category: Category[], totalCount: number }> {
-        const [Category, totalCount] = await this.CategoryRepository.findAndCount({
+    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Category[], totalCount: number }> {
+        const [data, totalCount] = await this.CategoryRepository.findAndCount({
             skip: (page - 1) * limit,
             take: limit,
         });
-        return { Category, totalCount };
+        return { data, totalCount };
     }
 
     async findOne(id: number): Promise<Category> {

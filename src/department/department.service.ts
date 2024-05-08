@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Department } from './entity/department.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateDepartmentDto } from './dto/department.dto';
 
 @Injectable()
@@ -17,12 +17,28 @@ export class DepartmentService {
         return await this.departmentRepository.save(department);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ department: Department[], totalCount: number }> {
-        const [department, totalCount] = await this.departmentRepository.findAndCount({
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { department, totalCount };
+    async findAll(page: number | "all" = 1, limit: number = 10, departmentName: string): Promise<{ data: Department[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
+        if (departmentName) {
+            where.departmentName = Like(`%${departmentName}%`);
+        }
+        let queryBuilder = this.departmentRepository.createQueryBuilder('department')
+            .andWhere(where);
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [department, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: department,
+            fetchedCount: department.length,
+            totalCount: totalCount
+        };
     }
 
     async findOne(id: number): Promise<Department> {

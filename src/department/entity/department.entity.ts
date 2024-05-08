@@ -12,8 +12,9 @@ export class Department {
     @Column()
     location: string
 
-    @Column()
-    type: string
+    @Column({ type: 'simple-json', default: null })
+    type: { [key: string]: any };
+
 
     @Column({ default: null })
     createdBy: number;

@@ -9,7 +9,7 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) { }
 
   @Get()
-  async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ roles: Role[]; total: number }> {
+  async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Role[]; total: number }> {
     try {
       return await this.roleService.getAllRoles(page, limit);
     } catch (error) {

@@ -21,13 +21,13 @@ export class RopeService {
         }
       }
     
-      async getAllRopes(page: number = 1, limit: number = 10): Promise<{ ropes: Rope[]; total: number }> {
+      async getAllRopes(page: number = 1, limit: number = 10): Promise<{ data: Rope[]; total: number }> {
         try {
-          const [ropes, total] = await this.ropeRepository.findAndCount({
+          const [data, total] = await this.ropeRepository.findAndCount({
             take: limit,
             skip: (page - 1) * limit,
           });
-          return { ropes, total };
+          return { data, total };
         } catch (error) {
           throw new Error(`Unable to fetch Ropes: ${error.message}`);
         }

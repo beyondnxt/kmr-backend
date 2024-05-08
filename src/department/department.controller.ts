@@ -20,9 +20,9 @@ export class DepartmentController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ department: Department[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('value')departmentName: string): Promise<{ data: Department[], totalCount: number }> {
         try {
-            return await this.departmentService.findAll(page, limit);
+            return await this.departmentService.findAll(page, limit, departmentName);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

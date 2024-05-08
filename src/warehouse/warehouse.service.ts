@@ -17,12 +17,12 @@ export class WarehouseService {
         return await this.warehouseRepository.save(warehouse);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ warehouse: Warehouse[], totalCount: number }> {
-        const [warehouse, totalCount] = await this.warehouseRepository.findAndCount({
+    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Warehouse[], totalCount: number }> {
+        const [data, totalCount] = await this.warehouseRepository.findAndCount({
             skip: (page - 1) * limit,
             take: limit,
         });
-        return { warehouse, totalCount };
+        return { data, totalCount };
     }
 
     async findOne(id: number): Promise<Warehouse> {

@@ -1,6 +1,7 @@
 import { Department } from 'src/department/entity/department.entity';
 import { Role } from 'src/role/entity/role.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { SalesLead } from 'src/sales-lead/entity/sales-lead.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'user' })
 export class User {
@@ -16,7 +17,7 @@ export class User {
     @Column()
     location: string;
 
-    @Column()
+    @Column({ default: null })
     departmentId: number
 
     @ManyToOne(() => Department, department => department.user)
@@ -29,14 +30,8 @@ export class User {
     @Column({ default: null })
     mobileNumer: string;
 
-    @Column()
-    salesFullAccess: boolean;
-
-    @Column()
-    barcodeTypeAccess: boolean;
-
-    @Column()
-    allCustomerAccess: boolean;
+    @Column({ default: null })
+    email: string
 
     @Column({ name: 'roleId' })
     roleId: number
@@ -44,7 +39,7 @@ export class User {
     @ManyToOne(() => Role, role => role.user)
     @JoinColumn({ name: 'roleId' })
     role: Role
-    
+
     @Column()
     status: boolean
 
@@ -59,5 +54,8 @@ export class User {
 
     @UpdateDateColumn()
     updatedOn: Date;
+
+    @OneToMany(() => SalesLead, saleslead => saleslead.user)
+    saleslead: SalesLead[];
 
 }

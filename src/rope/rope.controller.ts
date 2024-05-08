@@ -8,7 +8,7 @@ export class RopeController {
     constructor(private readonly ropeService: RopeService) { }
 
     @Get()
-    async getAllRopes(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ ropes: Rope[]; total: number }> {
+    async getAllRopes(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Rope[]; total: number }> {
         try {
             return await this.ropeService.getAllRopes(page, limit);
         } catch (error) {

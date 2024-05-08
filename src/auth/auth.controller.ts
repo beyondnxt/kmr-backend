@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, Put, Req, Get } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, Put, Req, Get, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/user.dto';
 
@@ -33,16 +33,16 @@ export class AuthController {
     return this.authService.forgotPassword(userName, password);
   }
 
-  // @Put('/resetPasswordUsingId/:id')
-  // async resetPasswordUsingId(@Param("id") id: number, @Body('password') password: string) {
-  //   return this.authService.resetPasswordUsingId(id, password);
-  // }
+  @Put('/resetPasswordUsingId/:id')
+  async resetPasswordUsingId(@Param("id") id: number, @Body('password') password: string) {
+    return this.authService.resetPasswordUsingId(id, password);
+  }
 
-  // @Post('email/changePassword')
-  // public async sendEmailForgotPassword(@Body('email') email: string): Promise<any> {
-  //   const isEmailSent = await this.authService.sendEmailForgotPassword(email);
-  //   if (isEmailSent) {
-  //     return { message: "Mail send successfully" };
-  //   }
-  // }
+  @Post('email/changePassword')
+  public async sendEmailForgotPassword(@Body('email') email: string): Promise<any> {
+    const isEmailSent = await this.authService.sendEmailForgotPassword(email);
+    if (isEmailSent) {
+      return { message: "Mail send successfully" };
+    }
+  }
 }

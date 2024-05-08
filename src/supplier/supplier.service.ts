@@ -17,12 +17,12 @@ export class SupplierService {
         return await this.supplierRepository.save(supplier);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ supplier: Supplier[], totalCount: number }> {
-        const [supplier, totalCount] = await this.supplierRepository.findAndCount({
+    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Supplier[], totalCount: number }> {
+        const [data, totalCount] = await this.supplierRepository.findAndCount({
             skip: (page - 1) * limit,
             take: limit,
         });
-        return { supplier, totalCount };
+        return { data, totalCount };
     }
 
     async findOne(id: number): Promise<Supplier> {

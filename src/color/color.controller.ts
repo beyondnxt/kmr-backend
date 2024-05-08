@@ -20,7 +20,7 @@ export class ColorController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ color: Color[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Color[], totalCount: number }> {
         try {
             return await this.colorService.findAll(page, limit);
         } catch (error) {

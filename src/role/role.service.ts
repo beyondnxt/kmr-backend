@@ -20,13 +20,13 @@ export class RoleService {
     }
   }
 
-  async getAllRoles(page: number = 1, limit: number = 10): Promise<{ roles: Role[]; total: number }> {
+  async getAllRoles(page: number = 1, limit: number = 10): Promise<{ data: Role[]; total: number }> {
     try {
-      const [roles, total] = await this.roleRepository.findAndCount({
+      const [data, total] = await this.roleRepository.findAndCount({
         take: limit,
         skip: (page - 1) * limit,
       });
-      return { roles, total };
+      return { data, total };
     } catch (error) {
       throw new Error(`Unable to fetch roles: ${error.message}`);
     }
