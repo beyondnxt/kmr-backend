@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { SalesLead } from './entity/sales-lead.entity';
 import { CreateSalesLeadDto } from './dto/sales-lead.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class SalesLeadService {
@@ -17,12 +17,39 @@ export class SalesLeadService {
         return await this.salesLeadRepository.save(salesLead);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ data: SalesLead[], totalCount: number }> {
-        const [data, totalCount] = await this.salesLeadRepository.findAndCount({
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { data, totalCount };
+    async findAll(page: number | 'all' = 1, limit: number = 10, name: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
+        if (name) {
+            where.name = Like(`%${name}%`);
+        }
+        let queryBuilder = this.salesLeadRepository.createQueryBuilder('sales_lead')
+            .leftJoinAndSelect('sales_lead.user', 'user')
+            .andWhere(where);
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [salesLeads, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: salesLeads.map(salesLead => ({
+                id: salesLead.id,
+                salesLeadName: salesLead.name,
+                shortCode: salesLead.shortCode,
+                userId: salesLead.user.id,
+                userName: salesLead.user.userName,
+                createdOn: salesLead.createdOn,
+                createdBy: salesLead.createdBy,
+                updatedOn: salesLead.updatedOn,
+                updatedBy: salesLead.updatedBy
+            })),
+            fetchedCount: salesLeads.length,
+            totalCount: totalCount
+        };
     }
 
     async findOne(id: number): Promise<SalesLead> {

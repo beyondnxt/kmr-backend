@@ -8,7 +8,7 @@ export class CreateCustomerDto{
     contactNo: string
     email: string
     grade: string
-    salesLeadName: string
+    salesLeadId: number
     salesCode: string
     destinationPort: string
     finalDestination: string

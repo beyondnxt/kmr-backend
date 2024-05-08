@@ -32,6 +32,10 @@ import { SalesLeadModule } from './sales-lead/sales-lead.module';
 import { SalesLead } from './sales-lead/entity/sales-lead.entity';
 import { ParentCategoryModule } from './parent-category/parent-category.module';
 import { ParentCategory } from './parent-category/entity/parent-category.entity';
+import { ChildCategoryModule } from './child-category/child-category.module';
+import { SubCategoryModule } from './sub-category/sub-category.module';
+import { ChildCategory } from './child-category/entity/child-category.entity';
+import { SubCategory } from './sub-category/entity/sub-category.entity';
 
 @Module({
   imports: [
@@ -47,7 +51,7 @@ import { ParentCategory } from './parent-category/entity/parent-category.entity'
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse, Supplier,
-        Department, Color, SalesLead,ParentCategory],
+        Department, Color, SalesLead,ParentCategory, ChildCategory, SubCategory],
       synchronize: true,
     }),
     AuthModule,
@@ -65,6 +69,8 @@ import { ParentCategory } from './parent-category/entity/parent-category.entity'
     BrandModule,
     SalesLeadModule,
     ParentCategoryModule,
+    ChildCategoryModule,
+    SubCategoryModule,
   ],
   controllers: [AppController],
   providers: [

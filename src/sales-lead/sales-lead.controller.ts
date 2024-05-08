@@ -3,7 +3,7 @@ import { SalesLeadService } from './sales-lead.service';
 import { CreateSalesLeadDto } from './dto/sales-lead.dto';
 import { SalesLead } from './entity/sales-lead.entity';
 
-@Controller('sales-lead')
+@Controller('saleslead')
 export class SalesLeadController {
     constructor(
         private readonly salesLeadService: SalesLeadService
@@ -20,9 +20,9 @@ export class SalesLeadController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: SalesLead[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('value') name: string): Promise<{ data: any[], totalCount: number }> {
         try {
-            return await this.salesLeadService.findAll(page, limit);
+            return await this.salesLeadService.findAll(page, limit, name);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

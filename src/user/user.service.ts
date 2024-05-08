@@ -55,16 +55,27 @@ export class UserService {
         };
     }
 
-    async getUsers(page: number = 1, limit: number = 10): Promise<{ data: User[]; total: number }> {
-        try {
-            const [data, total] = await this.userRepository.findAndCount({
-                take: limit,
-                skip: (page - 1) * limit,
-            });
-            return { data, total };
-        } catch (error) {
-            throw new Error(`Unable to fetch users: ${error.message}`);
+    async getUsers(page: number|'all' = 1, limit: number = 10): Promise<{ data: any[],  totalCount: number }> {
+        
+        let queryBuilder = this.userRepository.createQueryBuilder('user')
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
         }
+
+        const [users, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: users.map(user => ({ 
+                id: user.id, 
+                name: user.userName 
+            })),
+            totalCount: totalCount
+        };
+        
     }
 
     async getUserById(userId: number): Promise<User | undefined> {

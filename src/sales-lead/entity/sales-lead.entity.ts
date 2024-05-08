@@ -1,5 +1,6 @@
+import { Customer } from "src/customer/entity/customer.entity";
 import { User } from "src/user/entity/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({name: 'sales_lead'})
 export class SalesLead{
@@ -30,4 +31,7 @@ export class SalesLead{
 
     @UpdateDateColumn()
     updatedOn: Date;
+
+    @OneToMany(() => Customer, customer => customer.salesLead)
+    customer: Customer[];
 }

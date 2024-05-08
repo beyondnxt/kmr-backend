@@ -6,8 +6,8 @@ import { CreateUserDto } from './dto/user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  @Get('/findAll')
-  async getUsers(@Query('page') page: number, @Query('limit') limit: number): Promise<{ data: User[]; total: number }> {
+  @Get('/all')
+  async getUsers(@Query('page') page: number, @Query('limit') limit: number): Promise<{ data: User[]; totalCount: number }> {
     try {
       return await this.userService.getUsers(page, limit);
     } catch (error) {

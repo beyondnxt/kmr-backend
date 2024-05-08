@@ -1,4 +1,5 @@
 import { MainCustomer } from "src/main-customer/entity/main-customer.entity";
+import { SalesLead } from "src/sales-lead/entity/sales-lead.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'customer' })
@@ -37,8 +38,12 @@ export class Customer {
     @Column({ default: null })
     grade: string
 
-    @Column({ default: null })
-    salesLeadName: string
+    @Column()
+    salesLeadId: number
+
+    @ManyToOne(() => SalesLead, salesLead => salesLead.customer)
+    @JoinColumn({ name: 'salesLeadId' })
+    salesLead: SalesLead;
 
     @Column({ default: null })
     salesCode: string
