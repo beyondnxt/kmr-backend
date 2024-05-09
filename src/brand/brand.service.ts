@@ -22,7 +22,7 @@ export class BrandService {
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.brandRepository.createQueryBuilder('Brand')
+        let queryBuilder = this.brandRepository.createQueryBuilder('brand')
             .andWhere(where);
 
         if (page !== "all") {

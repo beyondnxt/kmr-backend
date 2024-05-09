@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import { User } from "./entity/user.entity";
 import { CreateUserDto } from "./dto/user.dto";
 
@@ -32,9 +32,12 @@ export class UserService {
             query = query.andWhere('user.fullName = :fullName', { fullName });
         }
 
-        const usersWithRoles = await query.getMany();
+        // const usersWithRoles = await query.getMany();
 
-        const totalCount = await this.userRepository.createQueryBuilder('user').getCount();
+        const [usersWithRoles, totalCount] = await Promise.all([
+            query.getMany(),
+            query.getCount()
+        ]);
 
         return {
             data: usersWithRoles.map(user => ({
@@ -42,21 +45,24 @@ export class UserService {
                 userName: user.userName,
                 fullName: user.fullName,
                 location: user.location,
-                departmentId: user.departmentId?user.departmentId: null,
-                departmentName: user.department.departmentName? user.department.departmentName: null,
+                departmentId: user.departmentId ? user.departmentId : null,
+                departmentName: user.department.departmentName ? user.department.departmentName : null,
                 password: user.password,
                 mobileNumer: user.mobileNumber,
                 email: user.email,
                 roleId: user.roleId,
                 roleName: user.role.name,
-                createdOn: user.createdOn
+                createdOn: user.createdOn,
+                createdBy: user.createdBy,
+                updatedOn: user.updatedOn,
+                updatedBy: user.updatedBy
             })),
             total: totalCount
         };
     }
 
-    async getUsers(page: number|'all' = 1, limit: number = 10): Promise<{ data: any[],  totalCount: number }> {
-        
+    async getUsers(page: number | 'all' = 1, limit: number = 10): Promise<{ data: any[], totalCount: number }> {
+
         let queryBuilder = this.userRepository.createQueryBuilder('user')
 
         if (page !== "all") {
@@ -69,13 +75,13 @@ export class UserService {
             queryBuilder.getCount()
         ]);
         return {
-            data: users.map(user => ({ 
-                id: user.id, 
-                name: user.userName 
+            data: users.map(user => ({
+                id: user.id,
+                name: user.userName
             })),
             totalCount: totalCount
         };
-        
+
     }
 
     async getUserById(userId: number): Promise<User | undefined> {
@@ -90,13 +96,16 @@ export class UserService {
         }
     }
 
-    async updateUser(id: number, userData: CreateUserDto): Promise<User> {
+    async updateUser(id: number, userData: CreateUserDto): Promise<any> {
         const existingUser = await this.userRepository.findOne({ where: { id } });
         if (!existingUser) {
             throw new NotFoundException(`User with id ${id} not found`);
         }
-
         Object.assign(existingUser, userData);
+        const userWithSameUsername = await this.userRepository.findOne({ where: { userName: userData.userName, id: Not(id) } });
+        if (userWithSameUsername) {
+            throw new NotFoundException ( `User name already exists` )
+        }
         return await this.userRepository.save(existingUser);
     }
 
