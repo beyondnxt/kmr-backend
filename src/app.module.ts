@@ -36,6 +36,9 @@ import { ChildCategoryModule } from './child-category/child-category.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
 import { ChildCategory } from './child-category/entity/child-category.entity';
 import { SubCategory } from './sub-category/entity/sub-category.entity';
+import { RawMaterialTypeModule } from './raw-material-type/raw-material-type.module';
+import { RawMaterialType } from './raw-material-type/entity/raw-material-type.entity';
+import { Brand } from './brand/entity/brand.entity';
 
 @Module({
   imports: [
@@ -51,7 +54,7 @@ import { SubCategory } from './sub-category/entity/sub-category.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse, Supplier,
-        Department, Color, SalesLead,ParentCategory, ChildCategory, SubCategory],
+        Department, Color, SalesLead, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand],
       synchronize: true,
     }),
     AuthModule,
@@ -71,6 +74,7 @@ import { SubCategory } from './sub-category/entity/sub-category.entity';
     ParentCategoryModule,
     ChildCategoryModule,
     SubCategoryModule,
+    RawMaterialTypeModule,
   ],
   controllers: [AppController],
   providers: [

@@ -45,7 +45,7 @@ export class UserService {
                 departmentId: user.departmentId?user.departmentId: null,
                 departmentName: user.department.departmentName? user.department.departmentName: null,
                 password: user.password,
-                mobileNumer: user.mobileNumer,
+                mobileNumer: user.mobileNumber,
                 email: user.email,
                 roleId: user.roleId,
                 roleName: user.role.name,

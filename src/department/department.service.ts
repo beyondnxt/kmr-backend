@@ -41,6 +41,16 @@ export class DepartmentService {
         };
     }
 
+    async getDepartmentName(): Promise<{ data: any[] }> {
+        const departments = await this.departmentRepository.find();
+        return {
+            data: departments.map(department => ({
+                id: department.id,
+                departmentName: department.departmentName
+            })),
+        };
+    } 
+
     async findOne(id: number): Promise<Department> {
         const department = await this.departmentRepository.findOne({ where: { id } });
         if (!department) {

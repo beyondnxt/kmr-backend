@@ -1,5 +1,4 @@
-export class CreateBrandDto{
-    rawMaterialTypeId: number
+export class CreateRawMaterialTypeDto{
     name: string
     createdBy: number
     createdOn: Date

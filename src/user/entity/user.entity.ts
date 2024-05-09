@@ -28,7 +28,7 @@ export class User {
     password: string;
 
     @Column({ default: null })
-    mobileNumer: string;
+    mobileNumber: string;
 
     @Column({ default: null })
     email: string

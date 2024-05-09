@@ -32,6 +32,16 @@ export class RoleService {
     }
   }
 
+  async getRoleName(): Promise<{ data: any[] }> {
+    const role = await this.roleRepository.find();
+    return {
+        data: role.map(role => ({
+            id: role.id,
+            roleName: role.name
+        })),
+    };
+}
+
   async getRoleById(id: number): Promise<Role> {
     try {
       return await this.roleRepository.findOne({ where: { id } });

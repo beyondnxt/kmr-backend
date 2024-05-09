@@ -17,6 +17,15 @@ export class RoleController {
     }
   }
 
+  @Get('/all')
+  async getRoleName(): Promise<{ data: any[] }> {
+    try {
+      return await this.roleService.getRoleName();
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Get(':id')
   async getRoleById(@Param('id') id: number): Promise<Role> {
     try {

@@ -4,7 +4,7 @@ export class CreateUserDto {
   location: string
   departmentId: number
   password: string
-  mobileNumer: string
+  mobileNumber: string
   email: string
   roleId: number
   status: boolean
