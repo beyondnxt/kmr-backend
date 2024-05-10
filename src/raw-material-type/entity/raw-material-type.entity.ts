@@ -1,7 +1,7 @@
 import { Brand } from "src/brand/entity/brand.entity";
 import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({ name: "raw_material_type" })
+@Entity({ name: "raw-material-type" })
 export class RawMaterialType {
     @PrimaryGeneratedColumn()
     id: number

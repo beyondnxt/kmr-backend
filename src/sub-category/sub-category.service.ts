@@ -22,7 +22,7 @@ export class SubCategoryService {
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.subCategoryRepository.createQueryBuilder('sub_category')
+        let queryBuilder = this.subCategoryRepository.createQueryBuilder('sub-category')
             .andWhere(where);
 
         if (page !== "all") {

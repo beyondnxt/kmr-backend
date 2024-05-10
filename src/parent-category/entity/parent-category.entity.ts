@@ -1,7 +1,7 @@
 import { ChildCategory } from "src/child-category/entity/child-category.entity";
 import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({name: 'parent_category'})
+@Entity({name: 'parent-category'})
 export class ParentCategory{
     @PrimaryGeneratedColumn()
     id: number

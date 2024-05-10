@@ -22,7 +22,7 @@ export class RawMaterialTypeService {
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.rawMaterialTypeRepository.createQueryBuilder('raw_material_type')
+        let queryBuilder = this.rawMaterialTypeRepository.createQueryBuilder('raw-material-type')
             .andWhere(where);
 
         if (page !== "all") {

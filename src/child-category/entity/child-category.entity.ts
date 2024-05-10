@@ -2,7 +2,7 @@ import { ParentCategory } from "src/parent-category/entity/parent-category.entit
 import { SubCategory } from "src/sub-category/entity/sub-category.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({ name: 'child_category'})
+@Entity({ name: 'child-category'})
 export class ChildCategory{
     @PrimaryGeneratedColumn()
     id: number

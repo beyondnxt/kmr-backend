@@ -22,7 +22,7 @@ export class SalesLeadService {
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.salesLeadRepository.createQueryBuilder('sales_lead')
+        let queryBuilder = this.salesLeadRepository.createQueryBuilder('sales-lead')
             .leftJoinAndSelect('sales_lead.user', 'user')
             .andWhere(where);
 

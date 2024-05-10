@@ -22,7 +22,7 @@ export class MainCustomerService {
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.mainCustomerRepository.createQueryBuilder('main_customer')
+        let queryBuilder = this.mainCustomerRepository.createQueryBuilder('main-customer')
             .andWhere(where);
 
         if (page !== "all") {
