@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { RopeGrade } from "src/rope-grade/entity/rope-grade.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'category' })
 export class Category {
@@ -34,4 +35,7 @@ export class Category {
 
     @UpdateDateColumn()
     updatedOn: Date;
+
+    @OneToMany(()=>RopeGrade, ropeGrade=>ropeGrade.category)
+    ropeGrade: RopeGrade
 }

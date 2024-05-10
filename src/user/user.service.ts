@@ -21,6 +21,7 @@ export class UserService {
         let query = this.userRepository.createQueryBuilder('user')
             .leftJoinAndSelect('user.role', 'role')
             .leftJoinAndSelect('user.department', 'department')
+            .orderBy('user.createdOn', 'DESC')
             .skip(skip)
             .take(limit);
 
@@ -61,27 +62,14 @@ export class UserService {
         };
     }
 
-    async getUsers(page: number | 'all' = 1, limit: number = 10): Promise<{ data: any[], totalCount: number }> {
-
-        let queryBuilder = this.userRepository.createQueryBuilder('user')
-
-        if (page !== "all") {
-            const skip = (page - 1) * limit;
-            queryBuilder = queryBuilder.skip(skip).take(limit);
-        }
-
-        const [users, totalCount] = await Promise.all([
-            queryBuilder.getMany(),
-            queryBuilder.getCount()
-        ]);
+    async getUsers(): Promise<{ data: any[] }> {
+        const users = await this.userRepository.find();
         return {
             data: users.map(user => ({
                 id: user.id,
-                name: user.userName
+                userName: user.userName
             })),
-            totalCount: totalCount
         };
-
     }
 
     async getUserById(userId: number): Promise<User | undefined> {

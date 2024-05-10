@@ -28,6 +28,15 @@ export class CompanyController {
         }
     }
 
+    @Get('/all')
+    async getCompanyName(): Promise<{ data: any[] }> {
+        try {
+            return await this.companyService.getCompanyName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Company> {
         try {

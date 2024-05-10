@@ -17,12 +17,37 @@ export class WarehouseService {
         return await this.warehouseRepository.save(warehouse);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Warehouse[], totalCount: number }> {
-        const [data, totalCount] = await this.warehouseRepository.findAndCount({
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { data, totalCount };
+    async findAll(page: number | 'all' = 1, limit: number = 10): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
+
+        let queryBuilder = this.warehouseRepository.createQueryBuilder('warehouse')
+            .leftJoinAndSelect('warehouse.company', 'company')
+            .andWhere(where);
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [warehouse, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: warehouse.map(warehouse => ({
+                id: warehouse.id,
+                companyId: warehouse.companyId,
+                companyName: warehouse.company.companyName,
+                location: warehouse.location,
+                code: warehouse.code,
+                createdBy: warehouse.createdBy,
+                createdon: warehouse.createdOn,
+                updatedBy: warehouse.updatedBy,
+                updatedOn: warehouse.updatedOn
+            })),
+            fetchedCount: warehouse.length,
+            totalCount: totalCount
+        };
     }
 
     async findOne(id: number): Promise<Warehouse> {

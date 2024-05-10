@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RopeController } from './rope.controller';
+import { RopeGradeController } from './rope-grade.controller';
 
-describe('RopeController', () => {
-  let controller: RopeController;
+describe('RopeGradeController', () => {
+  let controller: RopeGradeController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [RopeController],
+      controllers: [RopeGradeController],
     }).compile();
 
-    controller = module.get<RopeController>(RopeController);
+    controller = module.get<RopeGradeController>(RopeGradeController);
   });
 
   it('should be defined', () => {

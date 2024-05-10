@@ -41,6 +41,16 @@ export class CompanyService {
         };
     }
 
+    async getCompanyName(): Promise<{ data: any[] }> {
+        const company = await this.companyRepository.find();
+        return {
+            data: company.map(company => ({
+                id: company.id,
+                companyName: company.companyName
+            })),
+        };
+    }
+
     async findOne(id: number): Promise<Company> {
         const company = await this.companyRepository.findOne({ where: { id } });
         if (!company) {

@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Rope } from './entity/rope.entity';
+import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm';
-import { CreateRopeDto } from './dto/rope.dto';
+import { CreateRopeDto } from './dto/rope-type.dto';
+import { RopeType } from './entity/rope-type.entity';
 
 @Injectable()
 export class RopeService {
     constructor(
-        @InjectRepository(Rope)
-        private readonly ropeRepository: Repository<Rope>,
+        @InjectRepository(RopeType)
+        private readonly ropeRepository: Repository<RopeType>,
       ) { }
     
-      async createRope(ropeData: CreateRopeDto, userId: number): Promise<Rope> {
+      async createRope(ropeData: CreateRopeDto, userId: number): Promise<RopeType> {
         try {
           const rope = this.ropeRepository.create(ropeData);
           rope.createdBy = userId
@@ -21,7 +21,7 @@ export class RopeService {
         }
       }
     
-      async getAllRopes(page: number = 1, limit: number = 10): Promise<{ data: Rope[]; total: number }> {
+      async getAllRopes(page: number = 1, limit: number = 10): Promise<{ data: RopeType[]; total: number }> {
         try {
           const [data, total] = await this.ropeRepository.findAndCount({
             take: limit,
@@ -33,7 +33,7 @@ export class RopeService {
         }
       }
     
-      async getRopeById(id: number): Promise<Rope> {
+      async getRopeById(id: number): Promise<RopeType> {
         try {
           return await this.ropeRepository.findOne({ where: { id } });
         } catch (error) {
@@ -41,10 +41,10 @@ export class RopeService {
         }
       }
     
-      async updateRope(id: number, ropeData: CreateRopeDto, userId): Promise<Rope> {
+      async updateRope(id: number, ropeData: CreateRopeDto, userId): Promise<RopeType> {
         try {
           const rope = await this.ropeRepository.findOne({ where: { id } });
-          if (!Rope) {
+          if (!rope) {
             throw new NotFoundException(`Rope with ID ${id} not found`);
           }
           rope.updatedBy = userId

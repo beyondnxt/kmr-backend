@@ -17,9 +17,9 @@ import { MainCustomer } from './main-customer/entity/main-customer.entity';
 import { Customer } from './customer/entity/customer.entity';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entity/category.entity';
-import { RopeModule } from './rope/rope.module';
+import { RopeModule } from './rope/rope-type.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
-import { Rope } from './rope/entity/rope.entity';
+import { RopeType } from './rope/entity/rope-type.entity';
 import { Warehouse } from './warehouse/entity/warehouse.entity';
 import { SupplierModule } from './supplier/supplier.module';
 import { DepartmentModule } from './department/department.module';
@@ -39,6 +39,11 @@ import { SubCategory } from './sub-category/entity/sub-category.entity';
 import { RawMaterialTypeModule } from './raw-material-type/raw-material-type.module';
 import { RawMaterialType } from './raw-material-type/entity/raw-material-type.entity';
 import { Brand } from './brand/entity/brand.entity';
+import { RopeKgLenghtModule } from './rope-kg-lenght/rope-kg-lenght.module';
+import { RopeGradeModule } from './rope-grade/rope-grade.module';
+import { LocationModule } from './location/location.module';
+import { RopeKgLenght } from './rope-kg-lenght/entity/rope-kg-length.entity';
+import { RopeGrade } from './rope-grade/entity/rope-grade.entity';
 import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
 
 @Module({
@@ -54,8 +59,9 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Role, Company, MainCustomer, Customer, Category, Rope, Warehouse, Supplier,
-        Department, Color, SalesLead, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand],
+      entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
+        Department, Color, SalesLead, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
+        RopeKgLenght, RopeGrade],
       synchronize: true,
     }),
     AuthModule,
@@ -76,6 +82,9 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
     ChildCategoryModule,
     SubCategoryModule,
     RawMaterialTypeModule,
+    RopeKgLenghtModule,
+    RopeGradeModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [

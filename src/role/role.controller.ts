@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, HttpException, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, HttpException, HttpStatus, Query, Req } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { Role } from './entity/role.entity';
 import { CreateRoleDto } from './dto/role.dto';
@@ -8,6 +8,12 @@ import { CreateRoleDto } from './dto/role.dto';
 export class RoleController {
   constructor(private readonly roleService: RoleService) { }
 
+  @Get('module')
+  async getmodules(): Promise<any>{
+    const module = await this.roleService.getmodules()
+    return module
+  }
+  
   @Get()
   async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Role[]; total: number }> {
     try {
@@ -40,22 +46,20 @@ export class RoleController {
   }
 
   @Post()
-  async createRole(@Body() roleData: CreateRoleDto): Promise<Role> {
+  async createRole(@Body() roleData: CreateRoleDto, @Req() req: Request): Promise<Role> {
     try {
-      return await this.roleService.createRole(roleData);
+      const userId = req.headers['userid']
+      return await this.roleService.createRole(roleData, userId);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Put(':id')
-  async updateRole(@Param('id') id: number, @Body() roleData: CreateRoleDto): Promise<Role> {
+  async updateRole(@Param('id') id: number, @Body() roleData: CreateRoleDto, @Req() req: Request): Promise<Role> {
     try {
-      const updatedRole = await this.roleService.updateRole(id, roleData);
-      if (!updatedRole) {
-        throw new NotFoundException('Role not found');
-      }
-      return updatedRole;
+      const userId = req.headers['userid']
+      return await this.roleService.updateRole(id, roleData, userId);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -69,4 +73,6 @@ export class RoleController {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+
 }

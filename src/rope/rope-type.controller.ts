@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Put, Query, Req } from '@nestjs/common';
-import { RopeService } from './rope.service';
-import { Rope } from './entity/rope.entity';
-import { CreateRopeDto } from './dto/rope.dto';
+import { RopeService } from './rope-type.service';
+import { CreateRopeDto } from './dto/rope-type.dto';
+import { RopeType } from './entity/rope-type.entity';
 
 @Controller('rope')
 export class RopeController {
     constructor(private readonly ropeService: RopeService) { }
 
     @Get()
-    async getAllRopes(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Rope[]; total: number }> {
+    async getAllRopes(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: RopeType[]; total: number }> {
         try {
             return await this.ropeService.getAllRopes(page, limit);
         } catch (error) {
@@ -17,7 +17,7 @@ export class RopeController {
     }
 
     @Get(':id')
-    async getRopeById(@Param('id') id: number): Promise<Rope> {
+    async getRopeById(@Param('id') id: number): Promise<RopeType> {
         try {
             return await this.ropeService.getRopeById(id);
         } catch (error) {
@@ -26,7 +26,7 @@ export class RopeController {
     }
 
     @Post()
-    async createRope(@Body() ropeData: CreateRopeDto, @Req() req: Request): Promise<Rope> {
+    async createRope(@Body() ropeData: CreateRopeDto, @Req() req: Request): Promise<RopeType> {
         try {
             const userId = req.headers['userid']
             return await this.ropeService.createRope(ropeData, userId);
@@ -36,7 +36,7 @@ export class RopeController {
     }
 
     @Put(':id')
-    async updateRope(@Param('id') id: number, @Body() ropeData: CreateRopeDto, @Req() req: Request): Promise<Rope> {
+    async updateRope(@Param('id') id: number, @Body() ropeData: CreateRopeDto, @Req() req: Request): Promise<RopeType> {
         try {
             const userId = req.headers['userid']
             const updatedRope = await this.ropeService.updateRope(id, ropeData, userId);
