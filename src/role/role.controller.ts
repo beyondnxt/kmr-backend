@@ -15,7 +15,7 @@ export class RoleController {
   }
   
   @Get()
-  async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Role[]; total: number }> {
+  async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Role[]; totalCount: number }> {
     try {
       return await this.roleService.getAllRoles(page, limit);
     } catch (error) {

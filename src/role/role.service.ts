@@ -22,13 +22,13 @@ export class RoleService {
     }
   }
 
-  async getAllRoles(page: number = 1, limit: number = 10): Promise<{ data: Role[]; total: number }> {
+  async getAllRoles(page: number = 1, limit: number = 10): Promise<{ data: Role[]; totalCount: number }> {
     try {
-      const [data, total] = await this.roleRepository.findAndCount({
+      const [data, totalCount] = await this.roleRepository.findAndCount({
         take: limit,
         skip: (page - 1) * limit,
       });
-      return { data, total };
+      return { data, totalCount };
     } catch (error) {
       throw new Error(`Unable to fetch roles: ${error.message}`);
     }
@@ -37,12 +37,12 @@ export class RoleService {
   async getRoleName(): Promise<{ data: any[] }> {
     const role = await this.roleRepository.find();
     return {
-        data: role.map(role => ({
-            id: role.id,
-            roleName: role.name
-        })),
+      data: role.map(role => ({
+        id: role.id,
+        roleName: role.name
+      })),
     };
-}
+  }
 
   async getRoleById(id: number): Promise<Role> {
     try {
@@ -78,10 +78,18 @@ export class RoleService {
     }
   }
 
-  async getmodules(): Promise<any>{
+  async getmodules(): Promise<{ data: any }> {
     const query = "SELECT * FROM kmr.modules"; // Your SQL query
     const result = await this.connection.query(query);
-    return result;
+    return {
+      data: result.map(result => ({
+        id: result.id,
+        name: result.name,
+        key: result.key,
+        sort: result.sort === 0 ? false : true,
+        role: result.role === 0 ? false : true
+      }))
+    };
   }
 
 }
