@@ -17,12 +17,14 @@ export class CustomerService {
         return await this.customerRepository.save(Customer);
     }
 
-    async findAll(page: number | 'all' = 1, limit: number = 10, name: string): Promise<{ data: Customer[], fetchedCount: number, totalCount: number }> {
+    async findAll(page: number | 'all' = 1, limit: number = 10, name: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.customerRepository.createQueryBuilder('main-customer')
+        let queryBuilder = this.customerRepository.createQueryBuilder('customer')
+            .leftJoinAndSelect('customer.mainCustomer', 'mainCustomer')
+            .leftJoinAndSelect('customer.salesLead', 'salesLead')
             .andWhere(where);
 
         if (page !== "all") {
@@ -35,7 +37,37 @@ export class CustomerService {
             queryBuilder.getCount()
         ]);
         return {
-            data: customer,
+            data: customer.map(customer => ({
+                id: customer.id,
+                mainCustomerId: customer.mainCustomerId,
+                mainCustomerName: customer.mainCustomer.name,
+                status: customer.status,
+                name: customer.name,
+                code: customer.code,
+                type: customer.type,
+                contactPerson: customer.contactPerson,
+                contactNo: customer.contactNo,
+                email: customer.email,
+                grade: customer.grade,
+                salesLeadId: customer.salesLeadId,
+                salesLeadName: customer.salesLead.name,
+                salesCode: customer.salesCode,
+                destinationPort: customer.destinationPort,
+                finalDestination: customer.finalDestination,
+                pieceWeightTolerance: customer.pieceWeightTolerance,
+                invoiceTolerance: customer.invoiceTolerance,
+                state: customer.state,
+                gstIn: customer.gstIn,
+                aadhaarNumber: customer.aadhaarNumber,
+                pan: customer.pan,
+                country: customer.country,
+                handledBy: customer.handledBy,
+                address: customer.address,
+                createdBy: customer.createdBy,
+                createdOn: customer.createdOn,
+                updatedBy: customer.updatedBy,
+                updatedOn: customer.updatedOn
+            })),
             fetchedCount: customer.length,
             totalCount: totalCount
         };
