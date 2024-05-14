@@ -19,7 +19,7 @@ export class CreateCustomerDto{
     aadhaarNumber: number
     pan: number
     country: string
-    HandledBy: string
+    handledBy: string
     address: string
     createdBy: number
     createdOn: Date

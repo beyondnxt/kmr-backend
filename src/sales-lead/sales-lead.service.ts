@@ -23,7 +23,7 @@ export class SalesLeadService {
             where.name = Like(`%${name}%`);
         }
         let queryBuilder = this.salesLeadRepository.createQueryBuilder('sales-lead')
-            .leftJoinAndSelect('sales_lead.user', 'user')
+            .leftJoinAndSelect('sales-lead.user', 'user')
             .andWhere(where);
 
         if (page !== "all") {
@@ -49,6 +49,16 @@ export class SalesLeadService {
             })),
             fetchedCount: salesLeads.length,
             totalCount: totalCount
+        };
+    }
+
+    async getSalesLeadName(): Promise<{ data: any[] }> {
+        const salesLead = await this.salesLeadRepository.find();
+        return {
+            data: salesLead.map(salesLead => ({
+                id: salesLead.id,
+                name: salesLead.name
+            })),
         };
     }
 

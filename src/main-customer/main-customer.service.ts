@@ -41,6 +41,16 @@ export class MainCustomerService {
         };
     }
 
+    async getMainCustomerName(): Promise<{ data: any[] }> {
+        const mainCustomer = await this.mainCustomerRepository.find();
+        return {
+            data: mainCustomer.map(mainCustomer => ({
+                id: mainCustomer.id,
+                name: mainCustomer.name
+            })),
+        };
+    }
+
     async findOne(id: number): Promise<MainCustomer> {
         const mainCustomer = await this.mainCustomerRepository.findOne({ where: { id } });
         if (!mainCustomer) {

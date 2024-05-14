@@ -28,6 +28,15 @@ export class SalesLeadController {
         }
     }
 
+    @Get('/all')
+    async getSalesLeadName(): Promise<{ data: any[] }> {
+        try {
+            return await this.salesLeadService.getSalesLeadName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<SalesLead> {
         try {

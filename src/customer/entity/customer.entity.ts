@@ -76,7 +76,7 @@ export class Customer {
     country: string
 
     @Column({ default: null })
-    HandledBy: string
+    handledBy: string
 
     @Column({ default: null })
     address: string
