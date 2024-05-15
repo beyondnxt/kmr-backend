@@ -3,14 +3,14 @@ import { RopeService } from './rope-type.service';
 import { CreateRopeDto } from './dto/rope-type.dto';
 import { RopeType } from './entity/rope-type.entity';
 
-@Controller('rope')
+@Controller('ropeType')
 export class RopeController {
     constructor(private readonly ropeService: RopeService) { }
 
     @Get()
-    async getAllRopes(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: RopeType[]; total: number }> {
+    async getAllRopes(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('value') ropeType: string): Promise<{ data: any[]; fetchedCount: number, totalCount: number }> {
         try {
-            return await this.ropeService.getAllRopes(page, limit);
+            return await this.ropeService.getAllRopes(page, limit, ropeType);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

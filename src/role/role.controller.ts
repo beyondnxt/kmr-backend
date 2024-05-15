@@ -9,15 +9,15 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) { }
 
   @Get('module')
-  async getmodules(): Promise<any>{
+  async getmodules(): Promise<any> {
     const module = await this.roleService.getmodules()
     return module
   }
-  
+
   @Get()
-  async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Role[]; totalCount: number }> {
+  async getAllRoles(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('name') name: string): Promise<{ data: Role[]; fetchedCount: number, totalCount: number }> {
     try {
-      return await this.roleService.getAllRoles(page, limit);
+      return await this.roleService.getAllRoles(page, limit, name);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
