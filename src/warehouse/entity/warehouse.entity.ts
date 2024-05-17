@@ -19,6 +19,9 @@ export class Warehouse {
     @Column()
     code: string
 
+    @Column({ default: false})
+    deleted: boolean
+
     @Column({ default: null })
     createdBy: number;
 

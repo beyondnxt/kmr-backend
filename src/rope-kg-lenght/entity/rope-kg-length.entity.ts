@@ -11,6 +11,9 @@ export class RopeKgLenght{
     @Column()
     meterKg: string
 
+    @Column({ default: false})
+    deleted: boolean
+
     @Column({ default: null })
     createdBy: number
 

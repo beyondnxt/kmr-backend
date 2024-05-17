@@ -21,6 +21,7 @@ export class CreateCustomerDto{
     country: string
     handledBy: string
     address: string
+    deleted: boolean
     createdBy: number
     createdOn: Date
     updatedBy: number

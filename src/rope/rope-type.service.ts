@@ -27,6 +27,7 @@ export class RopeService {
       where.ropeType = Like(`%${ropeType}%`);
     }
     let queryBuilder = this.ropeRepository.createQueryBuilder('ropeType')
+      .where('ropeType.deleted = :deleted', { deleted: false })
       .andWhere(where);
 
     if (page !== "all") {
@@ -44,6 +45,7 @@ export class RopeService {
         ropeType: rope.ropeType,
         shortCode: rope.shortCode,
         pieceNoShortCode: rope.pieceNoShortCode,
+        deleted: rope.deleted,
         createdBy: rope.createdBy,
         createdOn: rope.createdOn,
         updatedBy: rope.updatedBy,
@@ -56,7 +58,7 @@ export class RopeService {
 
   async getRopeById(id: number): Promise<RopeType> {
     try {
-      return await this.ropeRepository.findOne({ where: { id } });
+      return await this.ropeRepository.findOne({ where: { id, deleted: false } });
     } catch (error) {
       throw new Error(`Unable to fetch Rope: ${error.message}`);
     }
@@ -64,7 +66,7 @@ export class RopeService {
 
   async updateRope(id: number, ropeData: CreateRopeDto, userId): Promise<RopeType> {
     try {
-      const rope = await this.ropeRepository.findOne({ where: { id } });
+      const rope = await this.ropeRepository.findOne({ where: { id, deleted: false } });
       if (!rope) {
         throw new NotFoundException(`Rope with ID ${id} not found`);
       }
@@ -76,15 +78,13 @@ export class RopeService {
     }
   }
 
-  async remove(id: number): Promise<void> {
-    try {
-      const rope = await this.ropeRepository.findOne({ where: { id } });
-      if (!rope) {
-        throw new NotFoundException(`Rope with ID ${id} not found`);
-      }
-      await this.ropeRepository.remove(rope);
-    } catch (error) {
-      throw new Error(`Unable to delete Rope: ${error.message}`);
+  async remove(id: number): Promise<any> {
+    const rope = await this.ropeRepository.findOne({ where: { id, deleted: false } });
+    if (!rope) {
+      throw new NotFoundException('rope not found');
     }
+    rope.deleted = true
+    await this.ropeRepository.save(rope);
+    return { message: `Successfully deleted id ${id}` }
   }
 }

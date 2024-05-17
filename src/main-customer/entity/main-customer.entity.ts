@@ -18,6 +18,9 @@ export class MainCustomer {
     @Column()
     country: string
 
+    @Column({ default: false})
+    deleted: boolean
+
     @Column({ default: null })
     createdBy: number;
 

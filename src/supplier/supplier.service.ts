@@ -23,6 +23,7 @@ export class SupplierService {
             where.name = Like(`%${name}%`);
         }
         let queryBuilder = this.supplierRepository.createQueryBuilder('supplier')
+            .where('supplier.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -49,6 +50,7 @@ export class SupplierService {
                 termsOfPayment: supplier.termsOfPayment,
                 productName: supplier.productName,
                 address: supplier.address,
+                deleted: supplier.deleted,
                 createdBy: supplier.createdBy,
                 createdOn: supplier.createdOn,
                 updatedBy: supplier.updatedBy,
@@ -60,7 +62,7 @@ export class SupplierService {
     }
 
     async findOne(id: number): Promise<Supplier> {
-        const supplier = await this.supplierRepository.findOne({ where: { id } });
+        const supplier = await this.supplierRepository.findOne({ where: { id, deleted: false } });
         if (!supplier) {
             throw new NotFoundException('Supplier not found');
         }
@@ -69,7 +71,7 @@ export class SupplierService {
 
     async update(id: number, supplierData: CreateSupplierDto, userId): Promise<Supplier> {
         try {
-            const supplier = await this.supplierRepository.findOne({ where: { id } });
+            const supplier = await this.supplierRepository.findOne({ where: { id, deleted: false } });
             if (!supplier) {
                 throw new NotFoundException(`Supplier with ID ${id} not found`);
             }
@@ -82,11 +84,12 @@ export class SupplierService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingSupplier = await this.supplierRepository.findOne({ where: { id } });
-        if (!existingSupplier) {
+        const supplier = await this.supplierRepository.findOne({ where: { id, deleted: false } });
+        if (!supplier) {
             throw new NotFoundException('Supplier not found');
         }
-        await this.supplierRepository.remove(existingSupplier);
+        supplier.deleted = true
+        await this.supplierRepository.save(supplier);
         return { message: `Successfully deleted id ${id}` }
     }
 }

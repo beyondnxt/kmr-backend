@@ -15,6 +15,8 @@ export class Department {
     @Column({ type: 'simple-json', default: null })
     type: { [key: string]: any };
 
+    @Column({ default: false })
+    deleted: boolean
 
     @Column({ default: null })
     createdBy: number;

@@ -23,8 +23,11 @@ export class CustomerService {
             where.name = Like(`%${name}%`);
         }
         let queryBuilder = this.customerRepository.createQueryBuilder('customer')
+            .where('customer.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('customer.mainCustomer', 'mainCustomer')
+            .where('mainCustomer.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('customer.user', 'user')
+            .where('user.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -63,6 +66,7 @@ export class CustomerService {
                 country: customer.country,
                 handledBy: customer.handledBy,
                 address: customer.address,
+                deleted: customer.deleted,
                 createdBy: customer.createdBy,
                 createdOn: customer.createdOn,
                 updatedBy: customer.updatedBy,
@@ -74,7 +78,7 @@ export class CustomerService {
     }
 
     async findOne(id: number): Promise<Customer> {
-        const Customer = await this.customerRepository.findOne({ where: { id } });
+        const Customer = await this.customerRepository.findOne({ where: { id, deleted: false } });
         if (!Customer) {
             throw new NotFoundException('Customer not found');
         }
@@ -83,7 +87,7 @@ export class CustomerService {
 
     async update(id: number, customerData: CreateCustomerDto, userId): Promise<Customer> {
         try {
-            const Customer = await this.customerRepository.findOne({ where: { id } });
+            const Customer = await this.customerRepository.findOne({ where: { id, deleted: false } });
             if (!Customer) {
                 throw new NotFoundException(`Customer with ID ${id} not found`);
             }
@@ -96,11 +100,12 @@ export class CustomerService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingCustomer = await this.customerRepository.findOne({ where: { id } });
-        if (!existingCustomer) {
-            throw new NotFoundException('Customer not found');
+        const customer = await this.customerRepository.findOne({ where: { id, deleted: false } });
+        if (!customer) {
+            throw new NotFoundException('customer not found');
         }
-        await this.customerRepository.remove(existingCustomer);
+        customer.deleted = true
+        await this.customerRepository.save(customer);
         return { message: `Successfully deleted id ${id}` }
     }
 }

@@ -23,6 +23,7 @@ export class CompanyService {
             where.companyName = Like(`%${companyName}%`);
         }
         let queryBuilder = this.companyRepository.createQueryBuilder('company')
+            .where('company.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -42,7 +43,7 @@ export class CompanyService {
     }
 
     async getCompanyName(): Promise<{ data: any[] }> {
-        const company = await this.companyRepository.find();
+        const company = await this.companyRepository.find({ where: { deleted: false } });
         return {
             data: company.map(company => ({
                 id: company.id,
@@ -52,7 +53,7 @@ export class CompanyService {
     }
 
     async findOne(id: number): Promise<Company> {
-        const company = await this.companyRepository.findOne({ where: { id } });
+        const company = await this.companyRepository.findOne({ where: { id, deleted: false } });
         if (!company) {
             throw new NotFoundException('company not found');
         }
@@ -61,7 +62,7 @@ export class CompanyService {
 
     async update(id: number, companyData: CreateCompanyDto, userId): Promise<Company> {
         try {
-            const company = await this.companyRepository.findOne({ where: { id } });
+            const company = await this.companyRepository.findOne({ where: { id, deleted: false } });
             if (!company) {
                 throw new NotFoundException(`company with ID ${id} not found`);
             }
@@ -74,11 +75,12 @@ export class CompanyService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingCompany = await this.companyRepository.findOne({ where: { id } });
-        if (!existingCompany) {
+        const company = await this.companyRepository.findOne({ where: { id, deleted: false } });
+        if (!company) {
             throw new NotFoundException('company not found');
         }
-        await this.companyRepository.remove(existingCompany);
+        company.deleted = true
+        await this.companyRepository.save(company);
         return { message: `Successfully deleted id ${id}` }
     }
 }

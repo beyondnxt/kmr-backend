@@ -27,6 +27,9 @@ export class RopeGrade{
     @Column({ default: null })
     rmComb: string
 
+    @Column({ default: false})
+    deleted: boolean
+
     @Column({ default: null })
     createdBy: number;
 

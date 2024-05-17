@@ -23,6 +23,7 @@ export class DepartmentService {
             where.departmentName = Like(`%${departmentName}%`);
         }
         let queryBuilder = this.departmentRepository.createQueryBuilder('department')
+            .where('department.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -42,17 +43,17 @@ export class DepartmentService {
     }
 
     async getDepartmentName(): Promise<{ data: any[] }> {
-        const departments = await this.departmentRepository.find();
+        const departments = await this.departmentRepository.find({ where: { deleted: false } });
         return {
             data: departments.map(department => ({
                 id: department.id,
                 departmentName: department.departmentName
             })),
         };
-    } 
+    }
 
     async findOne(id: number): Promise<Department> {
-        const department = await this.departmentRepository.findOne({ where: { id } });
+        const department = await this.departmentRepository.findOne({ where: { id, deleted: false } });
         if (!department) {
             throw new NotFoundException('Department not found');
         }
@@ -61,7 +62,7 @@ export class DepartmentService {
 
     async update(id: number, departmentData: CreateDepartmentDto, userId): Promise<Department> {
         try {
-            const department = await this.departmentRepository.findOne({ where: { id } });
+            const department = await this.departmentRepository.findOne({ where: { id, deleted: false } });
             if (!department) {
                 throw new NotFoundException(`Department with ID ${id} not found`);
             }
@@ -74,11 +75,12 @@ export class DepartmentService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingDepartment = await this.departmentRepository.findOne({ where: { id } });
-        if (!existingDepartment) {
-            throw new NotFoundException('Department not found');
+        const department = await this.departmentRepository.findOne({ where: { id, deleted: false } });
+        if (!department) {
+            throw new NotFoundException('department not found');
         }
-        await this.departmentRepository.remove(existingDepartment);
+        department.deleted = true
+        await this.departmentRepository.save(department);
         return { message: `Successfully deleted id ${id}` }
     }
 }

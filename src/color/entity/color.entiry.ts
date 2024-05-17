@@ -17,6 +17,9 @@ export class Color {
     @Column({ default: null })
     applicableFor: string
 
+    @Column({ default: false })
+    deleted: boolean
+
     @Column({ default: null })
     createdBy: number;
 

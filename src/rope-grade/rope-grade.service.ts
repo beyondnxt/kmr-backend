@@ -22,6 +22,7 @@ export class RopeGradeService {
 
         let queryBuilder = this.ropeGradeRepository.createQueryBuilder('rope-grade')
             .leftJoinAndSelect('rope-grade.rope-type', 'rope-type')
+            .where('rope-grade.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('rope-grade.category', 'category')
             .andWhere(where);
 
@@ -41,6 +42,7 @@ export class RopeGradeService {
                 categoryId: ropeGrade.categoryId,
                 grade: ropeGrade.grade,
                 rmComb: ropeGrade.rmComb,
+                deleted: ropeGrade.deleted,
                 createdBy: ropeGrade.createdBy,
                 createdon: ropeGrade.createdOn,
                 updatedBy: ropeGrade.updatedBy,
@@ -52,7 +54,7 @@ export class RopeGradeService {
     }
 
     async findOne(id: number): Promise<RopeGrade> {
-        const ropeGrade = await this.ropeGradeRepository.findOne({ where: { id } });
+        const ropeGrade = await this.ropeGradeRepository.findOne({ where: { id, deleted: false } });
         if (!ropeGrade) {
             throw new NotFoundException('RopeGrade not found');
         }
@@ -61,7 +63,7 @@ export class RopeGradeService {
 
     async update(id: number, RopeGradeData: CreateRopeGradeDto, userId): Promise<RopeGrade> {
         try {
-            const ropeGrade = await this.ropeGradeRepository.findOne({ where: { id } });
+            const ropeGrade = await this.ropeGradeRepository.findOne({ where: { id, deleted: false } });
             if (!ropeGrade) {
                 throw new NotFoundException(`RopeGrade with ID ${id} not found`);
             }
@@ -74,11 +76,12 @@ export class RopeGradeService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingRopeGrade = await this.ropeGradeRepository.findOne({ where: { id } });
-        if (!existingRopeGrade) {
-            throw new NotFoundException('RopeGrade not found');
+        const ropeGrade = await this.ropeGradeRepository.findOne({ where: { id, deleted: false } });
+        if (!ropeGrade) {
+            throw new NotFoundException('Rope grade not found');
         }
-        await this.ropeGradeRepository.remove(existingRopeGrade);
+        ropeGrade.deleted = true
+        await this.ropeGradeRepository.save(ropeGrade);
         return { message: `Successfully deleted id ${id}` }
     }
 }

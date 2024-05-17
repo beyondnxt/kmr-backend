@@ -23,6 +23,7 @@ export class RawMaterialTypeService {
             where.name = Like(`%${name}%`);
         }
         let queryBuilder = this.rawMaterialTypeRepository.createQueryBuilder('raw-material-type')
+            .where('raw-material-type.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -42,7 +43,7 @@ export class RawMaterialTypeService {
     }
 
     async findOne(id: number): Promise<RawMaterialType> {
-        const rawMaterialType = await this.rawMaterialTypeRepository.findOne({ where: { id } });
+        const rawMaterialType = await this.rawMaterialTypeRepository.findOne({ where: { id, deleted: false } });
         if (!rawMaterialType) {
             throw new NotFoundException('RawMaterial Type not found');
         }
@@ -51,7 +52,7 @@ export class RawMaterialTypeService {
 
     async update(id: number, rawMaterialTypeData: CreateRawMaterialTypeDto, userId): Promise<RawMaterialType> {
         try {
-            const rawMaterialType = await this.rawMaterialTypeRepository.findOne({ where: { id } });
+            const rawMaterialType = await this.rawMaterialTypeRepository.findOne({ where: { id, deleted: false } });
             if (!rawMaterialType) {
                 throw new NotFoundException(`RawMaterialType with ID ${id} not found`);
             }
@@ -64,11 +65,12 @@ export class RawMaterialTypeService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingRawMaterialType = await this.rawMaterialTypeRepository.findOne({ where: { id } });
-        if (!existingRawMaterialType) {
-            throw new NotFoundException('RawMaterialType not found');
+        const rawMaterialType = await this.rawMaterialTypeRepository.findOne({ where: { id, deleted: false } });
+        if (!rawMaterialType) {
+            throw new NotFoundException('Raw material type not found');
         }
-        await this.rawMaterialTypeRepository.remove(existingRawMaterialType);
+        rawMaterialType.deleted = true
+        await this.rawMaterialTypeRepository.save(rawMaterialType);
         return { message: `Successfully deleted id ${id}` }
     }
 }

@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/entity/user.entity';
@@ -16,9 +16,9 @@ export class AuthService {
 
     async signUp(signUpDto: CreateUserDto): Promise<any> {
         const { userName, fullName, location, departmentId, password, mobileNumber, email, salesLeadName, roleId, status } = signUpDto;
-        const existingUser = await this.userRepository.findOne({ where: { userName } });
+        const existingUser = await this.userRepository.findOne({ where: { userName, deleted: false } });
         if (existingUser) {
-            throw new UnauthorizedException('userName already exists');
+            throw new NotFoundException('User name already exists');
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await this.userRepository.create({
@@ -65,8 +65,9 @@ export class AuthService {
     async getUserInfo(id: number): Promise<any> {
         const user = await this.userRepository
             .createQueryBuilder('user')
-            .select(['user.id', 'user.userName', 'user.fullName', 'user.location', 'user.departmentId', 'user.mobileNumber', 'user.email', 'user.salesLeadName','user.roleId', 'user.status'])
-            .where('user.id = :id', { id })
+            .select(['user.id', 'user.userName', 'user.fullName', 'user.location', 'user.departmentId', 'user.mobileNumber', 'user.email', 'user.salesLeadName', 'user.roleId', 'user.status'])
+            .where('user.id = :id', { id, })
+            .where('user.deleted = :deleted', { deleted: false })
             .getOne();
 
         if (!user) {
@@ -82,7 +83,7 @@ export class AuthService {
             if (!result) {
                 throw new NotFoundException('User not found');
             }
-            return await this.userRepository.findOne({ where: { id } });
+            return await this.userRepository.findOne({ where: { id, deleted: false } });
         } catch (error) {
             console.error('Error changing password:', error);
             throw new InternalServerErrorException('Failed to change password');
@@ -90,7 +91,7 @@ export class AuthService {
     }
 
     async forgotPassword(userName: string, newPassword: string): Promise<User> {
-        const existingUser = await this.userRepository.findOne({ where: { userName } });
+        const existingUser = await this.userRepository.findOne({ where: { userName, deleted: false } });
         if (!existingUser) {
             throw new NotFoundException('Invalid user name');
         }
@@ -110,7 +111,7 @@ export class AuthService {
 
     async sendEmailForgotPassword(email: string): Promise<boolean> {
         try {
-            const user = await this.userRepository.findOne({ where: { email } });
+            const user = await this.userRepository.findOne({ where: { email, deleted: false } });
             if (!user) {
                 throw new NotFoundException('User not found');
             }

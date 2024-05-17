@@ -28,6 +28,7 @@ export class RoleService {
       where.name = Like(`%${name}%`);
     }
     let queryBuilder = this.roleRepository.createQueryBuilder('role')
+      .where('role.deleted = :deleted', { deleted: false })
       .andWhere(where);
 
     if (page !== "all") {
@@ -45,6 +46,7 @@ export class RoleService {
         name: role.name,
         description: role.description,
         menuAccess: role.menuAccess,
+        deleted: role. deleted,
         createdBy: role.createdBy,
         createdOn: role.createdOn,
         updatedBy: role.updatedBy,
@@ -56,7 +58,7 @@ export class RoleService {
   }
 
   async getRoleName(): Promise<{ data: any[] }> {
-    const role = await this.roleRepository.find();
+    const role = await this.roleRepository.find({ where: {deleted: false}});
     return {
       data: role.map(role => ({
         id: role.id,
@@ -67,7 +69,7 @@ export class RoleService {
 
   async getRoleById(id: number): Promise<Role> {
     try {
-      return await this.roleRepository.findOne({ where: { id } });
+      return await this.roleRepository.findOne({ where: { id, deleted: false } });
     } catch (error) {
       throw new Error(`Unable to fetch role: ${error.message}`);
     }
@@ -75,7 +77,7 @@ export class RoleService {
 
   async updateRole(id: number, roleData: CreateRoleDto, userId: number): Promise<Role> {
     try {
-      const role = await this.roleRepository.findOne({ where: { id } });
+      const role = await this.roleRepository.findOne({ where: { id, deleted: false } });
       if (!role) {
         throw new NotFoundException(`Role with ID ${id} not found`);
       }
@@ -87,16 +89,14 @@ export class RoleService {
     }
   }
 
-  async remove(id: number): Promise<void> {
-    try {
-      const role = await this.roleRepository.findOne({ where: { id } });
-      if (!role) {
-        throw new NotFoundException(`Role with ID ${id} not found`);
-      }
-      await this.roleRepository.remove(role);
-    } catch (error) {
-      throw new Error(`Unable to delete role: ${error.message}`);
+  async remove(id: number): Promise<any> {
+    const role = await this.roleRepository.findOne({ where: { id, deleted: false } });
+    if (!role) {
+        throw new NotFoundException('role not found');
     }
+    role.deleted = true
+    await this.roleRepository.save(role);
+    return { message: `Successfully deleted id ${id}` }
   }
 
   async getmodules(): Promise<{ data: any }> {

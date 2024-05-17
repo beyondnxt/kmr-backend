@@ -19,6 +19,7 @@ export class ColorService {
 
     async findAll(page: number = 1, limit: number = 10): Promise<{ data: Color[], totalCount: number }> {
         const [data, totalCount] = await this.colorRepository.findAndCount({
+            where: { deleted: false },
             skip: (page - 1) * limit,
             take: limit,
         });
@@ -26,7 +27,7 @@ export class ColorService {
     }
 
     async findOne(id: number): Promise<Color> {
-        const color = await this.colorRepository.findOne({ where: { id } });
+        const color = await this.colorRepository.findOne({ where: { id, deleted: false } });
         if (!color) {
             throw new NotFoundException('Color not found');
         }
@@ -35,7 +36,7 @@ export class ColorService {
 
     async update(id: number, colorData: CreateColorDto, userId): Promise<Color> {
         try {
-            const color = await this.colorRepository.findOne({ where: { id } });
+            const color = await this.colorRepository.findOne({ where: { id, deleted: false } });
             if (!color) {
                 throw new NotFoundException(`Color with ID ${id} not found`);
             }
@@ -48,11 +49,12 @@ export class ColorService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingColor = await this.colorRepository.findOne({ where: { id } });
-        if (!existingColor) {
+        const color = await this.colorRepository.findOne({ where: { id, deleted: false } });
+        if (!color) {
             throw new NotFoundException('Color not found');
         }
-        await this.colorRepository.remove(existingColor);
+        color.deleted = true
+        await this.colorRepository.save(color);
         return { message: `Successfully deleted id ${id}` }
     }
 }

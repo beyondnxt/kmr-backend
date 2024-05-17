@@ -22,6 +22,9 @@ export class Role {
   @OneToMany(() => User, user => user.role)
   user: User[];
 
+  @Column({ default: false})
+  deleted: boolean
+
   @Column({ default: null })
   createdBy: number;
 

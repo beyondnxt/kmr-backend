@@ -41,6 +41,9 @@ export class Supplier {
     @Column({ default: null })
     address: string
 
+    @Column({ default: false })
+    deleted: boolean
+
     @Column({ default: null })
     createdBy: number;
 

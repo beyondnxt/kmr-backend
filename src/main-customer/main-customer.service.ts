@@ -23,6 +23,7 @@ export class MainCustomerService {
             where.name = Like(`%${name}%`);
         }
         let queryBuilder = this.mainCustomerRepository.createQueryBuilder('main-customer')
+            .where('main-customer.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -42,7 +43,7 @@ export class MainCustomerService {
     }
 
     async getMainCustomerName(): Promise<{ data: any[] }> {
-        const mainCustomer = await this.mainCustomerRepository.find();
+        const mainCustomer = await this.mainCustomerRepository.find({ where: { deleted: false } });
         return {
             data: mainCustomer.map(mainCustomer => ({
                 id: mainCustomer.id,
@@ -52,7 +53,7 @@ export class MainCustomerService {
     }
 
     async findOne(id: number): Promise<MainCustomer> {
-        const mainCustomer = await this.mainCustomerRepository.findOne({ where: { id } });
+        const mainCustomer = await this.mainCustomerRepository.findOne({ where: { id, deleted: false } });
         if (!mainCustomer) {
             throw new NotFoundException('mainCustomer not found');
         }
@@ -61,7 +62,7 @@ export class MainCustomerService {
 
     async update(id: number, mainCustomerData: CreateMainCustomerDto, userId): Promise<MainCustomer> {
         try {
-            const mainCustomer = await this.mainCustomerRepository.findOne({ where: { id } });
+            const mainCustomer = await this.mainCustomerRepository.findOne({ where: { id, deleted: false } });
             if (!mainCustomer) {
                 throw new NotFoundException(`mainCustomer with ID ${id} not found`);
             }
@@ -74,11 +75,12 @@ export class MainCustomerService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingmainCustomer = await this.mainCustomerRepository.findOne({ where: { id } });
-        if (!existingmainCustomer) {
-            throw new NotFoundException('mainCustomer not found');
+        const mainCustomer = await this.mainCustomerRepository.findOne({ where: { id, deleted: false } });
+        if (!mainCustomer) {
+            throw new NotFoundException('Main Customer not found');
         }
-        await this.mainCustomerRepository.remove(existingmainCustomer);
+        mainCustomer.deleted = true
+        await this.mainCustomerRepository.save(mainCustomer);
         return { message: `Successfully deleted id ${id}` }
     }
 }

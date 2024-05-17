@@ -9,6 +9,7 @@ export class CreateUserDto {
   salesLeadName: string
   roleId: number
   status: boolean
+  deleted: boolean
   createdBy: number
   createdOn: Date
   updatedBy: number

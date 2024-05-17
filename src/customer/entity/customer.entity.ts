@@ -78,6 +78,9 @@ export class Customer {
     @Column({ default: null })
     handledBy: string
 
+    @Column({ default: false})
+    deleted: boolean
+
     @Column({ default: null })
     address: string
 

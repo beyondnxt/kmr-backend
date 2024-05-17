@@ -21,7 +21,9 @@ export class WarehouseService {
         const where: any = {};
 
         let queryBuilder = this.warehouseRepository.createQueryBuilder('warehouse')
+            .where('warehouse.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('warehouse.company', 'company')
+            .where('company.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -40,6 +42,7 @@ export class WarehouseService {
                 companyName: warehouse.company.companyName,
                 location: warehouse.location,
                 code: warehouse.code,
+                deleted: warehouse.deleted,
                 createdBy: warehouse.createdBy,
                 createdon: warehouse.createdOn,
                 updatedBy: warehouse.updatedBy,
@@ -51,7 +54,7 @@ export class WarehouseService {
     }
 
     async findOne(id: number): Promise<Warehouse> {
-        const warehouse = await this.warehouseRepository.findOne({ where: { id } });
+        const warehouse = await this.warehouseRepository.findOne({ where: { id, deleted: false } });
         if (!warehouse) {
             throw new NotFoundException('Warehouse not found');
         }
@@ -60,7 +63,7 @@ export class WarehouseService {
 
     async update(id: number, warehouseData: CreateWarehouseDto, userId): Promise<Warehouse> {
         try {
-            const warehouse = await this.warehouseRepository.findOne({ where: { id } });
+            const warehouse = await this.warehouseRepository.findOne({ where: { id, deleted: false } });
             if (!warehouse) {
                 throw new NotFoundException(`Warehouse with ID ${id} not found`);
             }
@@ -73,11 +76,12 @@ export class WarehouseService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingWarehouse = await this.warehouseRepository.findOne({ where: { id } });
+        const existingWarehouse = await this.warehouseRepository.findOne({ where: { id, deleted: false } });
         if (!existingWarehouse) {
-            throw new NotFoundException('Warehouse not found');
+            throw new NotFoundException('user not found');
         }
-        await this.warehouseRepository.remove(existingWarehouse);
+        existingWarehouse.deleted = true
+        await this.warehouseRepository.save(existingWarehouse);
         return { message: `Successfully deleted id ${id}` }
     }
 }

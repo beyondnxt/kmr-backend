@@ -22,6 +22,7 @@ export class RopeKgLenghtService {
 
         let queryBuilder = this.ropeKgLenghtRepository.createQueryBuilder('RopeKgLenght')
             .leftJoinAndSelect('RopeKgLenght.company', 'company')
+            .where('RopeKgLenght.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -38,6 +39,7 @@ export class RopeKgLenghtService {
                 id: ropeKgLenght.id,
                 code: ropeKgLenght.code,
                 meterKg: ropeKgLenght.meterKg,
+                deleted: ropeKgLenght.deleted,
                 createdBy: ropeKgLenght.createdBy,
                 createdon: ropeKgLenght.createdOn,
                 updatedBy: ropeKgLenght.updatedBy,
@@ -49,7 +51,7 @@ export class RopeKgLenghtService {
     }
 
     async findOne(id: number): Promise<RopeKgLenght> {
-        const ropeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id } });
+        const ropeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id, deleted: false } });
         if (!ropeKgLenght) {
             throw new NotFoundException('RopeKgLenght not found');
         }
@@ -58,7 +60,7 @@ export class RopeKgLenghtService {
 
     async update(id: number, ropeKgLenghtData: CreateRopeKgLenghtDto, userId): Promise<RopeKgLenght> {
         try {
-            const ropeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id } });
+            const ropeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id, deleted: false } });
             if (!ropeKgLenght) {
                 throw new NotFoundException(`RopeKgLenght with ID ${id} not found`);
             }
@@ -71,11 +73,12 @@ export class RopeKgLenghtService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingRopeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id } });
-        if (!existingRopeKgLenght) {
-            throw new NotFoundException('RopeKgLenght not found');
+        const ropeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id, deleted: false } });
+        if (!ropeKgLenght) {
+            throw new NotFoundException('Rope kg lenght not found');
         }
-        await this.ropeKgLenghtRepository.remove(existingRopeKgLenght);
+        ropeKgLenght.deleted = true
+        await this.ropeKgLenghtRepository.save(ropeKgLenght);
         return { message: `Successfully deleted id ${id}` }
     }
 }
