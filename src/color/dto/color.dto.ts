@@ -2,7 +2,7 @@ export class CreateColorDto {
     colorName: string
     shortCode: string
     matchingColor: string
-    applicableFor: string
+    applicableFor: { [key: string]: any };
     deleted: boolean
     createdBy: number
     createdOn: Date

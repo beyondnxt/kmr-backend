@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Color } from './entity/color.entiry';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateColorDto } from './dto/color.dto';
 
 @Injectable()
@@ -17,13 +17,29 @@ export class ColorService {
         return await this.colorRepository.save(color);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Color[], totalCount: number }> {
-        const [data, totalCount] = await this.colorRepository.findAndCount({
-            where: { deleted: false },
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { data, totalCount };
+    async findAll(page: number | 'all' = 1, limit: number = 10, colorName: string): Promise<{ data: Color[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
+        if (colorName) {
+            where.colorName = Like(`%${colorName}%`);
+        }
+        let queryBuilder = this.colorRepository.createQueryBuilder('color')
+            .where('color.deleted = :deleted', { deleted: false })
+            .andWhere(where);
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [color, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: color,
+            fetchedCount: color.length,
+            totalCount: totalCount
+        };
     }
 
     async findOne(id: number): Promise<Color> {

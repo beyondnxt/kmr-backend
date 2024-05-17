@@ -14,8 +14,8 @@ export class Color {
     @Column()
     matchingColor: string
 
-    @Column({ default: null })
-    applicableFor: string
+    @Column({ type: 'simple-json', default: null })
+    applicableFor: { [key: string]: any };
 
     @Column({ default: false })
     deleted: boolean
