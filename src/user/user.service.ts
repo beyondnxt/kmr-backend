@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Not, Repository } from "typeorm";
+import { IsNull, Not, Repository } from "typeorm";
 import { User } from "./entity/user.entity";
 import { CreateUserDto } from "./dto/user.dto";
 
@@ -24,7 +24,7 @@ export class UserService {
             .leftJoinAndSelect('user.department', 'department')
             .where('department.deleted = :deleted', { deleted: false })
             .where('user.deleted = :deleted', { deleted: false })
-            .orderBy('user.createdOn', 'DESC') 
+            .orderBy('user.createdOn', 'DESC')
             .skip(skip)
             .take(limit);
 
@@ -78,7 +78,12 @@ export class UserService {
     }
 
     async getsalesLeadName(): Promise<{ data: any[] }> {
-        const users = await this.userRepository.find({ where: { deleted: false } });
+        const users = await this.userRepository.find({
+            where: {
+                deleted: false,
+                salesLeadName: Not(IsNull())
+            },
+        });
         return {
             data: users.map(user => ({
                 id: user.id,
