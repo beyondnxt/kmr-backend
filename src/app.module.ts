@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -28,8 +28,6 @@ import { BrandModule } from './brand/brand.module';
 import { Supplier } from './supplier/entity/supplier.entity';
 import { Department } from './department/entity/department.entity';
 import { Color } from './color/entity/color.entiry';
-import { SalesLeadModule } from './sales-lead/sales-lead.module';
-import { SalesLead } from './sales-lead/entity/sales-lead.entity';
 import { ParentCategoryModule } from './parent-category/parent-category.module';
 import { ParentCategory } from './parent-category/entity/parent-category.entity';
 import { ChildCategoryModule } from './child-category/child-category.module';
@@ -44,7 +42,6 @@ import { RopeGradeModule } from './rope-grade/rope-grade.module';
 import { LocationModule } from './location/location.module';
 import { RopeKgLenght } from './rope-kg-lenght/entity/rope-kg-length.entity';
 import { RopeGrade } from './rope-grade/entity/rope-grade.entity';
-import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
 
 @Module({
   imports: [
@@ -60,7 +57,7 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
-        Department, Color, SalesLead, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
+        Department, Color, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
         RopeKgLenght, RopeGrade],
       synchronize: true,
     }),
@@ -77,7 +74,7 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
     DepartmentModule,
     ColorModule,
     BrandModule,
-    SalesLeadModule,
+    // SalesLeadModule,
     ParentCategoryModule,
     ChildCategoryModule,
     SubCategoryModule,
@@ -94,15 +91,15 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
 
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware).exclude(
-      { path: 'auth/signup', method: RequestMethod.POST },
-      { path: 'auth/signin', method: RequestMethod.POST },
-      { path: 'auth/forgotPassword', method: RequestMethod.PUT },
-      { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
-      { path: 'auth/email/changePassword', method: RequestMethod.POST },
-      { path: 'products/getProductData', method: RequestMethod.GET }
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(AuthenticationMiddleware).exclude(
+  //     { path: 'auth/signup', method: RequestMethod.POST },
+  //     { path: 'auth/signin', method: RequestMethod.POST },
+  //     { path: 'auth/forgotPassword', method: RequestMethod.PUT },
+  //     { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
+  //     { path: 'auth/email/changePassword', method: RequestMethod.POST },
+  //     { path: 'products/getProductData', method: RequestMethod.GET }
 
-    ).forRoutes('*');
-  }
+  //   ).forRoutes('*');
+  // }
 }
