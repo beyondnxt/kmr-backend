@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Supplier } from './entity/supplier.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateSupplierDto } from './dto/supplier.dto';
 
 @Injectable()
@@ -17,12 +17,46 @@ export class SupplierService {
         return await this.supplierRepository.save(supplier);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Supplier[], totalCount: number }> {
-        const [data, totalCount] = await this.supplierRepository.findAndCount({
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { data, totalCount };
+    async findAll(page: number | 'all' = 1, limit: number = 10, name: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
+        if (name) {
+            where.name = Like(`%${name}%`);
+        }
+        let queryBuilder = this.supplierRepository.createQueryBuilder('supplier')
+            .andWhere(where);
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [supplier, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
+        return {
+            data: supplier.map(supplier => ({
+                id: supplier.id,
+                name: supplier.name,
+                code: supplier.code,
+                contactNo: supplier.contactNo,
+                contactPerson: supplier.contactPerson,
+                vatTin: supplier.vatTin,
+                cstNo: supplier.cstNo,
+                pan: supplier.pan,
+                email: supplier.email,
+                gstIn: supplier.gstIn,
+                termsOfPayment: supplier.termsOfPayment,
+                productName: supplier.productName,
+                address: supplier.address,
+                createdBy: supplier.createdBy,
+                createdOn: supplier.createdOn,
+                updatedBy: supplier.updatedBy,
+                updatedOn: supplier.updatedOn
+            })),
+            fetchedCount: supplier.length,
+            totalCount: totalCount
+        };
     }
 
     async findOne(id: number): Promise<Supplier> {

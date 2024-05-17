@@ -15,6 +15,15 @@ export class UserController {
     }
   }
 
+  @Get('/salesLeadName')
+  async getsalesLeadName(): Promise<{ data: User[] }> {
+    try {
+      return await this.userService.getsalesLeadName();
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Get()
   async getUsersWithRole(@Query('page') page: number, @Query('limit') limit: number, @Query('userName') userName: string,
     @Query('value') fullName: string): Promise<{ data: any[], total: number }> {

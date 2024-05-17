@@ -6,6 +6,7 @@ export class CreateUserDto {
   password: string
   mobileNumber: string
   email: string
+  salesLeadName: string
   roleId: number
   status: boolean
   createdBy: number

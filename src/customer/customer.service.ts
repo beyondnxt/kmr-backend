@@ -24,7 +24,7 @@ export class CustomerService {
         }
         let queryBuilder = this.customerRepository.createQueryBuilder('customer')
             .leftJoinAndSelect('customer.mainCustomer', 'mainCustomer')
-            .leftJoinAndSelect('customer.salesLead', 'salesLead')
+            .leftJoinAndSelect('customer.user', 'user')
             .andWhere(where);
 
         if (page !== "all") {
@@ -50,7 +50,7 @@ export class CustomerService {
                 email: customer.email,
                 grade: customer.grade,
                 salesLeadId: customer.salesLeadId,
-                salesLeadName: customer.salesLead.name,
+                salesLeadName: customer.user.salesLeadName,
                 salesCode: customer.salesCode,
                 destinationPort: customer.destinationPort,
                 finalDestination: customer.finalDestination,

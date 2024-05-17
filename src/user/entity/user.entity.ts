@@ -1,6 +1,6 @@
+import { Customer } from 'src/customer/entity/customer.entity';
 import { Department } from 'src/department/entity/department.entity';
-import { Role } from 'src/role/entity/role.entity';
-import { SalesLead } from 'src/sales-lead/entity/sales-lead.entity';
+import { Role } from 'src/role/entity/role.entity'
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -33,6 +33,9 @@ export class User {
     @Column({ default: null })
     email: string
 
+    @Column({ default: null })
+    salesLeadName: string
+
     @Column({ name: 'roleId' })
     roleId: number
 
@@ -55,7 +58,7 @@ export class User {
     @UpdateDateColumn()
     updatedOn: Date;
 
-    @OneToMany(() => SalesLead, saleslead => saleslead.user)
-    saleslead: SalesLead[];
+    @OneToMany(() => Customer, customer => customer.user)
+    customer: Customer[];
 
 }

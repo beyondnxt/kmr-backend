@@ -15,7 +15,7 @@ export class AuthService {
     ) { }
 
     async signUp(signUpDto: CreateUserDto): Promise<any> {
-        const { userName, fullName, location, departmentId, password, mobileNumber, email, roleId, status } = signUpDto;
+        const { userName, fullName, location, departmentId, password, mobileNumber, email, salesLeadName, roleId, status } = signUpDto;
         const existingUser = await this.userRepository.findOne({ where: { userName } });
         if (existingUser) {
             throw new UnauthorizedException('userName already exists');
@@ -29,6 +29,7 @@ export class AuthService {
             password: hashedPassword,
             mobileNumber: mobileNumber.toString(),
             email,
+            salesLeadName,
             roleId,
             status
         });
@@ -64,7 +65,7 @@ export class AuthService {
     async getUserInfo(id: number): Promise<any> {
         const user = await this.userRepository
             .createQueryBuilder('user')
-            .select(['user.id', 'user.userName', 'user.fullName', 'user.location', 'user.departmentId', 'user.mobileNumber', 'user.email', 'user.roleId', 'user.status'])
+            .select(['user.id', 'user.userName', 'user.fullName', 'user.location', 'user.departmentId', 'user.mobileNumber', 'user.email', 'user.salesLeadName','user.roleId', 'user.status'])
             .where('user.id = :id', { id })
             .getOne();
 

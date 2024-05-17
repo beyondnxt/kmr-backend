@@ -51,6 +51,7 @@ export class UserService {
                 password: user.password,
                 mobileNumer: user.mobileNumber,
                 email: user.email,
+                salesLeadName: user.salesLeadName,
                 roleId: user.roleId,
                 roleName: user.role.name,
                 createdOn: user.createdOn,
@@ -68,6 +69,16 @@ export class UserService {
             data: users.map(user => ({
                 id: user.id,
                 userName: user.userName
+            })),
+        };
+    }
+
+    async getsalesLeadName(): Promise<{ data: any[] }> {
+        const users = await this.userRepository.find();
+        return {
+            data: users.map(user => ({
+                id: user.id,
+                salesLeadName: user.salesLeadName
             })),
         };
     }
