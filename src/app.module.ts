@@ -37,12 +37,12 @@ import { SubCategory } from './sub-category/entity/sub-category.entity';
 import { RawMaterialTypeModule } from './raw-material-type/raw-material-type.module';
 import { RawMaterialType } from './raw-material-type/entity/raw-material-type.entity';
 import { Brand } from './brand/entity/brand.entity';
-import { RopeKgLenghtModule } from './rope-kg-lenght/rope-kg-lenght.module';
 import { RopeGradeModule } from './rope-grade/rope-grade.module';
 import { LocationModule } from './location/location.module';
-import { RopeKgLength } from './rope-kg-lenght/entity/rope-kg-length.entity';
 import { RopeGrade } from './rope-grade/entity/rope-grade.entity';
 import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
+import { RopeKgLength } from './rope-kg-length/entity/rope-kg-length.entity';
+import { RopeKgLenghtModule } from './rope-kg-length/rope-kg-length.module';
 
 @Module({
   imports: [

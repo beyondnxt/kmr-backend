@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { RopeKgLengthService } from './rope-kg-lenght.service';
-import { RopeKgLengthController } from './rope-kg-lenght.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RopeKgLength } from './entity/rope-kg-length.entity';
+import { RopeKgLengthController } from './rope-kg-length.controller';
+import { RopeKgLengthService } from './rope-kg-length.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([RopeKgLength])],
