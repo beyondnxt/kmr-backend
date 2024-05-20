@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -42,6 +42,7 @@ import { RopeGradeModule } from './rope-grade/rope-grade.module';
 import { LocationModule } from './location/location.module';
 import { RopeKgLenght } from './rope-kg-lenght/entity/rope-kg-length.entity';
 import { RopeGrade } from './rope-grade/entity/rope-grade.entity';
+import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
 
 @Module({
   imports: [
@@ -91,15 +92,15 @@ import { RopeGrade } from './rope-grade/entity/rope-grade.entity';
 
 })
 export class AppModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(AuthenticationMiddleware).exclude(
-  //     { path: 'auth/signup', method: RequestMethod.POST },
-  //     { path: 'auth/signin', method: RequestMethod.POST },
-  //     { path: 'auth/forgotPassword', method: RequestMethod.PUT },
-  //     { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
-  //     { path: 'auth/email/changePassword', method: RequestMethod.POST },
-  //     { path: 'products/getProductData', method: RequestMethod.GET }
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthenticationMiddleware).exclude(
+      { path: 'auth/signup', method: RequestMethod.POST },
+      { path: 'auth/signin', method: RequestMethod.POST },
+      { path: 'auth/forgotPassword', method: RequestMethod.PUT },
+      { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
+      { path: 'auth/email/changePassword', method: RequestMethod.POST },
+      { path: 'products/getProductData', method: RequestMethod.GET }
 
-  //   ).forRoutes('*');
-  // }
+    ).forRoutes('*');
+  }
 }

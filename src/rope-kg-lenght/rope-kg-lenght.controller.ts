@@ -3,7 +3,7 @@ import { CreateRopeKgLenghtDto } from './dto/rope-kg-lenght.dto';
 import { RopeKgLenght } from './entity/rope-kg-length.entity';
 import { RopeKgLenghtService } from './rope-kg-lenght.service';
 
-@Controller('rope-kg-lenght')
+@Controller('ropeKgLenght')
 export class RopeKgLenghtController {
     constructor(
         private readonly ropeKgLenghtService: RopeKgLenghtService

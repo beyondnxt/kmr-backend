@@ -21,7 +21,6 @@ export class RopeKgLenghtService {
         const where: any = {};
 
         let queryBuilder = this.ropeKgLenghtRepository.createQueryBuilder('RopeKgLenght')
-            .leftJoinAndSelect('RopeKgLenght.company', 'company')
             .where('RopeKgLenght.deleted = :deleted', { deleted: false })
             .andWhere(where);
 

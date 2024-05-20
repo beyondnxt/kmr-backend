@@ -44,7 +44,7 @@ export class AuthService {
         if (!userName || !password) {
             return { message: 'User name and password required' }
         }
-        const user = await this.userRepository.findOne({ where: { userName }, relations: ['role'] })
+        const user = await this.userRepository.findOne({ where: { userName, deleted: false }, relations: ['role'] })
 
         if (!user) {
             return { message: 'Invalid user name or password' };
