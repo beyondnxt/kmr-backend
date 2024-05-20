@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RopeKgLenght } from './entity/rope-kg-length.entity';
-import { CreateRopeKgLenghtDto } from './dto/rope-kg-lenght.dto';
+import { RopeKgLength } from './entity/rope-kg-length.entity';
+import { CreateRopeKgLengthDto } from './dto/rope-kg-length.dto';
 
 @Injectable()
-export class RopeKgLenghtService {
+export class RopeKgLengthService {
     constructor(
-        @InjectRepository(RopeKgLenght)
-        private readonly ropeKgLenghtRepository: Repository<RopeKgLenght>
+        @InjectRepository(RopeKgLength)
+        private readonly ropeKgLenghtRepository: Repository<RopeKgLength>
     ) { }
 
-    async create(ropeKgLenghtData: CreateRopeKgLenghtDto, userId: number): Promise<RopeKgLenght> {
-        const ropeKgLenght = this.ropeKgLenghtRepository.create(ropeKgLenghtData);
+    async create(ropeKgLengthData: CreateRopeKgLengthDto, userId: number): Promise<RopeKgLength> {
+        const ropeKgLenght = this.ropeKgLenghtRepository.create(ropeKgLengthData);
         ropeKgLenght.createdBy = userId
         return await this.ropeKgLenghtRepository.save(ropeKgLenght);
     }
@@ -49,7 +49,7 @@ export class RopeKgLenghtService {
         };
     }
 
-    async findOne(id: number): Promise<RopeKgLenght> {
+    async findOne(id: number): Promise<RopeKgLength> {
         const ropeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id, deleted: false } });
         if (!ropeKgLenght) {
             throw new NotFoundException('RopeKgLenght not found');
@@ -57,14 +57,14 @@ export class RopeKgLenghtService {
         return ropeKgLenght;
     }
 
-    async update(id: number, ropeKgLenghtData: CreateRopeKgLenghtDto, userId): Promise<RopeKgLenght> {
+    async update(id: number, ropeKgLengthData: CreateRopeKgLengthDto, userId): Promise<RopeKgLength> {
         try {
             const ropeKgLenght = await this.ropeKgLenghtRepository.findOne({ where: { id, deleted: false } });
             if (!ropeKgLenght) {
                 throw new NotFoundException(`RopeKgLenght with ID ${id} not found`);
             }
             ropeKgLenght.updatedBy = userId
-            Object.assign(ropeKgLenght, ropeKgLenghtData);
+            Object.assign(ropeKgLenght, ropeKgLengthData);
             return await this.ropeKgLenghtRepository.save(ropeKgLenght);
         } catch (error) {
             throw new Error(`Unable to update RopeKgLenght : ${error.message}`);

@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RopeKgLenghtService } from './rope-kg-lenght.service';
+import { RopeKgLengthService } from './rope-kg-length.service';
 
-describe('RopeKgLenghtService', () => {
-  let service: RopeKgLenghtService;
+describe('RopeKgLengthService', () => {
+  let service: RopeKgLengthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [RopeKgLenghtService],
+      providers: [RopeKgLengthService],
     }).compile();
 
-    service = module.get<RopeKgLenghtService>(RopeKgLenghtService);
+    service = module.get<RopeKgLengthService>(RopeKgLengthService);
   });
 
   it('should be defined', () => {

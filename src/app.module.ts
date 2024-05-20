@@ -40,7 +40,7 @@ import { Brand } from './brand/entity/brand.entity';
 import { RopeKgLenghtModule } from './rope-kg-lenght/rope-kg-lenght.module';
 import { RopeGradeModule } from './rope-grade/rope-grade.module';
 import { LocationModule } from './location/location.module';
-import { RopeKgLenght } from './rope-kg-lenght/entity/rope-kg-length.entity';
+import { RopeKgLength } from './rope-kg-lenght/entity/rope-kg-length.entity';
 import { RopeGrade } from './rope-grade/entity/rope-grade.entity';
 import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
 
@@ -59,7 +59,7 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
         Department, Color, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
-        RopeKgLenght, RopeGrade],
+        RopeKgLength, RopeGrade],
       synchronize: true,
     }),
     AuthModule,

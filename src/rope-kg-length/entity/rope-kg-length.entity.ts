@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({ name: 'rope-kg-lenght'})
-export class RopeKgLenght{
+@Entity({ name: 'rope-kg-length'})
+export class RopeKgLength{
     @PrimaryGeneratedColumn()
     id: number
 

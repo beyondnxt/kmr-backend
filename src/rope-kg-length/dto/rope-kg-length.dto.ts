@@ -1,4 +1,4 @@
-export class CreateRopeKgLenghtDto{
+export class CreateRopeKgLengthDto{
     code: string
     meterKg: string
     deleted: boolean
