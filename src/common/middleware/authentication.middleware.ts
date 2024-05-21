@@ -1,8 +1,8 @@
 import { Injectable, Logger, NestMiddleware } from "@nestjs/common";
 import { NextFunction, Request, Response } from "express";
 import * as jwt from 'jsonwebtoken';
-import { UserService } from "src/user/user.service";
 import { RequestService } from "../request.service";
+import { UserService } from "src/admin/user/user.service";
 
 @Injectable()
 export class AuthenticationMiddleware implements NestMiddleware {
