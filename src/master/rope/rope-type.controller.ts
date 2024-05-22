@@ -16,6 +16,15 @@ export class RopeController {
         }
     }
 
+    @Get('/all')
+    async getRopeName(): Promise<{ data: any[] }> {
+        try {
+            return await this.ropeService.getRopeName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Get(':id')
     async getRopeById(@Param('id') id: number): Promise<RopeType> {
         try {

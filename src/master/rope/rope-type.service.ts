@@ -64,6 +64,16 @@ export class RopeService {
     }
   }
 
+  async getRopeName(): Promise<{ data: any[] }> {
+    const rope = await this.ropeRepository.find({ where: { deleted: false } });
+    return {
+        data: rope.map(rope => ({
+            id: rope.id,
+            ropeName: rope.ropeType
+        })),
+    };
+}
+
   async updateRope(id: number, ropeData: CreateRopeDto, userId): Promise<RopeType> {
     try {
       const rope = await this.ropeRepository.findOne({ where: { id, deleted: false } });

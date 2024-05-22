@@ -5,6 +5,7 @@ export class CreatecategoryDto{
     type: string
     grade: string
     smsCategory: boolean
+    deleted: boolean
     createdBy: number
     createdOn: Date
     updatedBy: number

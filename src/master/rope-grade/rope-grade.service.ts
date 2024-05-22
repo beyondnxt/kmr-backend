@@ -20,10 +20,10 @@ export class RopeGradeService {
     async findAll(page: number | 'all' = 1, limit: number = 10): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
 
-        let queryBuilder = this.ropeGradeRepository.createQueryBuilder('rope-grade')
-            .leftJoinAndSelect('rope-grade.rope-type', 'rope-type')
-            .where('rope-grade.deleted = :deleted', { deleted: false })
-            .leftJoinAndSelect('rope-grade.category', 'category')
+        let queryBuilder = this.ropeGradeRepository.createQueryBuilder('ropeGrade')
+            .leftJoinAndSelect('ropeGrade.ropeType', 'ropeType')
+            .where('ropeGrade.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('ropeGrade.category', 'category')
             .andWhere(where);
 
         if (page !== "all") {
@@ -39,7 +39,9 @@ export class RopeGradeService {
             data: ropeGrade.map(ropeGrade => ({
                 id: ropeGrade.id,
                 ropeTypeId: ropeGrade.ropeTypeId,
+                ropeTypeName: ropeGrade.ropeType.ropeType,
                 categoryId: ropeGrade.categoryId,
+                categoryName: ropeGrade.category.categoryName,
                 grade: ropeGrade.grade,
                 rmComb: ropeGrade.rmComb,
                 deleted: ropeGrade.deleted,

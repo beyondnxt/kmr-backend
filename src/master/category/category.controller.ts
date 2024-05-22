@@ -28,6 +28,15 @@ export class CategoryController {
         }
     }
 
+    @Get('/all')
+    async getCategoryName(): Promise<{ data: any[] }> {
+        try {
+            return await this.categoryService.getCategoryName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Category> {
         try {
