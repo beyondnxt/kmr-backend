@@ -20,8 +20,9 @@ export class RopeGradeController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number | 'all' = 1, @Query('limit') limit: number = 10): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
-        return await this.ropeGradeService.findAll(page, limit)
+    async findAll(@Query('page') page: number | 'all' = 1, @Query('limit') limit: number = 10,
+    @Query('value') ropeTypeName: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+        return await this.ropeGradeService.findAll(page, limit, ropeTypeName)
     }
 
     @Get(':id')

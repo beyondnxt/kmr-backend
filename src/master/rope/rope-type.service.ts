@@ -69,7 +69,7 @@ export class RopeService {
     return {
         data: rope.map(rope => ({
             id: rope.id,
-            ropeName: rope.ropeType
+            ropeTypeName: rope.ropeType
         })),
     };
 }

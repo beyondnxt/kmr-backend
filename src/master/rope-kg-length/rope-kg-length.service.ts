@@ -44,7 +44,7 @@ export class RopeKgLengthService {
                 meterKg: ropeKgLenght.meterKg,
                 deleted: ropeKgLenght.deleted,
                 createdBy: ropeKgLenght.createdBy,
-                createdon: ropeKgLenght.createdOn,
+                createdOn: ropeKgLenght.createdOn,
                 updatedBy: ropeKgLenght.updatedBy,
                 updatedOn: ropeKgLenght.updatedOn
             })),
