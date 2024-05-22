@@ -17,12 +17,14 @@ export class SubCategoryService {
         return await this.subCategoryRepository.save(subCategory);
     }
 
-    async findAll(page: number | "all" = 1, limit: number = 10, name: string): Promise<{ data: SubCategory[], fetchedCount: number, totalCount: number }> {
+    async findAll(page: number | "all" = 1, limit: number = 10, name: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.subCategoryRepository.createQueryBuilder('sub-category')
+        let queryBuilder = this.subCategoryRepository.createQueryBuilder('subCategory')
+            .where('subCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('subCategory.childCategory', 'childCategory', 'childCategory.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -35,14 +37,24 @@ export class SubCategoryService {
             queryBuilder.getCount()
         ]);
         return {
-            data: subCategory,
+            data: subCategory.map(subCategory => ({
+                id: subCategory.id,
+                childCategoryId: subCategory.childCategoryId,
+                childCategoryName: subCategory.childCategory.name,
+                name: subCategory.name,
+                deleted: subCategory.deleted,
+                createdBy: subCategory.createdBy,
+                createdon: subCategory.createdOn,
+                updatedBy: subCategory.updatedBy,
+                updatedOn: subCategory.updatedOn
+            })),
             fetchedCount: subCategory.length,
             totalCount: totalCount
         };
     }
 
     async findOne(id: number): Promise<SubCategory> {
-        const subCategory = await this.subCategoryRepository.findOne({ where: { id } });
+        const subCategory = await this.subCategoryRepository.findOne({ where: { id, deleted: false } });
         if (!subCategory) {
             throw new NotFoundException(`SubCategory id ${id} not found`);
         }
@@ -51,7 +63,7 @@ export class SubCategoryService {
 
     async update(id: number, subCategoryData: CreateSubCategoryDto, userId): Promise<SubCategory> {
         try {
-            const subCategory = await this.subCategoryRepository.findOne({ where: { id } });
+            const subCategory = await this.subCategoryRepository.findOne({ where: { id, deleted: false } });
             if (!subCategory) {
                 throw new NotFoundException(`SubCategory with ID ${id} not found`);
             }
@@ -64,11 +76,12 @@ export class SubCategoryService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingSubCategory = await this.subCategoryRepository.findOne({ where: { id } });
+        const existingSubCategory = await this.subCategoryRepository.findOne({ where: { id, deleted: false } });
         if (!existingSubCategory) {
-            throw new NotFoundException('SubCategory not found');
+            throw new NotFoundException('Sub category not found');
         }
-        await this.subCategoryRepository.remove(existingSubCategory);
+        existingSubCategory.deleted = true
+        await this.subCategoryRepository.save(existingSubCategory);
         return { message: `Successfully deleted id ${id}` }
     }
 }

@@ -1,13 +1,16 @@
 import { ChildCategory } from "src/master/child-category/entity/child-category.entity";
 import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({name: 'parent-category'})
-export class ParentCategory{
+@Entity({ name: 'parent-category' })
+export class ParentCategory {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
     name: string
+
+    @Column({ default: false })
+    deleted: boolean
 
     @Column({ default: null })
     createdBy: number;
@@ -21,6 +24,6 @@ export class ParentCategory{
     @UpdateDateColumn()
     updatedOn: Date;
 
-    @OneToOne(()=>ChildCategory,childCategory=>childCategory.parentCategory)
+    @OneToOne(() => ChildCategory, childCategory => childCategory.parentCategory)
     childCategory: ChildCategory
 }

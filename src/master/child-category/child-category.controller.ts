@@ -3,7 +3,7 @@ import { ChildCategoryService } from './child-category.service';
 import { CreateChildCategoryDto } from './dto/child-category.dto';
 import { ChildCategory } from './entity/child-category.entity';
 
-@Controller('childcategory')
+@Controller('childCategory')
 export class ChildCategoryController {
     constructor(
         private readonly childCategoryService: ChildCategoryService

@@ -17,12 +17,14 @@ export class ChildCategoryService {
         return await this.childCategoryRepository.save(childCategory);
     }
 
-    async findAll(page: number | "all" = 1, limit: number = 10, name: string): Promise<{ data: ChildCategory[], fetchedCount: number, totalCount: number }> {
+    async findAll(page: number | "all" = 1, limit: number = 10, name: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
         if (name) {
             where.name = Like(`%${name}%`);
         }
-        let queryBuilder = this.childCategoryRepository.createQueryBuilder('child-category')
+        let queryBuilder = this.childCategoryRepository.createQueryBuilder('childCategory')
+            .where('childCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('childCategory.parentCategory', 'parentCategory', 'parentCategory.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
@@ -35,14 +37,24 @@ export class ChildCategoryService {
             queryBuilder.getCount()
         ]);
         return {
-            data: childCategory,
+            data: childCategory.map(childCategory => ({
+                id: childCategory.id,
+                parentCategoryId: childCategory.parentCategoryId,
+                parentCategoryName: childCategory.parentCategory.name,
+                name: childCategory.name,
+                deleted: childCategory.deleted,
+                createdBy: childCategory.createdBy,
+                createdon: childCategory.createdOn,
+                updatedBy: childCategory.updatedBy,
+                updatedOn: childCategory.updatedOn
+            })),
             fetchedCount: childCategory.length,
             totalCount: totalCount
         };
     }
 
     async findOne(id: number): Promise<ChildCategory> {
-        const childCategory = await this.childCategoryRepository.findOne({ where: { id } });
+        const childCategory = await this.childCategoryRepository.findOne({ where: { id, deleted: false } });
         if (!childCategory) {
             throw new NotFoundException('ChildCategory not found');
         }
@@ -51,7 +63,7 @@ export class ChildCategoryService {
 
     async update(id: number, childCategoryData: CreateChildCategoryDto, userId): Promise<ChildCategory> {
         try {
-            const childCategory = await this.childCategoryRepository.findOne({ where: { id } });
+            const childCategory = await this.childCategoryRepository.findOne({ where: { id, deleted: false } });
             if (!childCategory) {
                 throw new NotFoundException(`ChildCategory with ID ${id} not found`);
             }
@@ -64,11 +76,12 @@ export class ChildCategoryService {
     }
 
     async remove(id: number): Promise<any> {
-        const existingChildCategory = await this.childCategoryRepository.findOne({ where: { id } });
+        const existingChildCategory = await this.childCategoryRepository.findOne({ where: { id, deleted: false } });
         if (!existingChildCategory) {
-            throw new NotFoundException('ChildCategory not found');
+            throw new NotFoundException('Parent category not found');
         }
-        await this.childCategoryRepository.remove(existingChildCategory);
+        existingChildCategory.deleted = true
+        await this.childCategoryRepository.save(existingChildCategory);
         return { message: `Successfully deleted id ${id}` }
     }
 }

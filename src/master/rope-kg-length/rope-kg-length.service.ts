@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { RopeKgLength } from './entity/rope-kg-length.entity';
 import { CreateRopeKgLengthDto } from './dto/rope-kg-length.dto';
 
@@ -17,8 +17,12 @@ export class RopeKgLengthService {
         return await this.ropeKgLenghtRepository.save(ropeKgLenght);
     }
 
-    async findAll(page: number | 'all' = 1, limit: number = 10): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+    async findAll(page: number | 'all' = 1, limit: number = 10, code: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
+
+        if (code) {
+            where.code = Like(`%${code}%`);
+        }
 
         let queryBuilder = this.ropeKgLenghtRepository.createQueryBuilder('RopeKgLenght')
             .where('RopeKgLenght.deleted = :deleted', { deleted: false })

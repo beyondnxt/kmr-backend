@@ -19,9 +19,10 @@ export class RopeKgLengthController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: any[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10,
+        @Query('value') code: string): Promise<{ data: any[], totalCount: number }> {
         try {
-            return await this.ropeKgLengthService.findAll(page, limit);
+            return await this.ropeKgLengthService.findAll(page, limit, code);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

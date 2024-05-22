@@ -3,7 +3,7 @@ import { ParentCategoryService } from './parent-category.service';
 import { CreateParentCategoryDto } from './dto/parent-category.dto';
 import { ParentCategory } from './entity/parent-category.entity';
 
-@Controller('parent-category')
+@Controller('parentCategory')
 export class ParentCategoryController {
     constructor(
         private readonly parentCategoryService: ParentCategoryService
@@ -20,9 +20,10 @@ export class ParentCategoryController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: ParentCategory[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10,
+        @Query('value') name: string): Promise<{ data: ParentCategory[], totalCount: number }> {
         try {
-            return await this.parentCategoryService.findAll(page, limit);
+            return await this.parentCategoryService.findAll(page, limit, name);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

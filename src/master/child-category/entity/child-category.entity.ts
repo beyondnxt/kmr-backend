@@ -2,20 +2,23 @@ import { ParentCategory } from "src/master/parent-category/entity/parent-categor
 import { SubCategory } from "src/master/sub-category/entity/sub-category.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({ name: 'child-category'})
-export class ChildCategory{
+@Entity({ name: 'child-category' })
+export class ChildCategory {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
     parentCategoryId: number
 
-    @ManyToOne(()=>ParentCategory, parentCategory=>parentCategory.childCategory)
-    @JoinColumn({name: 'parentCategoryId'})
+    @ManyToOne(() => ParentCategory, parentCategory => parentCategory.childCategory)
+    @JoinColumn({ name: 'parentCategoryId' })
     parentCategory: ParentCategory
 
     @Column()
     name: string
+
+    @Column({ default: false })
+    deleted: boolean
 
     @Column({ default: null })
     createdBy: number;
@@ -29,6 +32,6 @@ export class ChildCategory{
     @UpdateDateColumn()
     updatedOn: Date;
 
-    @OneToOne(()=>SubCategory,subCategory=>subCategory.childCategory)
+    @OneToOne(() => SubCategory, subCategory => subCategory.childCategory)
     subCategory: SubCategory
 }

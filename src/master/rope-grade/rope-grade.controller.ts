@@ -3,7 +3,7 @@ import { RopeGradeService } from './rope-grade.service';
 import { CreateRopeGradeDto } from './dto/rope-grade.dto';
 import { RopeGrade } from './entity/rope-grade.entity';
 
-@Controller('rope-grade')
+@Controller('ropeGrade')
 export class RopeGradeController {
     constructor(
         private readonly ropeGradeService: RopeGradeService
