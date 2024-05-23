@@ -19,8 +19,11 @@ export class Brand {
     @Column()
     brandPriorityOrder: string
 
+    @Column({default: false})
+    deleted: boolean
+
     @Column({ default: null })
-    createdBy: number;
+    createdBy: number
 
     @CreateDateColumn()
     createdOn: Date;

@@ -43,6 +43,7 @@ import { Supplier } from './master/supplier/entity/supplier.entity';
 import { SupplierModule } from './master/supplier/supplier.module';
 import { Warehouse } from './master/warehouse/entity/warehouse.entity';
 import { WarehouseModule } from './master/warehouse/warehouse.module';
+import { RopeSpecificationModule } from './master/rope-specification/rope-specification.module';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { WarehouseModule } from './master/warehouse/warehouse.module';
     RopeKgLenghtModule,
     RopeGradeModule,
     LocationModule,
+    RopeSpecificationModule,
   ],
   controllers: [AppController],
   providers: [

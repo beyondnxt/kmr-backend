@@ -28,6 +28,15 @@ export class RawMaterialTypeController {
         }
     }
 
+    @Get('/all')
+    async getRawMaterialName(): Promise<{ data: any[] }> {
+        try {
+            return await this.rawMaterialTypeService.getRawMaterialName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<RawMaterialType> {
         try {

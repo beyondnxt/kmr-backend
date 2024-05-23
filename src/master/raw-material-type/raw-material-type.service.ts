@@ -42,6 +42,16 @@ export class RawMaterialTypeService {
         };
     }
 
+    async getRawMaterialName(): Promise<{ data: any[] }> {
+        const rawMaterial = await this.rawMaterialTypeRepository.find({ where: { deleted: false } });
+        return {
+            data: rawMaterial.map(rawMaterial => ({
+                id: rawMaterial.id,
+                name: rawMaterial.name
+            })),
+        };
+    }
+
     async findOne(id: number): Promise<RawMaterialType> {
         const rawMaterialType = await this.rawMaterialTypeRepository.findOne({ where: { id, deleted: false } });
         if (!rawMaterialType) {
