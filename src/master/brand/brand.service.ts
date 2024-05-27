@@ -45,7 +45,7 @@ export class BrandService {
                 brandPriorityOrder: brand.brandPriorityOrder,
                 deleted: brand.deleted,
                 createdBy: brand.createdBy,
-                createdon: brand.createdOn,
+                createdOn: brand.createdOn,
                 updatedBy: brand.updatedBy,
                 updatedOn: brand.updatedOn
             })),

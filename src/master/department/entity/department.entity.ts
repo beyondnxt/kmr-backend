@@ -1,5 +1,6 @@
 import { User } from "src/admin/user/entity/user.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Company } from "src/master/company/entity/company.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'department' })
 export class Department {
@@ -9,8 +10,12 @@ export class Department {
     @Column()
     departmentName: string
 
-    @Column()
-    location: string
+    @Column({ default: null })
+    location: number
+
+    @ManyToOne(() => Company, company => company.department)
+    @JoinColumn({ name: 'location' })
+    company: Company;
 
     @Column({ type: 'simple-json', default: null })
     type: { [key: string]: any };

@@ -44,6 +44,7 @@ import { Warehouse } from './master/warehouse/entity/warehouse.entity';
 import { WarehouseModule } from './master/warehouse/warehouse.module';
 import { RopeSpecificationModule } from './master/rope-specification/rope-specification.module';
 import { Extruder } from './master/extruder/entity/extruder.entity';
+import { RopeMachine } from './master/rope-machine/entity/rope-machine.entity';
 
 @Module({
   imports: [
@@ -60,7 +61,7 @@ import { Extruder } from './master/extruder/entity/extruder.entity';
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
         Department, Color, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
-        RopeKgLength, RopeGrade, Extruder],
+        RopeKgLength, RopeGrade, Extruder, RopeMachine],
       synchronize: true,
     }),
     AuthModule,
