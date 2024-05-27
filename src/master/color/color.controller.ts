@@ -15,7 +15,7 @@ export class ColorController {
             const userId = req.headers['userid']
             return await this.colorService.create(colorData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -25,7 +25,7 @@ export class ColorController {
         try {
             return await this.colorService.findAll(page, limit, colorName);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -38,7 +38,7 @@ export class ColorController {
             }
             return color;
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -48,7 +48,7 @@ export class ColorController {
             const userId = req.headers['userid']
             return await this.colorService.update(id, colorData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -57,7 +57,7 @@ export class ColorController {
         try {
             return await this.colorService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

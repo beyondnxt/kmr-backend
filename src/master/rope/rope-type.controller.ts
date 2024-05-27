@@ -12,7 +12,7 @@ export class RopeController {
         try {
             return await this.ropeService.getAllRopes(page, limit, ropeType);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -21,7 +21,7 @@ export class RopeController {
         try {
             return await this.ropeService.getRopeName();
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -30,7 +30,7 @@ export class RopeController {
         try {
             return await this.ropeService.getRopeById(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -40,7 +40,7 @@ export class RopeController {
             const userId = req.headers['userid']
             return await this.ropeService.createRope(ropeData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -54,7 +54,7 @@ export class RopeController {
             }
             return updatedRope;
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -63,7 +63,7 @@ export class RopeController {
         try {
             return await this.ropeService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

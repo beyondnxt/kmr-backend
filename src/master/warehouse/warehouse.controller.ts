@@ -15,7 +15,7 @@ export class WarehouseController {
             const userId = req.headers['userid']
             return await this.warehouseService.create(warehouseData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -24,7 +24,7 @@ export class WarehouseController {
         try {
             return await this.warehouseService.findAll(page, limit);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -37,7 +37,7 @@ export class WarehouseController {
             }
             return warehouse;
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -47,7 +47,7 @@ export class WarehouseController {
             const userId = req.headers['userid']
             return await this.warehouseService.update(id, warehouseData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -56,7 +56,7 @@ export class WarehouseController {
         try {
             return await this.warehouseService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

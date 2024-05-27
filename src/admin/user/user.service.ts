@@ -22,8 +22,9 @@ export class UserService {
             .leftJoinAndSelect('user.role', 'role')
             .where('role.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('user.department', 'department')
-            .where('department.deleted = :deleted', { deleted: false })
-            .where('user.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('user.company', 'company', 'company.deleted = :deleted', { deleted: false })
+            .andWhere('department.deleted = :deleted', { deleted: false })
+            .andWhere('user.deleted = :deleted', { deleted: false })
             .orderBy('user.createdOn', 'DESC')
             .skip(skip)
             .take(limit);
@@ -49,6 +50,7 @@ export class UserService {
                 userName: user.userName,
                 fullName: user.fullName,
                 location: user.location,
+                companyName: user.company.companyName,
                 departmentId: user.departmentId ? user.departmentId : null,
                 departmentName: user.department.departmentName ? user.department.departmentName : null,
                 password: user.password,

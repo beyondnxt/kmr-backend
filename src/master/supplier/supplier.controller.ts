@@ -15,7 +15,7 @@ export class SupplierController {
             const userId = req.headers['userid']
             return await this.supplierService.create(supplierData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -24,7 +24,7 @@ export class SupplierController {
         try {
             return await this.supplierService.findAll(page, limit, name);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -37,7 +37,7 @@ export class SupplierController {
             }
             return department;
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -47,7 +47,7 @@ export class SupplierController {
             const userId = req.headers['userid']
             return await this.supplierService.update(id, supplierData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -56,7 +56,7 @@ export class SupplierController {
         try {
             return await this.supplierService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

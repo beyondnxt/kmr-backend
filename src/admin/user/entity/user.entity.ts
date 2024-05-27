@@ -1,4 +1,5 @@
 import { Role } from 'src/admin/role/entity/role.entity';
+import { Company } from 'src/master/company/entity/company.entity';
 import { Customer } from 'src/master/customer/entity/customer.entity';
 import { Department } from 'src/master/department/entity/department.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
@@ -14,8 +15,12 @@ export class User {
     @Column({ default: null })
     fullName: string;
 
-    @Column()
-    location: string;
+    @Column({ default: null })
+    location: number
+
+    @ManyToOne(() => Company, company => company.user)
+    @JoinColumn({ name: 'location' })
+    company: Company;
 
     @Column({ default: null })
     departmentId: number

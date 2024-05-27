@@ -1,7 +1,7 @@
 export class CreateUserDto {
   userName: string
   fullName: string
-  location: string
+  location: number
   departmentId: number
   password: string
   mobileNumber: string

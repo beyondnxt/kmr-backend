@@ -14,7 +14,7 @@ export class RopeKgLengthController {
             const userId = req.headers['userid']
             return await this.ropeKgLengthService.create(ropeKgLengthData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -24,7 +24,7 @@ export class RopeKgLengthController {
         try {
             return await this.ropeKgLengthService.findAll(page, limit, code);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -33,7 +33,7 @@ export class RopeKgLengthController {
         try {
             return await this.ropeKgLengthService.findOne(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -43,7 +43,7 @@ export class RopeKgLengthController {
             const userId = req.headers['userid']
             return await this.ropeKgLengthService.update(id, ropeKgLengthData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -52,7 +52,7 @@ export class RopeKgLengthController {
         try {
             return await this.ropeKgLengthService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

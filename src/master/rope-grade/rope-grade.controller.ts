@@ -15,7 +15,7 @@ export class RopeGradeController {
             const userId = req.headers['userid']
             return await this.ropeGradeService.create(ropeGradeData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -30,7 +30,7 @@ export class RopeGradeController {
         try {
             return await this.ropeGradeService.findOne(id)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -40,7 +40,7 @@ export class RopeGradeController {
         const userId = req.headers['userid']
         return await this.ropeGradeService.update(id, ropeGradeData, userId);
       } catch (error) {
-        throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
     }
   
@@ -49,7 +49,7 @@ export class RopeGradeController {
       try {
         return await this.ropeGradeService.remove(id);
       } catch (error) {
-        throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
     }
   

@@ -15,7 +15,7 @@ export class MainCustomerController {
             const userId = req.headers['userid']
             return await this.mainCustomerService.create(mainCustomerData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -24,7 +24,7 @@ export class MainCustomerController {
         try {
             return await this.mainCustomerService.findAll(page, limit, name);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -33,7 +33,7 @@ export class MainCustomerController {
         try {
             return await this.mainCustomerService.getMainCustomerName();
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -46,7 +46,7 @@ export class MainCustomerController {
             }
             return mainCustomer;
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -56,7 +56,7 @@ export class MainCustomerController {
             const userId = req.headers['userid']
             return await this.mainCustomerService.update(id, mainCustomerData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -65,7 +65,7 @@ export class MainCustomerController {
         try {
             return await this.mainCustomerService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -15,7 +15,7 @@ export class ChildCategoryController {
             const userId = req.headers['userid']
             return await this.childCategoryService.create(childCategoryData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -24,7 +24,7 @@ export class ChildCategoryController {
         try {
             return await this.childCategoryService.findAll(page, limit, name);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -33,7 +33,7 @@ export class ChildCategoryController {
         try {
             return await this.childCategoryService.findOne(id)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -43,7 +43,7 @@ export class ChildCategoryController {
             const userId = req.headers['userid']
             return await this.childCategoryService.update(id, childCategoryData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -52,7 +52,7 @@ export class ChildCategoryController {
         try {
             return await this.childCategoryService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

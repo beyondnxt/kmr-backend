@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -86,7 +86,7 @@ export class AuthService {
             return await this.userRepository.findOne({ where: { id, deleted: false } });
         } catch (error) {
             console.error('Error changing password:', error);
-            throw new InternalServerErrorException('Failed to change password');
+            throw new NotFoundException('Failed to change password');
         }
     }
 
@@ -105,7 +105,7 @@ export class AuthService {
             const user = await this.changePassword(id, password);
             return user;
         } catch (error) {
-            throw new InternalServerErrorException('Failed to reset password');
+            throw new NotFoundException('Failed to reset password');
         }
     }
 
@@ -142,7 +142,7 @@ export class AuthService {
             return true;
         } catch (error) {
             console.error('Error sending email:', error);
-            throw new InternalServerErrorException('Failed to send email');
+            throw new NotFoundException('Failed to send email');
         }
     }
 }

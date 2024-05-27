@@ -19,7 +19,7 @@ export class RoleController {
     try {
       return await this.roleService.getAllRoles(page, limit, name);
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -28,7 +28,7 @@ export class RoleController {
     try {
       return await this.roleService.getRoleName();
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -41,7 +41,7 @@ export class RoleController {
       }
       return role;
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -51,7 +51,7 @@ export class RoleController {
       const userId = req.headers['userid']
       return await this.roleService.createRole(roleData, userId);
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -61,7 +61,7 @@ export class RoleController {
       const userId = req.headers['userid']
       return await this.roleService.updateRole(id, roleData, userId);
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -70,7 +70,7 @@ export class RoleController {
     try {
       return await this.roleService.remove(id);
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 

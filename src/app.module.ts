@@ -24,7 +24,6 @@ import { CustomerModule } from './master/customer/customer.module';
 import { Customer } from './master/customer/entity/customer.entity';
 import { DepartmentModule } from './master/department/department.module';
 import { Department } from './master/department/entity/department.entity';
-import { LocationModule } from './master/location/location.module';
 import { MainCustomer } from './master/main-customer/entity/main-customer.entity';
 import { MainCustomerModule } from './master/main-customer/main-customer.module';
 import { ParentCategory } from './master/parent-category/entity/parent-category.entity';
@@ -44,6 +43,7 @@ import { SupplierModule } from './master/supplier/supplier.module';
 import { Warehouse } from './master/warehouse/entity/warehouse.entity';
 import { WarehouseModule } from './master/warehouse/warehouse.module';
 import { RopeSpecificationModule } from './master/rope-specification/rope-specification.module';
+import { Extruder } from './master/extruder/entity/extruder.entity';
 
 @Module({
   imports: [
@@ -60,7 +60,7 @@ import { RopeSpecificationModule } from './master/rope-specification/rope-specif
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
         Department, Color, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
-        RopeKgLength, RopeGrade],
+        RopeKgLength, RopeGrade, Extruder],
       synchronize: true,
     }),
     AuthModule,
@@ -83,7 +83,6 @@ import { RopeSpecificationModule } from './master/rope-specification/rope-specif
     RawMaterialTypeModule,
     RopeKgLenghtModule,
     RopeGradeModule,
-    LocationModule,
     RopeSpecificationModule,
   ],
   controllers: [AppController],

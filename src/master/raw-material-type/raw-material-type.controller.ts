@@ -15,7 +15,7 @@ export class RawMaterialTypeController {
             const userId = req.headers['userid']
             return await this.rawMaterialTypeService.create(rawMaterialTypeData, userId)
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -24,7 +24,7 @@ export class RawMaterialTypeController {
         try {
             return await this.rawMaterialTypeService.findAll(page, limit, name);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -33,7 +33,7 @@ export class RawMaterialTypeController {
         try {
             return await this.rawMaterialTypeService.getRawMaterialName();
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -42,7 +42,7 @@ export class RawMaterialTypeController {
         try {
             return await this.rawMaterialTypeService.findOne(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -52,7 +52,7 @@ export class RawMaterialTypeController {
             const userId = req.headers['userid']
             return await this.rawMaterialTypeService.update(id, rawMaterialTypeData, userId);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -61,7 +61,7 @@ export class RawMaterialTypeController {
         try {
             return await this.rawMaterialTypeService.remove(id);
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
 }

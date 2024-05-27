@@ -1,4 +1,6 @@
 import { IsEmail } from "class-validator"
+import { User } from "src/admin/user/entity/user.entity";
+import { Extruder } from "src/master/extruder/entity/extruder.entity";
 import { Warehouse } from "src/master/warehouse/entity/warehouse.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -24,7 +26,7 @@ export class Company {
 
     @Column({ default: null })
     pan: string
-    
+
     @Column({ default: null })
     accountYear: string
 
@@ -44,7 +46,7 @@ export class Company {
     @Column({ default: null })
     mobileNumber: string;
 
-    @Column({ default: false})
+    @Column({ default: false })
     deleted: boolean
 
     @Column({ default: null })
@@ -61,4 +63,10 @@ export class Company {
 
     @OneToMany(() => Warehouse, warehouse => warehouse.company)
     warehouse: Warehouse[];
+
+    @OneToMany(() => User, user => user.company)
+    user: User[];
+
+    @OneToMany(() => Extruder, extruder => extruder.company)
+    extruder: Extruder[];
 }

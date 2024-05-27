@@ -21,9 +21,9 @@ export class RopeGradeService {
         const where: any = {};
 
         let queryBuilder = this.ropeGradeRepository.createQueryBuilder('ropeGrade')
-            .leftJoinAndSelect('ropeGrade.ropeType', 'ropeType')
+            .leftJoinAndSelect('ropeGrade.ropeType', 'ropeType', 'ropeType.deleted = :deleted', { deleted: false })
             .where('ropeGrade.deleted = :deleted', { deleted: false })
-            .leftJoinAndSelect('ropeGrade.category', 'category')
+            .leftJoinAndSelect('ropeGrade.category', 'category', 'category.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (ropeTypeName) {
