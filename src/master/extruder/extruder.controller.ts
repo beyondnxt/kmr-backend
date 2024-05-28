@@ -10,7 +10,7 @@ export class ExtruderController {
     ) { }
 
     @Post()
-    async create(@Body() extruderData: CreateExtruderDto, @Req() req: Request) {
+    async create(@Body() extruderData: CreateExtruderDto, @Req() req: Request): Promise<Extruder> {
         try {
             const userId = req.headers['userid']
             return await this.extruderService.create(extruderData, userId)
@@ -27,7 +27,7 @@ export class ExtruderController {
             throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Extruder> {
         try {

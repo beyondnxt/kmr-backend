@@ -37,7 +37,23 @@ export class ExtruderService {
             queryBuilder.getCount()
         ]);
         return {
-            data: extruder,
+            data: extruder.map(extruder => ({
+                id: extruder.id,
+                machineName: extruder.machineName,
+                shortCode: extruder.shortCode,
+                location: extruder.location,
+                locationName: extruder.company.location,
+                code: extruder.code,
+                rpm: extruder.rpm,
+                target: extruder.target,
+                runningTime: extruder.runningTime,
+                spindle: extruder.spindle,
+                deleted: extruder.deleted,
+                createdBy: extruder.createdBy,
+                createdOn: extruder.createdOn,
+                updatedBy: extruder.updatedBy,
+                updatedOn: extruder.updatedOn
+            })),
             fetchedCount: extruder.length,
             totalCount: totalCount
         };

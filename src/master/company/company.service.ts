@@ -47,7 +47,9 @@ export class CompanyService {
         return {
             data: company.map(company => ({
                 id: company.id,
-                companyName: company.companyName
+                companyName: company.companyName,
+                location: company.location,
+                code: company.code
             })),
         };
     }

@@ -45,6 +45,7 @@ import { WarehouseModule } from './master/warehouse/warehouse.module';
 import { RopeSpecificationModule } from './master/rope-specification/rope-specification.module';
 import { Extruder } from './master/extruder/entity/extruder.entity';
 import { RopeMachine } from './master/rope-machine/entity/rope-machine.entity';
+import { ExtruderModule } from './master/extruder/extruder.module';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { RopeMachine } from './master/rope-machine/entity/rope-machine.entity';
     RopeKgLenghtModule,
     RopeGradeModule,
     RopeSpecificationModule,
+    ExtruderModule
   ],
   controllers: [AppController],
   providers: [
