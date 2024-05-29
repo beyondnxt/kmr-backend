@@ -41,6 +41,9 @@ export class Supplier {
     @Column({ default: null })
     address: string
 
+    @Column({ default: true })
+    status: boolean
+
     @Column({ default: false })
     deleted: boolean
 

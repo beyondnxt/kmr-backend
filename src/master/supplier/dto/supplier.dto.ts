@@ -11,6 +11,7 @@ export class CreateSupplierDto{
     termsOfPayment: string
     productName: string
     address: string
+    status: boolean
     deleted: boolean
     createdBy: number
     createdOn: Date

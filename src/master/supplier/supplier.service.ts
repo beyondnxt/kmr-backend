@@ -50,6 +50,7 @@ export class SupplierService {
                 termsOfPayment: supplier.termsOfPayment,
                 productName: supplier.productName,
                 address: supplier.address,
+                status: supplier.status,
                 deleted: supplier.deleted,
                 createdBy: supplier.createdBy,
                 createdOn: supplier.createdOn,

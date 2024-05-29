@@ -6,6 +6,7 @@ export class CreateCustomerDto{
     type: string
     contactPerson: string
     contactNo: string
+    stdCode: string
     email: string
     grade: string
     salesLeadId: number
@@ -19,7 +20,7 @@ export class CreateCustomerDto{
     aadhaarNumber: number
     pan: number
     country: string
-    handledBy: string
+    lookupSLID: string
     address: string
     deleted: boolean
     createdBy: number

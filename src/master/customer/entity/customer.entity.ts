@@ -33,6 +33,9 @@ export class Customer {
     contactNo: string
 
     @Column({ default: null })
+    stdCode: string
+
+    @Column({ default: null })
     email: string
 
     @Column({ default: null })
@@ -76,7 +79,7 @@ export class Customer {
     country: string
 
     @Column({ default: null })
-    handledBy: string
+    lookupSLID: string
 
     @Column({ default: false})
     deleted: boolean

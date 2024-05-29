@@ -62,7 +62,7 @@ export class ExtruderService {
     async findOne(id: number): Promise<Extruder> {
         const extruder = await this.extruderRepository.findOne({ where: { id, deleted: false } });
         if (!extruder) {
-            throw new NotFoundException('extruder not found');
+            throw new NotFoundException(`Extruder with ID ${id} not found`);
         }
         return extruder;
     }
@@ -71,7 +71,7 @@ export class ExtruderService {
         try {
             const extruder = await this.extruderRepository.findOne({ where: { id, deleted: false } });
             if (!extruder) {
-                throw new NotFoundException(`extruder with ID ${id} not found`);
+                throw new NotFoundException(`Extruder with ID ${id} not found`);
             }
             extruder.updatedBy = userId
             Object.assign(extruder, extruderData);
@@ -84,7 +84,7 @@ export class ExtruderService {
     async remove(id: number): Promise<any> {
         const extruder = await this.extruderRepository.findOne({ where: { id, deleted: false } });
         if (!extruder) {
-            throw new NotFoundException('extruder not found');
+            throw new NotFoundException(`Extruder with ID ${id} not found`);
         }
         extruder.deleted = true
         await this.extruderRepository.save(extruder);
