@@ -28,6 +28,15 @@ export class ChildCategoryController {
         }
     }
 
+    @Get('/all')
+    async getChildName(): Promise<{ data: any[] }> {
+        try {
+            return await this.childCategoryService.getChildName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<ChildCategory> {
         try {

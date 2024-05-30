@@ -43,12 +43,22 @@ export class ParentCategoryService {
                 name: parentCategory.name,
                 deleted: parentCategory.deleted,
                 createdBy: parentCategory.createdBy,
-                createdon: parentCategory.createdOn,
+                createdOn: parentCategory.createdOn,
                 updatedBy: parentCategory.updatedBy,
                 updatedOn: parentCategory.updatedOn
             })),
             fetchedCount: parentCategory.length,
             totalCount: totalCount
+        };
+    }
+
+    async getParentName(): Promise<{ data: any[] }> {
+        const parentCategory = await this.parentCategoryRepository.find({ where: { deleted: false } });
+        return {
+            data: parentCategory.map(parentCategory => ({
+                id: parentCategory.id,
+                name: parentCategory.name
+            })),
         };
     }
 

@@ -1,3 +1,4 @@
+import { Item } from "src/master/item/entity/item.entity";
 import { RopeGrade } from "src/master/rope-grade/entity/rope-grade.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -32,4 +33,7 @@ export class RopeType {
 
     @OneToMany(()=>RopeGrade, ropeGrade=>ropeGrade.ropeType)
     ropeGrade: RopeGrade
+
+    @OneToMany(() => Item, item => item.ropeType)
+    item: Item
 }

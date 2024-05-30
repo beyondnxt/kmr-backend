@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Item } from "src/master/item/entity/item.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'color' })
 export class Color {
@@ -31,4 +32,10 @@ export class Color {
 
     @UpdateDateColumn()
     updatedOn: Date;
+
+    @OneToMany(() => Item, item => item.color)
+    item: Item
+
+    @OneToMany(() => Item, item => item.treasureYarnColor)
+    treasureYarnItems: Item[];
 }

@@ -29,6 +29,15 @@ export class ParentCategoryController {
         }
     }
 
+    @Get('/all')
+    async getParentName(): Promise<{ data: any[] }> {
+        try {
+            return await this.parentCategoryService.getParentName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<ParentCategory> {
         try {

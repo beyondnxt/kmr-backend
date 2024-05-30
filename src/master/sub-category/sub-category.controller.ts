@@ -28,6 +28,15 @@ export class SubCategoryController {
         }
     }
 
+    @Get('/all')
+    async getSubCategoryName(): Promise<{ data: any[] }> {
+        try {
+            return await this.subCategoryService.getSubCategoryName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<SubCategory> {
         try {

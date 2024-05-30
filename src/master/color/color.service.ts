@@ -42,6 +42,16 @@ export class ColorService {
         };
     }
 
+    async getColorName(): Promise<{ data: any[] }> {
+        const color = await this.colorRepository.find({ where: { deleted: false } });
+        return {
+            data: color.map(color => ({
+                id: color.id,
+                colorName: color.colorName
+            })),
+        };
+    }
+
     async findOne(id: number): Promise<Color> {
         const color = await this.colorRepository.findOne({ where: { id, deleted: false } });
         if (!color) {

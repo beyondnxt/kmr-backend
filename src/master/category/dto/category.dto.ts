@@ -1,7 +1,7 @@
 export class CreatecategoryDto{
-    categoryName: string
-    parentCategory: string
-    categoryCode: string
+    parentCategoryId: number
+    childCategoryId: number
+    subCategoryId: number
     type: string
     grade: string
     smsCategory: boolean

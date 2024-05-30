@@ -2,23 +2,23 @@ import { Category } from "src/master/category/entity/category.entity";
 import { RopeType } from "src/master/rope/entity/rope-type.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({name: 'rope-grade'})
-export class RopeGrade{
+@Entity({ name: 'rope-grade' })
+export class RopeGrade {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
     ropeTypeId: number
 
-    @ManyToOne(()=>RopeType, ropeType=>ropeType.ropeGrade)
-    @JoinColumn({name: 'ropeTypeId'})
+    @ManyToOne(() => RopeType, ropeType => ropeType.ropeGrade)
+    @JoinColumn({ name: 'ropeTypeId' })
     ropeType: RopeType
 
-    @Column()
+    @Column({ default: null })
     categoryId: number
 
-    @ManyToOne(()=>Category, category=>category.ropeGrade)
-    @JoinColumn({name: 'categoryId'})
+    @ManyToOne(() => Category, category => category.ropeGrade)
+    @JoinColumn({ name: 'categoryId' })
     category: Category
 
     @Column({ default: null })
@@ -27,7 +27,7 @@ export class RopeGrade{
     @Column({ default: null })
     rmComb: string
 
-    @Column({ default: false})
+    @Column({ default: false })
     deleted: boolean
 
     @Column({ default: null })

@@ -6,20 +6,20 @@ export class Warehouse {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ name: 'companyId' })
+    @Column({ default: null })
     companyId: number
 
     @ManyToOne(() => Company, company => company.warehouse)
     @JoinColumn({ name: 'companyId' })
     company: Company
 
-    @Column()
+    @Column({ default: null })
     location: string
 
-    @Column()
+    @Column({ default: null })
     code: string
 
-    @Column({ default: false})
+    @Column({ default: false })
     deleted: boolean
 
     @Column({ default: null })

@@ -52,7 +52,5 @@ export class RopeGradeController {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
     }
-  
-
 
 }

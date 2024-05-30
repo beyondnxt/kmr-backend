@@ -29,6 +29,15 @@ export class ColorController {
         }
     }
 
+    @Get('/all')
+    async getColorName(): Promise<{ data: any[] }> {
+        try {
+            return await this.colorService.getColorName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Color> {
         try {

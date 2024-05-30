@@ -1,5 +1,6 @@
+import { Category } from "src/master/category/entity/category.entity";
 import { ChildCategory } from "src/master/child-category/entity/child-category.entity";
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'parent-category' })
 export class ParentCategory {
@@ -24,6 +25,9 @@ export class ParentCategory {
     @UpdateDateColumn()
     updatedOn: Date;
 
-    @OneToOne(() => ChildCategory, childCategory => childCategory.parentCategory)
+    @OneToMany(() => ChildCategory, childCategory => childCategory.parentCategory)
     childCategory: ChildCategory
+
+    @OneToMany(()=>Category, category=>category.parentCategory)
+    category: Category
 }

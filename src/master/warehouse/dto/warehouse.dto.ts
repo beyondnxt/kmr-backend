@@ -6,5 +6,5 @@ export class CreateWarehouseDto{
     createdBy: number
     createdOn: Date
     updatedBy: number
-    updatedOn: Date;
+    updatedOn: Date
 }

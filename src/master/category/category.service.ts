@@ -17,22 +17,72 @@ export class CategoryService {
         return await this.CategoryRepository.save(Category);
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<{ data: Category[], totalCount: number }> {
-        const [data, totalCount] = await this.CategoryRepository.findAndCount({
-            where: { deleted: false },
-            skip: (page - 1) * limit,
-            take: limit,
-        });
-        return { data, totalCount };
-    }
+    async findAll(page: number | 'all' = 1, limit: number = 10): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+        const where: any = {};
 
-    async getCategoryName(): Promise<{ data: any[] }> {
-        const category = await this.CategoryRepository.find({ where: { deleted: false } });
+        let queryBuilder = this.CategoryRepository.createQueryBuilder('category')
+            .leftJoinAndSelect('category.parentCategory', 'parentCategory', 'parentCategory.deleted = :deleted', { deleted: false })
+            .where('category.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.childCategory', 'childCategory', 'childCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.subCategory', 'subCategory', 'subCategory.deleted = :deleted', { deleted: false })
+            .andWhere(where);
+
+        // if (ropeTypeName) {
+        //     queryBuilder = queryBuilder.andWhere('ropeType.ropeType LIKE :ropeTypeName', { ropeTypeName: `%${ropeTypeName}%` });
+        // }
+
+        if (page !== "all") {
+            const skip = (page - 1) * limit;
+            queryBuilder = queryBuilder.skip(skip).take(limit);
+        }
+
+        const [category, totalCount] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount()
+        ]);
         return {
             data: category.map(category => ({
                 id: category.id,
-                categoryName: category.categoryName
+                parentCategoryId: category.parentCategoryId,
+                parentCategoryName: category.parentCategory.name,
+                childCategoryId: category.childCategoryId,
+                childCategoryName: category.childCategory.name,
+                subCategoryId: category.subCategoryId,
+                subCategoryName: category.subCategory.name,
+                type: category.type,
+                grade: category.grade,
+                smsCategory: category.smsCategory,
+                deleted: category.deleted,
+                createdBy: category.createdBy,
+                createdOn: category.createdOn,
+                updatedBy: category.updatedBy,
+                updatedOn: category.updatedOn
             })),
+            fetchedCount: category.length,
+            totalCount: totalCount
+        };
+    }
+
+    async getCategoryName(): Promise<{ data: any[] }> {
+        const categories = await this.CategoryRepository.createQueryBuilder('category')
+            .leftJoinAndSelect('category.parentCategory', 'parentCategory', 'parentCategory.deleted = :deleted', { deleted: false })
+            .where('category.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.childCategory', 'childCategory', 'childCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.subCategory', 'subCategory', 'subCategory.deleted = :deleted', { deleted: false })
+            .getMany();
+
+        return {
+            data: categories.map(category => {
+                const parentCategoryName = category.parentCategory ? category.parentCategory.name : '';
+                const childCategoryName = category.childCategory ? category.childCategory.name : '';
+                const subCategoryName = category.subCategory ? category.subCategory.name : '';
+                const categoryPath = `${parentCategoryName}/${childCategoryName}/${subCategoryName}`;
+
+                return {
+                    id: category.id,
+                    categoryName: categoryPath,
+                };
+            }),
         };
     }
 

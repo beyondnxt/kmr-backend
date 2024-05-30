@@ -53,6 +53,16 @@ export class SubCategoryService {
         };
     }
 
+    async getSubCategoryName(): Promise<{ data: any[] }> {
+        const subCategory = await this.subCategoryRepository.find({ where: { deleted: false } });
+        return {
+            data: subCategory.map(subCategory => ({
+                id: subCategory.id,
+                name: subCategory.name
+            })),
+        };
+    }
+
     async findOne(id: number): Promise<SubCategory> {
         const subCategory = await this.subCategoryRepository.findOne({ where: { id, deleted: false } });
         if (!subCategory) {

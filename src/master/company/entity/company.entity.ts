@@ -2,6 +2,7 @@ import { IsEmail } from "class-validator"
 import { User } from "src/admin/user/entity/user.entity";
 import { Department } from "src/master/department/entity/department.entity";
 import { Extruder } from "src/master/extruder/entity/extruder.entity";
+import { Item } from "src/master/item/entity/item.entity";
 import { RopeMachine } from "src/master/rope-machine/entity/rope-machine.entity";
 import { Warehouse } from "src/master/warehouse/entity/warehouse.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -77,4 +78,7 @@ export class Company {
 
     @OneToMany(() => RopeMachine, ropeMachine => ropeMachine.company)
     ropeMachine: RopeMachine[];
+
+    @OneToMany(() => Item, item => item.company)
+    item: Item[];
 }

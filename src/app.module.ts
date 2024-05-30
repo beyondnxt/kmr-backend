@@ -46,6 +46,10 @@ import { RopeSpecificationModule } from './master/rope-specification/rope-specif
 import { Extruder } from './master/extruder/entity/extruder.entity';
 import { RopeMachine } from './master/rope-machine/entity/rope-machine.entity';
 import { ExtruderModule } from './master/extruder/extruder.module';
+import { Item } from './master/item/entity/item.entity';
+import { ItemModule } from './master/item/item.module';
+import { RopeDie } from './master/rope-die/entity/rope-die.entity';
+import { RopeDieModule } from './master/rope-die/rope-die.module';
 
 @Module({
   imports: [
@@ -62,7 +66,7 @@ import { ExtruderModule } from './master/extruder/extruder.module';
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
         Department, Color, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
-        RopeKgLength, RopeGrade, Extruder, RopeMachine],
+        RopeKgLength, RopeGrade, Extruder, RopeMachine, Item, RopeDie],
       synchronize: true,
     }),
     AuthModule,
@@ -86,7 +90,9 @@ import { ExtruderModule } from './master/extruder/extruder.module';
     RopeKgLenghtModule,
     RopeGradeModule,
     RopeSpecificationModule,
-    ExtruderModule
+    ExtruderModule,
+    ItemModule,
+    RopeDieModule
   ],
   controllers: [AppController],
   providers: [

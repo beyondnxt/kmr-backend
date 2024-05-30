@@ -17,12 +17,13 @@ export class DepartmentService {
         return await this.departmentRepository.save(department);
     }
 
-    async findAll(page: number | "all" = 1, limit: number = 10, departmentName: string): Promise<{ data: Department[], fetchedCount: number, totalCount: number }> {
+    async findAll(page: number | "all" = 1, limit: number = 10, departmentName: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
         if (departmentName) {
             where.departmentName = Like(`%${departmentName}%`);
         }
         let queryBuilder = this.departmentRepository.createQueryBuilder('department')
+            .leftJoinAndSelect('department.company', 'company', 'company.deleted = :deleted', { deleted: false })
             .where('department.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
@@ -36,7 +37,18 @@ export class DepartmentService {
             queryBuilder.getCount()
         ]);
         return {
-            data: department,
+            data: department.map(department => ({
+                id: department.id,
+                departmentName: department.departmentName,
+                location: department.location,
+                locationName: department.company.location,
+                type: department.type,
+                deleted: department.deleted,
+                createdBy: department.createdBy,
+                createdOn: department.createdOn,
+                updatedBy: department.updatedBy,
+                updatedOn: department.updatedOn
+            })),
             fetchedCount: department.length,
             totalCount: totalCount
         };

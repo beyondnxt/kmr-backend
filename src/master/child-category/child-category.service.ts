@@ -44,12 +44,22 @@ export class ChildCategoryService {
                 name: childCategory.name,
                 deleted: childCategory.deleted,
                 createdBy: childCategory.createdBy,
-                createdon: childCategory.createdOn,
+                createdOn: childCategory.createdOn,
                 updatedBy: childCategory.updatedBy,
                 updatedOn: childCategory.updatedOn
             })),
             fetchedCount: childCategory.length,
             totalCount: totalCount
+        };
+    }
+
+    async getChildName(): Promise<{ data: any[] }> {
+        const childCategory = await this.childCategoryRepository.find({ where: { deleted: false } });
+        return {
+            data: childCategory.map(childCategory => ({
+                id: childCategory.id,
+                name: childCategory.name
+            })),
         };
     }
 

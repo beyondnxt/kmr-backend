@@ -24,6 +24,9 @@ export class RopeGradeService {
             .leftJoinAndSelect('ropeGrade.ropeType', 'ropeType', 'ropeType.deleted = :deleted', { deleted: false })
             .where('ropeGrade.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('ropeGrade.category', 'category', 'category.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.parentCategory', 'parentCategory', 'parentCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.childCategory', 'childCategory', 'childCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.subCategory', 'subCategory', 'subCategory.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (ropeTypeName) {
@@ -44,9 +47,8 @@ export class RopeGradeService {
                 id: ropeGrade.id,
                 ropeTypeId: ropeGrade.ropeTypeId,
                 ropeTypeName: ropeGrade.ropeType.ropeType,
-                categoryId: ropeGrade.categoryId,
-                categoryName: ropeGrade.category.categoryName,
-                grade: ropeGrade.grade,
+                categoryId: ropeGrade.categoryId ? ropeGrade.categoryId : null,
+                categoryName: `${ropeGrade.category.parentCategory?.name ? ropeGrade.category.parentCategory.name + '/' : ''}${ropeGrade.category.childCategory?.name ? ropeGrade.category.childCategory.name + '/' : ''}${ropeGrade.category.subCategory?.name ? ropeGrade.category.subCategory.name : ''}`,                grade: ropeGrade.grade,
                 rmComb: ropeGrade.rmComb,
                 deleted: ropeGrade.deleted,
                 createdBy: ropeGrade.createdBy,
