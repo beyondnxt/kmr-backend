@@ -17,7 +17,7 @@ export class CategoryService {
         return await this.CategoryRepository.save(Category);
     }
 
-    async findAll(page: number | 'all' = 1, limit: number = 10): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+    async findAll(page: number | 'all' = 1, limit: number = 10, name: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
 
         let queryBuilder = this.CategoryRepository.createQueryBuilder('category')
@@ -27,10 +27,10 @@ export class CategoryService {
             .leftJoinAndSelect('category.subCategory', 'subCategory', 'subCategory.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
-        // if (ropeTypeName) {
-        //     queryBuilder = queryBuilder.andWhere('ropeType.ropeType LIKE :ropeTypeName', { ropeTypeName: `%${ropeTypeName}%` });
-        // }
-
+        if (name) {
+            queryBuilder = queryBuilder.andWhere('parentCategory.name LIKE :name', { name: `%${name}%` });
+        }
+        
         if (page !== "all") {
             const skip = (page - 1) * limit;
             queryBuilder = queryBuilder.skip(skip).take(limit);
@@ -40,28 +40,41 @@ export class CategoryService {
             queryBuilder.getMany(),
             queryBuilder.getCount()
         ]);
+
         return {
-            data: category.map(category => ({
-                id: category.id,
-                parentCategoryId: category.parentCategoryId,
-                parentCategoryName: category.parentCategory.name,
-                childCategoryId: category.childCategoryId,
-                childCategoryName: category.childCategory.name,
-                subCategoryId: category.subCategoryId,
-                subCategoryName: category.subCategory.name,
-                type: category.type,
-                grade: category.grade,
-                smsCategory: category.smsCategory,
-                deleted: category.deleted,
-                createdBy: category.createdBy,
-                createdOn: category.createdOn,
-                updatedBy: category.updatedBy,
-                updatedOn: category.updatedOn
-            })),
+            data: category.map(category => {
+                const parentCategoryName = category.parentCategory ? category.parentCategory.name : null;
+                const childCategory = category.childCategory ? category.childCategory.name : null;
+                const subCategory = category.subCategory ? category.subCategory.name : null;
+
+                const childCategoryName = parentCategoryName && childCategory ? `${parentCategoryName}/${childCategory}` : null;
+                const subCategoryName = parentCategoryName && childCategory && subCategory ?
+                    `${parentCategoryName}/${childCategory}/${subCategory}` : null;
+
+                return {
+                    id: category.id,
+                    parentCategoryId: category.parentCategoryId,
+                    parentCategoryName: parentCategoryName,
+                    name: parentCategoryName,
+                    childCategoryId: category.childCategoryId,
+                    childCategoryName: childCategoryName,
+                    subCategoryId: category.subCategoryId,
+                    subCategoryName: subCategoryName,
+                    type: category.type,
+                    grade: category.grade,
+                    smsCategory: category.smsCategory,
+                    deleted: category.deleted,
+                    createdBy: category.createdBy,
+                    createdOn: category.createdOn,
+                    updatedBy: category.updatedBy,
+                    updatedOn: category.updatedOn
+                };
+            }),
             fetchedCount: category.length,
             totalCount: totalCount
         };
     }
+
 
     async getCategoryName(): Promise<{ data: any[] }> {
         const categories = await this.CategoryRepository.createQueryBuilder('category')

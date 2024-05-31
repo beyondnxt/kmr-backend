@@ -54,12 +54,22 @@ export class ChildCategoryService {
     }
 
     async getChildName(): Promise<{ data: any[] }> {
-        const childCategory = await this.childCategoryRepository.find({ where: { deleted: false } });
+        const childCategory = await this.childCategoryRepository.createQueryBuilder('childCategory')
+            .leftJoinAndSelect('childCategory.parentCategory', 'parentCategory', 'parentCategory.deleted = :deleted', { deleted: false })
+            .where('childCategory.deleted = :deleted', { deleted: false })
+            .getMany();
+
         return {
-            data: childCategory.map(childCategory => ({
-                id: childCategory.id,
-                name: childCategory.name
-            })),
+            data: childCategory.map(childCategory => {
+                const parentCategoryName = childCategory.parentCategory ? childCategory.parentCategory.name : '';
+                const childCategoryName = childCategory ? childCategory.name : '';
+                const categoryPath = `${parentCategoryName}/${childCategoryName}`;
+
+                return {
+                    id: childCategory.id,
+                    childCategoryName: categoryPath,
+                };
+            }),
         };
     }
 

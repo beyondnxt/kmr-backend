@@ -20,9 +20,10 @@ export class CategoryController {
     }
 
     @Get()
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<{ data: Category[], totalCount: number }> {
+    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10,
+    @Query('value') name: string): Promise<{ data: Category[], totalCount: number }> {
         try {
-            return await this.categoryService.findAll(page, limit);
+            return await this.categoryService.findAll(page, limit, name);
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }

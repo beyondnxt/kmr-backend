@@ -40,11 +40,11 @@ export class SubCategoryService {
             data: subCategory.map(subCategory => ({
                 id: subCategory.id,
                 childCategoryId: subCategory.childCategoryId,
-                childCategoryName: subCategory.childCategory.name,
+                childCategoryName: subCategory.childCategory ? subCategory.childCategory.name : null,
                 name: subCategory.name,
                 deleted: subCategory.deleted,
                 createdBy: subCategory.createdBy,
-                createdon: subCategory.createdOn,
+                createdOn: subCategory.createdOn,
                 updatedBy: subCategory.updatedBy,
                 updatedOn: subCategory.updatedOn
             })),
@@ -54,12 +54,24 @@ export class SubCategoryService {
     }
 
     async getSubCategoryName(): Promise<{ data: any[] }> {
-        const subCategory = await this.subCategoryRepository.find({ where: { deleted: false } });
+        const subCategory = await this.subCategoryRepository.createQueryBuilder('subCategory')
+            .leftJoinAndSelect('subCategory.childCategory', 'childCategory', 'childCategory.deleted = :deleted', { deleted: false })
+            .where('subCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('childCategory.parentCategory', 'parentCategory', 'parentCategory.deleted = :deleted', { deleted: false })
+            .getMany();
+
         return {
-            data: subCategory.map(subCategory => ({
-                id: subCategory.id,
-                name: subCategory.name
-            })),
+            data: subCategory.map(sub => {
+                const parentCategoryName = sub.childCategory?.parentCategory?.name || '';
+                const childCategoryName = sub.childCategory?.name || '';
+                const subCategoryName = sub.name || '';
+                const categoryPath = `${parentCategoryName}/${childCategoryName}/${subCategoryName}`;
+
+                return {
+                    id: sub.id,
+                    subCategoryName: categoryPath,
+                };
+            }),
         };
     }
 
