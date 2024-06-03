@@ -50,6 +50,8 @@ import { Item } from './master/item/entity/item.entity';
 import { ItemModule } from './master/item/item.module';
 import { RopeDie } from './master/rope-die/entity/rope-die.entity';
 import { RopeDieModule } from './master/rope-die/rope-die.module';
+import { TwineType } from './master/twine-type/entity/twine-type.entity';
+import { TwineTypeModule } from './master/twine-type/twine-type.module';
 
 @Module({
   imports: [
@@ -66,7 +68,7 @@ import { RopeDieModule } from './master/rope-die/rope-die.module';
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
         Department, Color, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
-        RopeKgLength, RopeGrade, Extruder, RopeMachine, Item, RopeDie],
+        RopeKgLength, RopeGrade, Extruder, RopeMachine, Item, RopeDie, TwineType],
       synchronize: true,
     }),
     AuthModule,
@@ -92,7 +94,8 @@ import { RopeDieModule } from './master/rope-die/rope-die.module';
     RopeSpecificationModule,
     ExtruderModule,
     ItemModule,
-    RopeDieModule
+    RopeDieModule,
+    TwineTypeModule
   ],
   controllers: [AppController],
   providers: [
@@ -102,15 +105,15 @@ import { RopeDieModule } from './master/rope-die/rope-die.module';
 
 })
 export class AppModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(AuthenticationMiddleware).exclude(
-  //     { path: 'auth/signup', method: RequestMethod.POST },
-  //     { path: 'auth/signin', method: RequestMethod.POST },
-  //     { path: 'auth/forgotPassword', method: RequestMethod.PUT },
-  //     { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
-  //     { path: 'auth/email/changePassword', method: RequestMethod.POST },
-  //     { path: 'products/getProductData', method: RequestMethod.GET }
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthenticationMiddleware).exclude(
+      { path: 'auth/signup', method: RequestMethod.POST },
+      { path: 'auth/signin', method: RequestMethod.POST },
+      { path: 'auth/forgotPassword', method: RequestMethod.PUT },
+      { path: 'auth/resetPasswordUsingId/:id', method: RequestMethod.PUT },
+      { path: 'auth/email/changePassword', method: RequestMethod.POST },
+      { path: 'products/getProductData', method: RequestMethod.GET }
 
-  //   ).forRoutes('*');
-  // }
+    ).forRoutes('*');
+  }
 }
