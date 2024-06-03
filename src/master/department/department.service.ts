@@ -40,8 +40,8 @@ export class DepartmentService {
             data: department.map(department => ({
                 id: department.id,
                 departmentName: department.departmentName,
-                location: department.location,
-                locationName: department.company.location,
+                location: department ? department.location : null,
+                locationName: department.company ? department.company.location : null,
                 type: department.type,
                 deleted: department.deleted,
                 createdBy: department.createdBy,
