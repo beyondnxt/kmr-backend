@@ -1,0 +1,33 @@
+export class CreateRopeSpecification {
+    sampleNo: number
+    date: Date
+    ropeSize: string
+    colorId: number
+    type: string
+    twist: number
+    customer: string
+    ropeGradeId: number
+    extruderId: number
+    die: string
+    stretchRatio: number
+    elongation: number
+    gpd: number
+    denier: string
+    noOfTape: string
+    strandDenier: string
+    onlineTpm: string
+    noOfStrand: string
+    ropeMcNo: string
+    gear: string
+    twistFactor: number
+    layLength: string
+    wMtr: string
+    actualDia: string
+    strength: string
+    rackNo: string
+    deleted: boolean
+    createdBy: number
+    createdOn: Date
+    updatedBy: number
+    updatedOn: Date
+}

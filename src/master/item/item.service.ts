@@ -24,8 +24,13 @@ export class ItemService {
         }
         let queryBuilder = this.itemRepository.createQueryBuilder('item')
             .leftJoinAndSelect('item.ropeType', 'ropeType', 'ropeType.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('item.company', 'company', 'company.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('item.category', 'category', 'category.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.parentCategory', 'parentCategory', 'parentCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.childCategory', 'childCategory', 'childCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.subCategory', 'subCategory', 'subCategory.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('item.color', 'color', 'color.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('item.treasureYarnColor', 'treasureYarnColor', 'treasureYarnColor.deleted = :deleted', { deleted: false })
             .where('item.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
@@ -39,7 +44,40 @@ export class ItemService {
             queryBuilder.getCount()
         ]);
         return {
-            data: item,
+            data: item.map(item => ({
+                id: item.id,
+                itemTypeId: item.itemTypeId ? item.itemTypeId : null,
+                ropeTypeName: item.ropeType ? item.ropeType.ropeType : null,
+                categoryId: item.categoryId ? item.categoryId : null,
+                categoryName: `${item.category.parentCategory?.name ? item.category.parentCategory.name + '/' : ''}${item.category.childCategory?.name ? item.category.childCategory.name + '/' : ''}${item.category.subCategory?.name ? item.category.subCategory.name : ''}`,
+                itemCode: item.itemCode,
+                colorId: item.colorId ? item.colorId : null,
+                colorName: item.color ? item.color.colorName : null,
+                strand: item.strand,
+                length: item.length,
+                noOfTwist: item.noOfTwist,
+                twineType: item.twineType,
+                treasureYarn: item.treasureYarn,
+                treasureYarnColorId: item.treasureYarnColorId ? item.treasureYarnColorId : null,
+                treasureYarnColorName: item.treasureYarnColor ? item.treasureYarnColor.colorName : null,
+                itemName: item.itemName,
+                itemUnit: item.itemUnit,
+                minimumStock: item.minimumStock,
+                reOrderQty: item.reOrderQty,
+                location: item.location? item.location: null,
+                locationCode: item.company?item.company.code: null,
+                currentStock: item.currentStock,
+                noOfLeadDays: item.noOfLeadDays,
+                kpcCode: item.kpcCode,
+                description: item.description,
+                smsItem: item.smsItem,
+                itemImage: item.itemImage,
+                deleted: item.deleted,
+                createdBy: item.createdBy,
+                createdOn: item.createdOn,
+                updatedBy: item.updatedBy,
+                updatedOn: item.updatedOn,
+            })),
             fetchedCount: item.length,
             totalCount: totalCount
         };

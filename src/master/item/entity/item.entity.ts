@@ -10,10 +10,10 @@ export class Item {
     id: number
 
     @Column({ default: null })
-    ropeTypeId: number
+    itemTypeId: number
 
     @ManyToOne(() => RopeType, ropeType => ropeType.item)
-    @JoinColumn({ name: 'ropeTypeId' })
+    @JoinColumn({ name: 'itemTypeId' })
     ropeType: RopeType
 
     @Column({ default: null })

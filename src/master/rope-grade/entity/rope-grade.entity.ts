@@ -1,6 +1,7 @@
 import { Category } from "src/master/category/entity/category.entity";
+import { RopeSpecification } from "src/master/rope-specification/entity/rope-specification.entity";
 import { RopeType } from "src/master/rope/entity/rope-type.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'rope-grade' })
 export class RopeGrade {
@@ -40,6 +41,9 @@ export class RopeGrade {
     updatedBy: number;
 
     @UpdateDateColumn()
-    updatedOn: Date;
+    updatedOn: Date
+
+    @OneToMany(() => RopeSpecification, ropeSpecification => ropeSpecification.ropeGrade)
+    ropeSpecification: RopeSpecification
 
 }

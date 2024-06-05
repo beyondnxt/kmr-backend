@@ -52,6 +52,7 @@ import { RopeDie } from './master/rope-die/entity/rope-die.entity';
 import { RopeDieModule } from './master/rope-die/rope-die.module';
 import { TwineType } from './master/twine-type/entity/twine-type.entity';
 import { TwineTypeModule } from './master/twine-type/twine-type.module';
+import { RopeSpecification } from './master/rope-specification/entity/rope-specification.entity';
 
 @Module({
   imports: [
@@ -68,7 +69,7 @@ import { TwineTypeModule } from './master/twine-type/twine-type.module';
       database: process.env.DB_NAME,
       entities: [User, Role, Company, MainCustomer, Customer, Category, RopeType, Warehouse, Supplier,
         Department, Color, ParentCategory, ChildCategory, SubCategory, RawMaterialType, Brand,
-        RopeKgLength, RopeGrade, Extruder, RopeMachine, Item, RopeDie, TwineType],
+        RopeKgLength, RopeGrade, Extruder, RopeMachine, Item, RopeDie, TwineType, RopeSpecification],
       synchronize: true,
     }),
     AuthModule,

@@ -1,5 +1,6 @@
 import { Company } from "src/master/company/entity/company.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { RopeSpecification } from "src/master/rope-specification/entity/rope-specification.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'extruder' })
 export class Extruder {
@@ -48,4 +49,7 @@ export class Extruder {
 
     @UpdateDateColumn()
     updatedOn: Date
+
+    @OneToMany(() => RopeSpecification, ropeSpecification => ropeSpecification.extruder)
+    ropeSpecification: RopeSpecification
 }

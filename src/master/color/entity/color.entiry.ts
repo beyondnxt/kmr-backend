@@ -1,4 +1,5 @@
 import { Item } from "src/master/item/entity/item.entity";
+import { RopeSpecification } from "src/master/rope-specification/entity/rope-specification.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'color' })
@@ -38,4 +39,7 @@ export class Color {
 
     @OneToMany(() => Item, item => item.treasureYarnColor)
     treasureYarnItems: Item[];
+
+    @OneToMany(() => RopeSpecification, ropeSpecification => ropeSpecification.color)
+    ropeSpecification: RopeSpecification
 }

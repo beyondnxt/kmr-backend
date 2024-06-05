@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CreateItemDto } from './dto/item.dto';
 import { Item } from './entity/item.entity';
 import { ItemService } from './item.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from 'src/multer.config';
 
 @Controller('item')
 export class ItemController {
@@ -10,12 +12,19 @@ export class ItemController {
     ) { }
 
     @Post()
-    async create(@Body() itemData: CreateItemDto, @Req() req: Request) {
+    @UseInterceptors(FileInterceptor('itemImage', multerConfig))
+    async createItem(
+        @UploadedFile() file: Express.Multer.File,
+        @Body() createItemDto: CreateItemDto,
+        @Req() req: Request,
+    ) {
         try {
-            const userId = req.headers['userid']
-            return await this.itemService.create(itemData, userId)
+            const userId = req.headers['userid'] as string;
+            const imagePath = file ? file.path : null;
+            createItemDto.itemImage = imagePath;
+            return await this.itemService.create(createItemDto, parseInt(userId, 10));
         } catch (error) {
-            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 

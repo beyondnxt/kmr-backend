@@ -1,5 +1,5 @@
 export class CreateItemDto {
-    ropeTypeId: number
+    itemTypeId: number
     categoryId: number
     itemCode: string
     colorId: number
