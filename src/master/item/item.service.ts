@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateItemDto } from './dto/item.dto';
 import { Item } from './entity/item.entity';
 
@@ -12,16 +12,16 @@ export class ItemService {
     ) { }
 
     async create(itemData: CreateItemDto, userId: number): Promise<Item> {
-        const item = this.itemRepository.create(itemData);
-        item.createdBy = userId
+        const item = this.itemRepository.create({
+            ...itemData,
+            createdBy: userId
+        });
         return await this.itemRepository.save(item);
     }
 
-    async findAll(page: number | "all" = 1, limit: number = 10, itemName: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
+    async findAll(page: number | "all" = 1, limit: number = 10, ropeType: string): Promise<{ data: any[], fetchedCount: number, totalCount: number }> {
         const where: any = {};
-        if (itemName) {
-            where.itemName = Like(`%${itemName}%`);
-        }
+
         let queryBuilder = this.itemRepository.createQueryBuilder('item')
             .leftJoinAndSelect('item.ropeType', 'ropeType', 'ropeType.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('item.company', 'company', 'company.deleted = :deleted', { deleted: false })
@@ -33,6 +33,11 @@ export class ItemService {
             .leftJoinAndSelect('item.treasureYarnColor', 'treasureYarnColor', 'treasureYarnColor.deleted = :deleted', { deleted: false })
             .where('item.deleted = :deleted', { deleted: false })
             .andWhere(where);
+
+        if (ropeType) {
+            queryBuilder = queryBuilder.andWhere('ropeType.ropeType LIKE :ropeType', { ropeType: `%${ropeType}%` });
+        }
+
 
         if (page !== "all") {
             const skip = (page - 1) * limit;

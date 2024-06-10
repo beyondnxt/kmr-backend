@@ -89,7 +89,7 @@ export class Item {
     @Column({ default: null })
     smsItem: boolean
 
-    @Column({ default: null })
+    @Column({ type: 'longtext', nullable: true })
     itemImage: string
 
     @Column({ default: false })
