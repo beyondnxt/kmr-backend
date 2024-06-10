@@ -53,6 +53,7 @@ import { RopeDieModule } from './master/rope-die/rope-die.module';
 import { TwineType } from './master/twine-type/entity/twine-type.entity';
 import { TwineTypeModule } from './master/twine-type/twine-type.module';
 import { RopeSpecification } from './master/rope-specification/entity/rope-specification.entity';
+import { RopeMachineModule } from './master/rope-machine/rope-machine.module';
 
 @Module({
   imports: [
@@ -96,7 +97,8 @@ import { RopeSpecification } from './master/rope-specification/entity/rope-speci
     ExtruderModule,
     ItemModule,
     RopeDieModule,
-    TwineTypeModule
+    TwineTypeModule,
+    RopeMachineModule
   ],
   controllers: [AppController],
   providers: [
