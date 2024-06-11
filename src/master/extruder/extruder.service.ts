@@ -59,6 +59,16 @@ export class ExtruderService {
         };
     }
 
+    async getExtruderName(): Promise<{ data: any[] }> {
+        const extruder = await this.extruderRepository.find({ where: { deleted: false } });
+        return {
+            data: extruder.map(extruder => ({
+                id: extruder.id,
+                name: extruder.machineName
+            })),
+        };
+    }
+
     async findOne(id: number): Promise<Extruder> {
         const extruder = await this.extruderRepository.findOne({ where: { id, deleted: false } });
         if (!extruder) {

@@ -26,6 +26,8 @@ export class RopeSpecificationService {
 
         let queryBuilder = this.ropeSpecificationRepository.createQueryBuilder('ropeSpecification')
             .leftJoinAndSelect('ropeSpecification.ropeGrade', 'ropeGrade', 'ropeGrade.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('ropeSpecification.color', 'color', 'color.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('ropeSpecification.extruder', 'extruder', 'extruder.deleted = :deleted', { deleted: false })
             .where('ropeSpecification.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
@@ -41,6 +43,35 @@ export class RopeSpecificationService {
         return {
             data: ropeSpecification.map(specification => ({
                 id: specification.id,
+                sampleNo: specification.sampleNo,
+                date: specification.date,
+                ropeSize: specification.ropeSize,
+                colorId: specification ? specification.colorId : null,
+                colorName: specification.color ? specification.color.colorName : null,
+                type: specification.type,
+                twist: specification.twist,
+                customer: specification.customer,
+                ropeGradeId: specification ? specification.ropeGradeId : null,
+                ropeGradeName: specification.ropeGrade ? specification.ropeGrade.grade : null,
+                extruderId: specification ? specification.extruderId : null,
+                extruderName: specification.extruder ? specification.extruder.machineName : null,
+                die: specification.die,
+                stretchRatio: specification.stretchRatio,
+                elongation: specification.elongation,
+                gpd: specification.gpd,
+                denier: specification.denier,
+                noOfTape: specification.noOfTape,
+                strandDenier: specification.strandDenier,
+                onlineTpm: specification.onlineTpm,
+                noOfStrand: specification.noOfStrand,
+                ropeMcNo: specification.ropeMcNo,
+                gear: specification.gear,
+                twistFactor: specification.twistFactor,
+                layLength: specification.layLength,
+                wMtr: specification.wMtr,
+                actualDia: specification.actualDia,
+                strength: specification.strength,
+                rackNo: specification.rackNo,
                 deleted: specification.deleted,
                 createdBy: specification.createdBy,
                 createdOn: specification.createdOn,

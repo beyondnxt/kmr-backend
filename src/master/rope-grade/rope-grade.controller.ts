@@ -25,6 +25,15 @@ export class RopeGradeController {
         return await this.ropeGradeService.findAll(page, limit, ropeTypeName)
     }
 
+    @Get('/all')
+    async getRopeGradeName(): Promise<{ data: any[] }> {
+        try {
+            return await this.ropeGradeService.getRopeGradeName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<RopeGrade> {
         try {

@@ -62,6 +62,16 @@ export class RopeGradeService {
         };
     }
 
+    async getRopeGradeName(): Promise<{ data: any[] }> {
+        const ropeGrade = await this.ropeGradeRepository.find({ where: { deleted: false } });
+        return {
+            data: ropeGrade.map(ropeGrade => ({
+                id: ropeGrade.id,
+                grade: ropeGrade.grade
+            })),
+        };
+    }
+
     async findOne(id: number): Promise<RopeGrade> {
         const ropeGrade = await this.ropeGradeRepository.findOne({ where: { id, deleted: false } });
         if (!ropeGrade) {

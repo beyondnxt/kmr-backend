@@ -28,6 +28,15 @@ export class ExtruderController {
         }
     }
 
+    @Get('/all')
+    async getExtruderName(): Promise<{ data: any[] }> {
+        try {
+            return await this.extruderService.getExtruderName();
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Extruder> {
         try {
