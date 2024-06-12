@@ -25,6 +25,7 @@ export class DepartmentService {
         let queryBuilder = this.departmentRepository.createQueryBuilder('department')
             .leftJoinAndSelect('department.company', 'company', 'company.deleted = :deleted', { deleted: false })
             .where('department.deleted = :deleted', { deleted: false })
+            .orderBy('department.updatedOn', 'DESC')
             .andWhere(where);
 
         if (page !== "all") {
@@ -41,7 +42,7 @@ export class DepartmentService {
                 id: department.id,
                 departmentName: department.departmentName,
                 location: department ? department.location : null,
-                locationName: department.company ? department.company.location : null,
+                locationName: department.company ? department.company.code : null,
                 type: department.type,
                 deleted: department.deleted,
                 createdBy: department.createdBy,

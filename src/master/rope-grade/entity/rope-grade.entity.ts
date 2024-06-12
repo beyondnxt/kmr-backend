@@ -16,11 +16,7 @@ export class RopeGrade {
     ropeType: RopeType
 
     @Column({ default: null })
-    categoryId: number
-
-    @ManyToOne(() => Category, category => category.ropeGrade)
-    @JoinColumn({ name: 'categoryId' })
-    category: Category
+    categoryGrade: string
 
     @Column({ default: null })
     grade: string
@@ -45,5 +41,8 @@ export class RopeGrade {
 
     @OneToMany(() => RopeSpecification, ropeSpecification => ropeSpecification.ropeGrade)
     ropeSpecification: RopeSpecification
+
+    @OneToMany(() => Category, category => category.ropeGrade)
+    category: Category
 
 }

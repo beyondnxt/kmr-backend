@@ -1,6 +1,6 @@
 export class CreateRopeGradeDto {
     ropeTypeId: number
-    categoryId: number
+    categoryGrade: string
     grade: string
     rmComb: string
     deleted: boolean

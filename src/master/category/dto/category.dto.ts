@@ -2,8 +2,8 @@ export class CreatecategoryDto{
     parentCategoryId: number
     childCategoryId: number
     subCategoryId: number
-    type: string
-    grade: string
+    type: number
+    grade: number
     smsCategory: boolean
     deleted: boolean
     createdBy: number

@@ -50,7 +50,7 @@ export class UserService {
                 userName: user.userName,
                 fullName: user.fullName,
                 location: user ? user.location : null,
-                locationName: user.company ? user.company.location : null,
+                locationName: user.company ? user.company.code : null,
                 departmentId: user ? user.departmentId : null,
                 departmentName: user.department ? user.department.departmentName : null,
                 password: user.password,

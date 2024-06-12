@@ -25,12 +25,14 @@ export class CategoryService {
             .where('category.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('category.childCategory', 'childCategory', 'childCategory.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('category.subCategory', 'subCategory', 'subCategory.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.ropeType', 'ropeType', 'ropeType.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('category.ropeGrade', 'ropeGrade', 'ropeGrade.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (name) {
             queryBuilder = queryBuilder.andWhere('parentCategory.name LIKE :name', { name: `%${name}%` });
         }
-        
+
         if (page !== "all") {
             const skip = (page - 1) * limit;
             queryBuilder = queryBuilder.skip(skip).take(limit);
@@ -60,8 +62,10 @@ export class CategoryService {
                     childCategoryName: childCategoryName,
                     subCategoryId: category.subCategoryId,
                     subCategoryName: subCategoryName,
-                    type: category.type,
-                    grade: category.grade,
+                    type: category ? category.type : null,
+                    typeName: category.ropeType ? category.ropeType.ropeType : null,
+                    grade: category ? category.grade : null,
+                    gradeName: category.ropeGrade ? category.ropeGrade.grade : null,
                     smsCategory: category.smsCategory,
                     deleted: category.deleted,
                     createdBy: category.createdBy,

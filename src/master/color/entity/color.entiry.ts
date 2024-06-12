@@ -7,13 +7,13 @@ export class Color {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({ default: null })
     colorName: string
 
-    @Column()
+    @Column({ default: null })
     shortCode: string
 
-    @Column()
+    @Column({ default: null })
     matchingColor: string
 
     @Column({ type: 'simple-json', default: null })

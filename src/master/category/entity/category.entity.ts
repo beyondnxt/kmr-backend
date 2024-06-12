@@ -2,6 +2,7 @@ import { ChildCategory } from "src/master/child-category/entity/child-category.e
 import { Item } from "src/master/item/entity/item.entity";
 import { ParentCategory } from "src/master/parent-category/entity/parent-category.entity";
 import { RopeGrade } from "src/master/rope-grade/entity/rope-grade.entity";
+import { RopeType } from "src/master/rope/entity/rope-type.entity";
 import { SubCategory } from "src/master/sub-category/entity/sub-category.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -32,10 +33,18 @@ export class Category {
     subCategory: SubCategory
 
     @Column({ default: null })
-    type: string
+    type: number
+
+    @ManyToOne(() => RopeType, ropeType => ropeType.category)
+    @JoinColumn({ name: 'type' })
+    ropeType: RopeType
 
     @Column({ default: null })
-    grade: string
+    grade: number
+
+    @ManyToOne(() => RopeGrade, ropeGrade => ropeGrade.category)
+    @JoinColumn({ name: 'grade' })
+    ropeGrade: RopeGrade
 
     @Column({ default: null })
     smsCategory: boolean
@@ -53,10 +62,7 @@ export class Category {
     updatedBy: number;
 
     @UpdateDateColumn()
-    updatedOn: Date;
-
-    @OneToMany(() => RopeGrade, ropeGrade => ropeGrade.category)
-    ropeGrade: RopeGrade
+    updatedOn: Date
 
     @OneToMany(() => Item, item => item.category)
     item: Item
