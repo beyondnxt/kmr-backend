@@ -41,8 +41,8 @@ export class RopeGradeService {
         return {
             data: ropeGrade.map(ropeGrade => ({
                 id: ropeGrade.id,
-                ropeTypeId: ropeGrade.ropeTypeId,
-                ropeTypeName: ropeGrade.ropeType.ropeType,
+                ropeTypeId: ropeGrade ? ropeGrade.ropeTypeId : null,
+                ropeTypeName: ropeGrade.ropeType ? ropeGrade.ropeType.ropeType : null,
                 categoryGrade: ropeGrade.categoryGrade,
                 grade: ropeGrade.grade,
                 rmComb: ropeGrade.rmComb,

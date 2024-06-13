@@ -8,7 +8,7 @@ export class RopeGrade {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({ default: null })
     ropeTypeId: number
 
     @ManyToOne(() => RopeType, ropeType => ropeType.ropeGrade)
