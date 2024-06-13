@@ -27,6 +27,18 @@ export class Extruder {
     rpm: string
 
     @Column({ default: null })
+    die: string
+
+    @Column({ default: null })
+    noOfHoles: string
+
+    @Column({ default: null })
+    denier: string
+
+    @Column({ default: null })
+    lineSpeed: string
+
+    @Column({ default: null })
     target: string
 
     @Column({ default: null })

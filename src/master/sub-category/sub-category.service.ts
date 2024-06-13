@@ -70,6 +70,7 @@ export class SubCategoryService {
                 return {
                     id: sub.id,
                     subCategoryName: categoryPath,
+                    name: sub.name
                 };
             }),
         };

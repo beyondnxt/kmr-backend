@@ -4,6 +4,10 @@ export class CreateExtruderDto {
     location: number
     code: string
     rpm: string
+    die: string
+    noOfHoles: string
+    denier: string
+    lineSpeed: string
     target: string
     runningTime: string
     spindle: string

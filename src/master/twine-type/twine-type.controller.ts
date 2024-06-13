@@ -3,7 +3,7 @@ import { CreateTwineTypeDto } from './dto/twine-type.dto';
 import { TwineType } from './entity/twine-type.entity';
 import { TwineTypeService } from './twine-type.service';
 
-@Controller('twine-type')
+@Controller('twineType')
 export class TwineTypeController {
     constructor(private readonly twineTypeService: TwineTypeService) { }
 

@@ -93,6 +93,9 @@ export class Item {
     itemImage: string
 
     @Column({ default: false })
+    isApproved: boolean
+
+    @Column({ default: false })
     deleted: boolean
 
     @Column({ default: null })

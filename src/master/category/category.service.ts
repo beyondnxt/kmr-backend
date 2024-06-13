@@ -98,6 +98,7 @@ export class CategoryService {
                 return {
                     id: category.id,
                     categoryName: categoryPath,
+                    subCategory: category.subCategory ? category.subCategory.name : null
                 };
             }),
         };

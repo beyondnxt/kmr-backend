@@ -77,6 +77,7 @@ export class ItemService {
                 description: item.description,
                 smsItem: item.smsItem,
                 itemImage: item.itemImage,
+                isApproved: item.isApproved,
                 deleted: item.deleted,
                 createdBy: item.createdBy,
                 createdOn: item.createdOn,

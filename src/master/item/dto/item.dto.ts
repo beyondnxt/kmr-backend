@@ -20,6 +20,7 @@ export class CreateItemDto {
     description: string
     smsItem: boolean
     itemImage: string
+    isApproved: boolean
     deleted: boolean
     createdBy: number
     createdOn: Date
