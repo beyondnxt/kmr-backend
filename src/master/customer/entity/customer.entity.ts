@@ -7,7 +7,7 @@ export class Customer {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({ default: null })
     mainCustomerId: number
 
     @ManyToOne(() => MainCustomer, mainCustomer => mainCustomer.customer)
@@ -41,7 +41,7 @@ export class Customer {
     @Column({ default: null })
     grade: string
 
-    @Column()
+    @Column({ default: null })
     salesLeadId: number
 
     @ManyToOne(() => User, user => user.customer)
@@ -81,11 +81,11 @@ export class Customer {
     @Column({ default: null })
     lookupSLID: string
 
-    @Column({ default: false})
-    deleted: boolean
-
     @Column({ default: null })
     address: string
+
+    @Column({ default: false })
+    deleted: boolean
 
     @Column({ default: null })
     createdBy: number;

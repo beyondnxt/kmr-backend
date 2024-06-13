@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, NotFoundException, Param, Post, Put, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { Customer } from './entity/customer.entity';
 import { CreateCustomerDto } from './dto/customer.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('customer')
 export class CustomerController {
@@ -58,5 +59,11 @@ export class CustomerController {
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    async uploadFile(@UploadedFile() file: Express.Multer.File) {
+        return await this.customerService.uploadCustomers(file);
     }
 }

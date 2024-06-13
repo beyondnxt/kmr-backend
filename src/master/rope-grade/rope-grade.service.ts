@@ -23,7 +23,6 @@ export class RopeGradeService {
         let queryBuilder = this.ropeGradeRepository.createQueryBuilder('ropeGrade')
             .leftJoinAndSelect('ropeGrade.ropeType', 'ropeType', 'ropeType.deleted = :deleted', { deleted: false })
             .where('ropeGrade.deleted = :deleted', { deleted: false })
-            .leftJoinAndSelect('ropeGrade.category', 'category', 'category.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (ropeTypeName) {

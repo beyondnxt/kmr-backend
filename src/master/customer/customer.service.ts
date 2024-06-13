@@ -3,6 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './entity/customer.entity';
 import { Like, Repository } from 'typeorm';
 import { CreateCustomerDto } from './dto/customer.dto';
+import * as XLSX from 'xlsx';
+import * as fs from 'fs';
+import * as csv from 'csv-parser';
 
 @Injectable()
 export class CustomerService {
@@ -108,5 +111,72 @@ export class CustomerService {
         customer.deleted = true
         await this.customerRepository.save(customer);
         return { message: `Successfully deleted id ${id}` }
+    }
+
+    async uploadCustomers(file: Express.Multer.File): Promise<string> {
+        try {
+            // Step 1: Read the Excel file
+            const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            XLSX.utils.sheet_to_json(worksheet);
+
+            // Step 2: Convert JSON to CSV format
+            const csvData = XLSX.utils.sheet_to_csv(worksheet);
+
+            // Step 3: Save CSV data to a temporary file
+            const tempCSVFilePath = 'temp.csv';
+            fs.writeFileSync(tempCSVFilePath, csvData);
+
+            // Step 4: Parse CSV file and upload data to the database
+            const customers: Customer[] = [];
+            fs.createReadStream(tempCSVFilePath)
+                .pipe(csv())
+                .on('data', (row) => {
+                    const customer = new Customer();
+                    customer.id = row['ID'] ?? null;
+                    customer.mainCustomerId = row['MainCustomerID'] ?? null;
+                    customer.status = row['ActiveStatus'] ?? null;
+                    customer.name = row['Name'] ?? null;
+                    customer.code = row['Code'] ?? null;
+                    customer.type = row['Type'] ?? null;
+                    customer.contactPerson = row['ContactPerson'] ?? null;
+                    customer.contactNo = row['ContactNumber'] ?? null;
+                    customer.stdCode = row['STDCode'] ?? null;
+                    customer.email = row['EmailID'] ?? null;
+                    customer.grade = row['Grade'] ?? null;
+                    customer.salesLeadId = row['SalesLeadNameID'] ?? null;
+                    customer.salesCode = row['SalesCode'] ?? null;
+                    customer.destinationPort = row['DestinationPort'] ?? null;
+                    customer.finalDestination = row['FinalDestination'] ?? null;
+                    customer.pieceWeightTolerance = row['PieceWeightTolerance'] ?? null;
+                    customer.invoiceTolerance = row['InvoiceTolerance'] ?? null;
+                    customer.state = row['StateName'] ?? null;
+                    customer.gstIn = row['GSTIN'] ?? null;
+                    customer.aadhaarNumber = row['AadhaarNumber'] ?? null;
+                    customer.pan = row['PAN'] ?? null;
+                    customer.country = row['CountryName'] ?? null;
+                    customer.lookupSLID = row['LookupSLID'] ?? null;
+                    customer.address = row['Address'] ?? null;
+                    customer.deleted = row['Deleted'] === 'false';
+                    customer.createdBy = row['CreatedBy'] ?? null;
+                    customer.updatedBy = row['ModifiedBy'] ?? null;
+                    customer.createdOn = row['CreatedOn'] ? new Date(row['CreatedOn']) : new Date();
+                    customer.updatedOn = row['ModifiedOn'] ? new Date(row['UpdatedOn']) : new Date();
+
+                    customers.push(customer);
+                })
+                .on('end', async () => {
+                    // Step 5: Upload data to the database
+                    await this.customerRepository.save(customers);
+                    // Remove temporary CSV file
+                    fs.unlinkSync(tempCSVFilePath);
+                });
+
+            return 'success';
+        } catch (error) {
+            console.error('Error uploading customers:', error);
+            return 'error';
+        }
     }
 }
