@@ -134,33 +134,32 @@ export class CustomerService {
                 .pipe(csv())
                 .on('data', (row) => {
                     const customer = new Customer();
-                    customer.id = row['ID'] ?? null;
-                    customer.mainCustomerId = row['MainCustomerID'] ?? null;
-                    customer.status = row['ActiveStatus'] ?? null;
                     customer.name = row['Name'] ?? null;
                     customer.code = row['Code'] ?? null;
                     customer.type = row['Type'] ?? null;
-                    customer.contactPerson = row['ContactPerson'] ?? null;
+                    customer.address = row['Address'] ?? null;
                     customer.contactNo = row['ContactNumber'] ?? null;
                     customer.stdCode = row['STDCode'] ?? null;
+                    customer.contactPerson = row['ContactPerson'] ?? null;
                     customer.email = row['EmailID'] ?? null;
                     customer.grade = row['Grade'] ?? null;
-                    customer.salesLeadId = row['SalesLeadNameID'] ?? null;
+                    customer.salesLeadId = row['SalesLeadNameID'] ? Number(row['SalesLeadNameID']) || null : null;
                     customer.salesCode = row['SalesCode'] ?? null;
+                    customer.mainCustomerId = row['MainCustomerID'] ? Number(row['MainCustomerID']) || null : null;
                     customer.destinationPort = row['DestinationPort'] ?? null;
                     customer.finalDestination = row['FinalDestination'] ?? null;
                     customer.pieceWeightTolerance = row['PieceWeightTolerance'] ?? null;
                     customer.invoiceTolerance = row['InvoiceTolerance'] ?? null;
                     customer.state = row['StateName'] ?? null;
                     customer.gstIn = row['GSTIN'] ?? null;
-                    customer.aadhaarNumber = row['AadhaarNumber'] ?? null;
-                    customer.pan = row['PAN'] ?? null;
+                    customer.status = row['ActiveStatus'] ?? null;
                     customer.country = row['CountryName'] ?? null;
+                    customer.aadhaarNumber = row['AadhaarNumber'] ? Number(row['AadhaarNumber']) || null : null;
+                    customer.pan = row['PAN'] ? Number(row['PAN']) || null : null;
                     customer.lookupSLID = row['LookupSLID'] ?? null;
-                    customer.address = row['Address'] ?? null;
-                    customer.deleted = row['Deleted'] === 'false';
-                    customer.createdBy = row['CreatedBy'] ?? null;
-                    customer.updatedBy = row['ModifiedBy'] ?? null;
+                    customer.deleted = row['deleted'] === 'false';
+                    customer.createdBy = row['CreatedBy'] ? Number(row['CreatedBy']) || null : null;
+                    customer.updatedBy = row['ModifiedBy'] ? Number(row['ModifiedBy']) || null : null;
                     customer.createdOn = row['CreatedOn'] ? new Date(row['CreatedOn']) : new Date();
                     customer.updatedOn = row['ModifiedOn'] ? new Date(row['UpdatedOn']) : new Date();
 
@@ -169,11 +168,12 @@ export class CustomerService {
                 .on('end', async () => {
                     // Step 5: Upload data to the database
                     await this.customerRepository.save(customers);
+                    console.log('Customers saved successfully');
                     // Remove temporary CSV file
                     fs.unlinkSync(tempCSVFilePath);
                 });
 
-            return 'success';
+            return 'success'
         } catch (error) {
             console.error('Error uploading customers:', error);
             return 'error';
