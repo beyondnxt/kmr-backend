@@ -27,10 +27,8 @@ export class CustomerService {
         }
         let queryBuilder = this.customerRepository.createQueryBuilder('customer')
             .where('customer.deleted = :deleted', { deleted: false })
-            .leftJoinAndSelect('customer.mainCustomer', 'mainCustomer')
-            .where('mainCustomer.deleted = :deleted', { deleted: false })
-            .leftJoinAndSelect('customer.user', 'user')
-            .andWhere('user.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('customer.mainCustomer', 'mainCustomer', 'mainCustomer.deleted = :deleted', { deleted: false })
+            .leftJoinAndSelect('customer.user', 'user', 'user.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
