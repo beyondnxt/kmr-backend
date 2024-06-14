@@ -5,8 +5,11 @@ export class TwineType {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({ default: null })
     name: string
+
+    @Column({ default: null })
+    shortCode: string
 
     @Column({ default: false })
     deleted: boolean

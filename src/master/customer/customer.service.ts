@@ -30,7 +30,7 @@ export class CustomerService {
             .leftJoinAndSelect('customer.mainCustomer', 'mainCustomer')
             .where('mainCustomer.deleted = :deleted', { deleted: false })
             .leftJoinAndSelect('customer.user', 'user')
-            .where('user.deleted = :deleted', { deleted: false })
+            .andWhere('user.deleted = :deleted', { deleted: false })
             .andWhere(where);
 
         if (page !== "all") {
