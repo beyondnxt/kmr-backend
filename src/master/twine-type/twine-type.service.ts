@@ -43,6 +43,7 @@ export class TwineTypeService {
             data: twineType.map(twine => ({
                 id: twine.id,
                 name: twine.name,
+                shortCode: twine.shortCode,
                 deleted: twine.deleted,
                 createdBy: twine.createdBy,
                 createdOn: twine.createdOn,
@@ -67,7 +68,8 @@ export class TwineTypeService {
         return {
             data: twineType.map(twine => ({
                 id: twine.id,
-                name: twine.name
+                name: twine.name,
+                shortCode: twine.shortCode
             })),
         };
     }
